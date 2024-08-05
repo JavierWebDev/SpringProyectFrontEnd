@@ -30,27 +30,28 @@ h1 {
 
 a {
     text-decoration: none;
-    color: var(--white);
+    color: var(--darkBlue);
 }
 
 /* NAVEGACION */
 
 .titulo-nav {
-    color: var(--lightBlue);
-    font-weight: 500;
+    color: var(--darkBlue);
+    font-weight: bolder;
     font-size: 40px;
 }
 
 .nav-bar {
     width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
 }
 
 .container-nav {
-    margin-top: 20px;
     width: 90%;
-    background-color: var(--darkBlue);
+    height: 15%;
+    background-color: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -71,18 +72,16 @@ main {
 }
 
 .container-menu {
-    width: 55%;
+    width: 90%;
     margin: auto;
-    margin-top: 3%;
 }
 
 .grid-menu {
     width: 100%;
+    height: 85%;
     display: grid;
-    grid-template-columns: 4fr 3fr 3fr;
-    grid-template-rows: 1fr;
-    grid-auto-columns: 300px;
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill,minmax(3fr)) ;
+    gap: 1rem;
 }
 
 .button-menu {
@@ -145,6 +144,22 @@ main {
 }
 
 .button-menu:hover {
-    filter: brightness(85%);
+    filter: brightness(108%);
     cursor: pointer;
+    transform: scale(1.02);
+    box-shadow: .1rem .1rem .5rem #0000007e;
+    
+}
+
+@media (max-width: 850px) {
+    .grid-menu {
+        grid-template-areas: none; /* Remove grid areas */
+    }
+
+    .menu--button_large,
+    .menu--button_wide,
+    .menu--button_wide2 {
+        grid-area: auto; 
+        min-width: calc(100% - 2rem); 
+    }
 }
