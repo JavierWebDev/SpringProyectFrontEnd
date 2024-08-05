@@ -106,11 +106,6 @@ a {
 
 /* MENU PRINCIPAL */
 
-main {
-    display: flex;
-    justify-content: center;
-}
-
 .container-menu {
     width: 90%;
     margin: auto;
