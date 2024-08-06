@@ -58,6 +58,7 @@ body {
 
 h1 {
     color: var(--white);
+    color: var(--white);
     font-weight: 500;
     font-size: 40px;
 }
@@ -135,6 +136,7 @@ a {
 
 .titulo--boton {
     color: var(--white);
+    color: var(--white);
     font-size: 30px;
     font-weight: 400;
 }
@@ -146,7 +148,10 @@ a {
 }
 
 .titulo--boton:hover {
+.titulo--boton:hover {
     width: 100%;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    transition: .2s;
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
     transition: .2s;
 }
@@ -194,13 +199,48 @@ a {
     background-position: right;
 }
 
+.btn-pedidos {
+    background-image: url('/img/pedidos.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.btn-clientes {
+    background-image: url('/img/clientes.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.btn-empleados {
+    background-image: url('/img/empleados.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.btn-oficinas {
+    background-image: url('/img/oficinas.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+
+.btn-pagos {
+    background-image: url('/img/pagos.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
 
 .button-menu:hover {
     filter: brightness(108%);
     cursor: pointer;
     transform: scale(1.02);
     box-shadow: .1rem .1rem .5rem #0000007e;
-    
 }
 
 @media (max-width: 850px) {
@@ -261,4 +301,18 @@ a {
 
 .login-container button:hover {
     background-color: var(--lightBlue);
+}
+
+
+/* WEB COMPONENTS */
+
+menu-oficinas {
+    display: none;
+}
+
+/* ESTILOS LISTAS GLOBALES */
+
+.container-oficinas {
+    width: 90%;
+    margin: auto;
 }

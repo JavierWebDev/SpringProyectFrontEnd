@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
-    <script type="module" src="/App/Components/MainMenu/menu.js" defer></script>
+    <script type="module" src="/app.js" defer></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <title>Campuslands</title>
 </head>
 <body>
@@ -18,7 +19,26 @@
     <main>
         <main-menu></main-menu>
 
-        <menu-oficinas></menu-oficinas>
+        <oficinas-menu></oficinas-menu>
+
+        <section class="container-oficinas">
+            <div class="cont-button">
+                <a href="#"><box-icon name='arrow-back' ></box-icon></a>
+            </div>
+
+            <div class="container-titulos_list">
+                <div class="cont-list">
+                    <h1 class="titulo-list">Offices</h1>
+                </div>
+    
+                <a class="button-new" href="#"><box-icon name='plus' color="#FFF"></box-icon> New Office</a>
+            </div>
+
+            <div class="">
+
+            </div>
+
+        </section>
         
     </main>
 </body>

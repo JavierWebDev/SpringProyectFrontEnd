@@ -1,2 +1,5 @@
 // Menu Principal
-import '/App/Components/MainMenu/main-menu.js'
+import '/App/Components/MainMenu/menu.js'
+
+// MENU OFICINAS
+import '/App/Components/Oficinas/oficinas.js'
