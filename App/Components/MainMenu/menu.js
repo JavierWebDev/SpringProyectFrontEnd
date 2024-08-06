@@ -18,17 +18,17 @@ export class MainMenu extends HTMLElement {
                     <h2 class="titulo--boton">Clientes</h2>
                 </div>
             </div>
-            <div id="btnPedidos" class="button-menu_large button-menu btn-pedidos">
+            <div id="btnPedidos" class="button-menu_large2 button-menu btn-pedidos">
                 <div>
                     <h2 class="titulo--boton">Pedidos</h2>
                 </div>
             </div>
-            <div id="btnPagos" class="button-menu_large button-menu btn-pagos">
+            <div id="btnPagos" class="button-menu_large3 button-menu btn-pagos">
                 <div>
                     <h2 class="titulo--boton">Pagos</h2>
                 </div>
             </div>
-            <div id="btnEmpleados" class="button-menu btn-empleados">
+            <div id="btnEmpleados" class="button-menu_large4 btn-empleados">
                 <div>
                     <h2 class="titulo--boton">Empleados</h2>
                 </div>
