@@ -63,7 +63,7 @@ body {
 }
 
 h1 {
-    color: var(--lightBlue);
+    color: var(--white);
     font-weight: 500;
     font-size: 40px;
 }
@@ -106,11 +106,6 @@ a {
 
 /* MENU PRINCIPAL */
 
-main {
-    display: flex;
-    justify-content: center;
-}
-
 .container-menu {
     width: 90%;
     margin: auto;
@@ -145,7 +140,7 @@ main {
 }
 
 .titulo--boton {
-    color: var(--background);
+    color: var(--white);
     font-size: 30px;
     font-weight: 400;
 }
@@ -156,24 +151,10 @@ main {
     overflow: hidden;
 }
 
-.titulo--boton::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background-color: var(--darkBlue);
-    transform: scaleX(0);
-    transform-origin: bottom right;
-    transition: transform 300ms ease-out;
-}
-
-.titulo--boton:hover::after {
+.titulo--boton:hover {
     width: 100%;
-    transform: scaleX(1);
-    transform-origin: bottom left;
-    filter: brightness(120%);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    transition: .2s;
 }
 
 .btn-productos {
@@ -182,13 +163,48 @@ main {
     background-repeat: no-repeat;
     background-position: right;
 }
+.btn-pedidos {
+    background-image: url('/img/pedidos.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.btn-clientes {
+    background-image: url('/img/clientes.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.btn-empleados {
+    background-image: url('/img/empleados.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.btn-oficinas {
+    background-image: url('/img/oficinas.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+
+.btn-pagos {
+    background-image: url('/img/pagos.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
 
 .button-menu:hover {
     filter: brightness(108%);
     cursor: pointer;
     transform: scale(1.02);
     box-shadow: .1rem .1rem .5rem #0000007e;
-    
 }
 
 @media (max-width: 850px) {
@@ -202,4 +218,17 @@ main {
         grid-area: auto; 
         min-width: calc(100% - 2rem); 
     }
+}
+
+/* WEB COMPONENTS */
+
+menu-oficinas {
+    display: none;
+}
+
+/* ESTILOS LISTAS GLOBALES */
+
+.container-oficinas {
+    width: 90%;
+    margin: auto;
 }
