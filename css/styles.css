@@ -265,36 +265,77 @@ a {
 }
 
 .button-new {
-    padding: 12px;
-    background-color: var(--lightBlue);
+    padding: .5em;
+    background-color: var(--darkBlue);
     display: flex;
     align-items: center;
     color: var(--white);
     border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.button-new::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -160%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 10%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 60%,
+        rgba(255, 255, 255, 0) 90%
+    );
+    transform: rotate(40deg);
+    transition: left 0.5s;
+}
+
+.button-new:hover {
+    background-color: var(--lightBlue);
+    transform: scale(1.05);
+}
+
+.button-new:hover::before {
+    left: 100%;
 }
 
 .titulo-list {
     color: var(--darkBlue);
+    margin-bottom: 1em;
+    display: flex;
+    margin: auto 0;
 }
+
+.titulo-list-id{
+    color: var(--darkBlue);
+    margin-bottom: 1em;
+}
+
 
 .cont-list_big {
     min-width: 90%;
     min-height: 600px;
-    border: 3px solid var(--grey);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     padding: 20px;
+    box-shadow: .4em .4em 2em#00000041;
 }
 
 .cont-list {
-    width: 100%;
-    color: var(--darkBlue);
     display: grid;
     grid-template-columns: 1fr 2fr 2fr 5fr;
     justify-content: center;
+    align-items: center;
     text-align: center;
-    font-size: 15px;
+    grid-auto-rows:max-content;
+    border-radius: 10px;
+    padding-left: .3em;
 }
 
 .elements-list {
@@ -309,9 +350,9 @@ a {
     align-items: center;
     text-align: center;
     grid-auto-rows:max-content;
-    background-color: var(--grey);
+    background-color: #0000000c;
     border-radius: 10px;
-    padding: 10px;
+    padding: .5em;
 }
 
 .card-buttons_container {
@@ -321,6 +362,10 @@ a {
     gap: 50px;
 }
 
+.card-button {
+    display: flex;
+    margin: auto 0;
+}
 
 /* WEB COMPONENTS */
 
