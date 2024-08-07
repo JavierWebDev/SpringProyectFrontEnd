@@ -10,6 +10,10 @@ import '/App/Components/Oficinas/oficinas.js'
 // Menu Proveedor
 import '/App/Components/Proveedor/proveedor.js'
 
+// Enter
+
+import '/App/Components/Enter/enter.js'
+
 // Login
 
 import '/App/Components/login/login.js'

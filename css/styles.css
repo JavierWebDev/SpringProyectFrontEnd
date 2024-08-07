@@ -377,6 +377,13 @@ proveedor-menu {
     display: none;
 }
 
+login-component {
+    display: none;
+}
+
+register-component {
+    display: none;
+}
 
 
 /* ESTILOS LISTAS GLOBALES */
