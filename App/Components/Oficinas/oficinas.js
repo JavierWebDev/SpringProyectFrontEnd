@@ -41,61 +41,53 @@ export class OficinasMenu extends HTMLElement {
             </div>
 
             <div id="overlay" class="overlay">
-                <div class="popup active ">
+                <div class="popup active">
                     <div class="cont-top_modal">
                         <h1 class="titulo-list">New Office</h1>
-    
                         <div id="btnCancel" class="button-cancel_modal">&#10005;</div>
                     </div>
 
                     <div class="cont-form">
                         <form class="form-new">
-                            <div class="cont-input_wide cont-input">
-                                <label class="label-form"  for="inPhone">Phone</label>
-                                <input class="input-form" id="inPhone" name="inPhone" type="text">
-                            </div>
-    
                             <div class="cont-input_two cont-input">
                                 <div class="cont-input_twoo">
                                     <label class="label-form" for="inCountry">Country</label>
                                     <select class="input-form input-select" name="inCountry" id="inCountry"></select>
                                 </div>
-    
                                 <div class="cont-input_twoo">
                                     <label class="label-form" for="inCity">City</label>
                                     <select class="input-form input-select" name="inCity" id="inCity"></select>
                                 </div>
                             </div>
-    
-                            <div class="cont-input_two cont-input">
-                                <div class="cont-input_twoo">
-                                    <label class="label-form" for="inAddres">Address</label>
-                                    <div id="inAddres">
-                                        <label class="label-form_addr" for="inStreet">Street</label>
-                                        <input class="input-form input-addr" id="inStreet" name="inStreet" type="text">
-                                        
-                                        <label for="inNumberStreet">#</label>
-                                        <input class="input-form input-addr" class="label-form_addr" id="inNumberStreet" name="inNumberStreet" type="text">
-                                    </div>
-                                </div>
-                                
-                                <div class="cont-input_twoo">
-                                    <label class="label-form" for="inNeighHood">Neighborhood</label>
-                                    <div>
-                                        <select class="input-form input-select" name="inHood" id="inHood"></select>
-                                    </div>
+
+                            <div class="cont-input_wide cont-input">
+                                <label class="label-form" for="inAddres">Address</label>
+                                <div id="inAddres">
+                                    <label class="label-form_addr" for="inStreet">Street</label>
+                                    <input class="input-form input-addr" id="inStreet" name="inStreet" type="text">
+                                    
+                                    <label for="inNumberStreet">#</label>
+                                    <input class="input-form input-addr" id="inNumberStreet" name="inNumberStreet" type="text">
                                 </div>
                             </div>
-    
+
+                            <div class="cont-input_wide cont-input">
+                                <label class="label-form" for="inNeighHood">Neighborhood</label>
+                                <select class="input-form input-select" name="inHood" id="inHood"></select>
+                            </div>
+
                             <div class="cont-input_wide cont-input">
                                 <label class="label-form" for="inPostalCode">Postal Code</label>
                                 <input class="input-form" id="inPostalCode" name="inPostalCode" type="text">
                             </div>
 
+                            <div class="cont-input_wide cont-input">
+                                <label class="label-form" for="inPhone">Phone</label>
+                                <input class="input-form" id="inPhone" name="inPhone" type="text">
+                            </div>
+
                             <button class="button-new">ADD</button>
-
                         </form>
-
                     </div>
                 </div>
             </div>

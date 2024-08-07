@@ -31,9 +31,9 @@ export class ProveedorMenu extends HTMLElement {
                     <p class="card-text">AAA</p>
 
                     <div class="card-buttons_container">
-                        <a href="" class="card-button"><box-icon name='info-circle' color='#000' ></box-icon></a>
-                        <a href="" class="card-button"><box-icon name='trash' color='#e00000' ></box-icon></a>
-                        <a href="" class="card-button"><box-icon name='pencil' color='#02a0ff' ></box-icon></a>
+                        <a href="" class="card-button"><box-icon name='info-circle' color='#508C9B' ></box-icon></a>
+                        <a href="" class="card-button"><box-icon name='trash' color='#508C9B' ></box-icon></a>
+                        <a href="" class="card-button"><box-icon name='pencil' color='#508C9B' ></box-icon></a>
                     </div>
                 </div>
 
