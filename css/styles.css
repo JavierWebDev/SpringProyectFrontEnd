@@ -379,6 +379,14 @@ a {
     align-items: start;
 }
 
+login-component {
+    display: none;
+}
+
+register-component {
+    display: none;
+}
+
 .button-cancel_modal {
     cursor: pointer;
     font-size: 1.5rem;

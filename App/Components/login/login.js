@@ -8,6 +8,10 @@ class LoginComponent extends HTMLElement {
                 <h1>Stock It</h1>
                 <input type="email" placeholder="Email" id="email">
                 <input type="password" placeholder="Password" id="password">
+                <select id="role">
+                    <option value="USER">User</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
                 <button id="loginButton">Login</button>
                 <p id="message"></p>
             </div>
@@ -25,6 +29,7 @@ class LoginComponent extends HTMLElement {
     async login() {
         const email = this.shadowRoot.getElementById('email').value;
         const password = this.shadowRoot.getElementById('password').value;
+        const role = this.shadowRoot.getElementById('role').value;
         
         try {
             const response = await fetch('http://localhost:8080/auth/login', {
@@ -32,7 +37,7 @@ class LoginComponent extends HTMLElement {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ username:email, password, role }),
             });
 
             const data = await response.json();
