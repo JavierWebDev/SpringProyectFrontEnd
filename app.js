@@ -10,6 +10,9 @@ import '/App/Components/Oficinas/oficinas.js'
 // Menu Proveedor
 import '/App/Components/Proveedor/proveedor.js'
 
+// Menu Producto
+import '/App/Components/Producto/producto.js'
+
 // Enter
 
 import '/App/Components/Enter/enter.js'

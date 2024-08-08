@@ -115,7 +115,8 @@ export class OficinasMenu extends HTMLElement {
         const btnCerrar = document.getElementById("btnCancel");
 
         btnAbrir.addEventListener("click", e => {
-            popUp.classList.add("active")
+            popUp.classList.add("active
+                ")
 
             e.preventDefault();
         })
