@@ -7,8 +7,8 @@ import '/App/Components/Oficinas/oficinas.js'
 
 // //FRONT-END NICO
 
-// Menu Proveedor
-import '/App/Components/Proveedor/proveedor.js'
+// Menu Pedidos
+import '/App/Components/Pedidos/pedidos.js'
 
 // Enter
 

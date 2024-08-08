@@ -500,7 +500,7 @@ register-component {
 }
 
 /* WEB COMPONENTS */
-oficinas-menu, proveedor-menu {
+oficinas-menu, pedidos-menu {
     display: none;
 }
 
