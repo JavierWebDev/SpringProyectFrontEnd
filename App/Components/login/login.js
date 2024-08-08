@@ -5,6 +5,7 @@ class LoginComponent extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <link rel="stylesheet" href="../css/style.css">
             <div class="container-menu_enter">
+                <a href="" class="titulo-nav">Stock It!</a>
                 <input type="email" placeholder="Email" id="email">
                 <input type="password" placeholder="Password" id="password">
                 <select id="role">
