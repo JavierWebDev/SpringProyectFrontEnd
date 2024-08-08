@@ -8,13 +8,20 @@ const myHeaders = () => {
     });
 };
 
-const getData = async(endpoint) => {
+
+const getData = async (endpoint) => {
     try {
-        return await fetch(`${URL_API}/${endpoint}`, {
+        const response = await fetch(`${URL_API}/${endpoint}`, {
             headers: myHeaders()
         });
-    } catch(error){
-        console.log(error);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null; 
     }
 };
 

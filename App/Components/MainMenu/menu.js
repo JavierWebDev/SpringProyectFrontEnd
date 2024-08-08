@@ -47,10 +47,13 @@ export class MainMenu extends HTMLElement {
         const menuprincipal = document.querySelector("main-menu")
 
         const btnProductos = document.querySelector("#btnProductos");
-        const secProductos = document.querySelector("proveedor-menu")
+        //const secProductos = document.querySelector("menu")
 
         const btnOficinas = document.querySelector("#btnOficinas")
         const secOficinas = document.querySelector("oficinas-menu")
+
+        const btnPedidos = document.querySelector("#btnPedidos")
+        const secPedidos = document.querySelector("pedidos-menu")
 
         /* CONTROLADOR OFICINAS */
 
@@ -59,11 +62,11 @@ export class MainMenu extends HTMLElement {
             secOficinas.style.display = "block"
         })
 
-        /* CONTROLADOR PROOVEDORES */
+        /* CONTROLADOR PEDIDOS */
 
-        btnProductos.addEventListener("click", () => {
+        btnPedidos.addEventListener("click", () => {
             menuprincipal.style.display = "none"
-            secProductos.style.display = "block"
+            secPedidos.style.display = "block"
         })
     }
 
