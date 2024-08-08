@@ -169,22 +169,71 @@ a {
 .btn-pagos { background-image: url('/img/pagos.jpg'); }
 
 /* LOGIN */
-.login-container {
-    background-color: var(--white);
-    padding: 2em;
-    border-radius: 0.625em;
-    box-shadow: 0 0.25em 0.75em rgba(0, 0, 0, 0.017);
-    text-align: center;
-    max-width: 20em;
+.container-menu_enter {
+    position: fixed;
+    top: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
     width: 100%;
 }
 
-.login-container h1 {
-    margin-bottom: 1.5em;
-    font-size: 2em;
-    font-weight: bolder;
-    color: var(--darkBlue);
+
+.container-enter_buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    width: 40%;
+    gap: 30px;
+    border-radius: 10px;
+    align-items: center;
+    box-shadow: .4em .4em 2em#00000041;
+    padding: 50px;
 }
+
+.register--button {
+    padding: 15px;
+    width: 70%;
+    border: 3px solid var(--primary-color);
+    color: var(--white);
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    transition: all 0.2s ease-in;
+}
+.register--button:hover {
+    background-color: var(--background);
+    color: var(--primary-dark);
+    cursor: pointer;
+}
+
+.login--button {
+    padding: 15px;
+    width: 70%;
+    border: 3px solid var(--primary-color);
+    color: var(--primary-dark);
+    background-color: var(--background);
+    border-radius: 10px;
+    transition: all 0.2s ease-in;
+}
+.login--button:hover {
+    color: var(--white);
+    background-color: var(--primary-color);
+    cursor: pointer;
+}
+@media (max-width: 600px) {
+    .container-enter_buttons{
+        width: 90%;
+    }
+
+    .login--button,
+    .register--button {
+        width: 90%;
+    }
+}
+
+
 
 .login-container input {
     width: 100%;
@@ -301,7 +350,6 @@ a {
     grid-template-columns: 1fr 2fr 2fr 5fr;
     justify-content: center;
     align-items: center;
-    text-align: center;
     grid-auto-rows: max-content;
     border-radius: 10px;
     padding: .5em;

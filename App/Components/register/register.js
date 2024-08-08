@@ -4,8 +4,7 @@ class RegisterComponent extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = `
             <link rel="stylesheet" href="../css/style.css">
-            <div class="register-container">
-                <h1>Stock It</h1>
+            <div class="container-wc">
                 <input type="email" placeholder="Email" id="email">
                 <input type="password" placeholder="Password" id="password">
                 <select id="role">
