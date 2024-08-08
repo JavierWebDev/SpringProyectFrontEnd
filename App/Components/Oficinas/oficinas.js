@@ -104,8 +104,10 @@ export class OficinasMenu extends HTMLElement {
                                     <label class="label-form" for="inPhone">Phone</label>
                                     <input class="input-form" id="inPhone" name="inPhone" type="text">
                                 </div>
-    
-                                <button id="createNewOffice" class="button-new">ADD</button>
+
+                                <div class="button-add">
+                                    <button id="createNewOffice" class="button-new">ADD</button>
+                                </div>   
                             </form>
                         </div>
                     </div>
