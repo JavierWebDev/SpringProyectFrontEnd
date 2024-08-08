@@ -1,4 +1,4 @@
-import { deleteData, getData, postData, updateData, getElementData } from '/API/API.js';
+import { deleteData, getData, postData, updateData, getElementData, getDataTry } from '/API/API.js';
 
 
 export class OficinasMenu extends HTMLElement {
@@ -150,7 +150,7 @@ export class OficinasMenu extends HTMLElement {
         const endpointCities = "ciudad";
         const endpointHood = "barrio";
 
-        getData(endpointCountries)
+        getDataTry(endpointCountries)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -172,7 +172,7 @@ export class OficinasMenu extends HTMLElement {
                 console.error("Error fetching data:", error);
             });
 
-        getData(endpointCities)
+        getDataTry(endpointCities)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -193,7 +193,7 @@ export class OficinasMenu extends HTMLElement {
                 console.error("Error fetching data:", error);
             });
 
-            getData(endpointHood)
+            getDataTry(endpointHood)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -353,7 +353,7 @@ export class OficinasMenu extends HTMLElement {
         const contShowOffices = document.querySelector("#containerShowOffices");
         const contInfoOffices = document.querySelector("#infoModalOffice");
     
-        getData(endpoint)
+        getDataTry(endpoint)
             .then((response) => {
                 if (response.ok) {
                     return response.json();

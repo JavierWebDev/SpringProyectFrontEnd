@@ -25,6 +25,21 @@ const getData = async (endpoint) => {
     }
 };
 
+async function getDataTry(endpoint) {
+    try {
+        const response = await fetch(`${URL_API}/${endpoint}`, {
+            headers: myHeaders()
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response;
+    } catch (error) {
+        console.error('Error en la solicitud GET:', error);
+        throw error; // Re-throw the error for handling in the caller
+    }
+}
+
 const getElementData = async(endpoint, id) => {
     try {
         return await fetch(`${URL_API}/${endpoint}/${id}`, {
@@ -62,11 +77,18 @@ const postData = async (datos, endpoint) => {
             headers: myHeaders(),
             body: JSON.stringify(datos)
         });
+
+        if (!response.ok) {
+            const errorMessage = await response.text(); 
+            console.error(`Error ${response.status}: ${errorMessage}`);
+        }
+
         return response;
     } catch (error) {
         console.error('Error en la solicitud POST:', error.message);
     }
 };
+
 
 const deleteData = async (endpoint, id) => {
     try {
@@ -84,5 +106,6 @@ export {
     getData,
     postData,
     updateData,
-    getElementData
+    getElementData,
+    getDataTry
 };
