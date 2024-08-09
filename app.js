@@ -10,6 +10,9 @@ import '/App/Components/Oficinas/oficinas.js'
 // Menu Pedidos
 import '/App/Components/Pedidos/pedidos.js'
 
+// Menu Producto
+import '/App/Components/Producto/producto.js'
+
 // Enter
 
 import '/App/Components/Enter/enter.js'

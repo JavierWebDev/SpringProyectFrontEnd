@@ -3,16 +3,20 @@ class LoginComponent extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="../css/style.css">
+            <link rel="stylesheet" href="css/styles.css">
             <div class="container-menu_enter">
-                <input type="email" placeholder="Email" id="email">
-                <input type="password" placeholder="Password" id="password">
-                <select id="role">
-                    <option value="USER">User</option>
-                    <option value="ADMIN">Admin</option>
-                </select>
-                <button id="loginButton">Login</button>
-                <p id="message"></p>
+                <div class="container-login">
+                    <a href="" class="titulo-nav">Stock It!</a>
+                    <img src="img/coder_1.svg" alt="">
+                    <input type="email" placeholder="Email" id="email" class="input-form">
+                    <input type="password" placeholder="Password" id="password"  class="input-form">
+                    <select id="role" placeholder="Email" class="input-select">
+                        <option value="USER">User</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                    <button id="loginButton" class="button-new">Login</button>
+                    <p id="message"></p>
+                </div>
             </div>
         `;
     }

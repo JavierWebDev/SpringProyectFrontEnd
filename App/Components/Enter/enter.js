@@ -9,6 +9,7 @@ export class EnterComponent extends HTMLElement {
         this.innerHTML = /* html */ `
         <section class="container-menu_enter">
             <div class="container-enter_buttons">
+                <a href="" class="titulo-nav">Stock It!</a>
                 <button id="btnLogin" class="login--button">Login</button>
                 <button id="btnRegister" class="register--button">Register</button>
             </div>

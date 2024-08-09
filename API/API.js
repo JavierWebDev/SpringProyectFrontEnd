@@ -16,14 +16,15 @@ const getData = async (endpoint) => {
         });
         if (response.ok) {
             const data = await response.json();
-            return data;
+            return { data, response }; // Devolvemos tanto los datos como la respuesta
         }
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
     } catch (error) {
         console.error('Error fetching data:', error);
-        return null; 
+        return { data: null, error }; // Devolvemos un objeto con los datos nulos y el error
     }
 };
+
 
 async function getDataTry(endpoint) {
     try {
@@ -39,6 +40,7 @@ async function getDataTry(endpoint) {
         throw error; // Re-throw the error for handling in the caller
     }
 }
+
 
 const getElementData = async(endpoint, id) => {
     try {
@@ -109,3 +111,4 @@ export {
     getElementData,
     getDataTry
 };
+

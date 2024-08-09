@@ -1,18 +1,17 @@
+
 import { deleteData, getData, postData, updateData, getElementData, getDataTry } from '/API/API.js';
 
 
 export class OficinasMenu extends HTMLElement {
-    constructor() {
-        super();
-        this.render();
+	constructor() {
+		super();
+		this.render();
         this.goBack();
-        this.controlModalAdd();
-        this.listOffices();
-    }
-
-    render() {
-        this.innerHTML = /* html */ `
-        <section class="container-wc">
+        this.showOffices();
+	}
+	render() {
+		this.innerHTML = /* html */ `
+		<section class="container-wc">
             <div class="cont-button">
                 <a href="#" id="btnVolver"><box-icon name='arrow-back' ></box-icon></a>
             </div>
@@ -26,8 +25,8 @@ export class OficinasMenu extends HTMLElement {
             <div class="cont-list_big">
                 <div class="cont-list">
                     <p class="titulo-list-id">ID</p>
-                    <p class="titulo-list-id">Telefono</p>
-                    <p class="titulo-list-id">Ciudad</p>
+                    <p class="titulo-list-id">Telephone</p>
+                    <p class="titulo-list-id">City</p>
                 </div>
 
                 <div id="containerShowOffices" class="elements-list">
@@ -37,7 +36,7 @@ export class OficinasMenu extends HTMLElement {
                 <div class="overlay" id="overlay3">
                     <div id="popupDelete" class="popup-delete">
                         <div id="delModalOffice" class="cont">
-                            <p>Estas seguro que deseas eliminar la oficina?</p>
+                            <p>Would you delete the office?</p>
 
                             <div class="cont-buttons_delete">
                                 <a id="btnConfirmDelOffice" class="button-confirm_delete">Confirm</a>
@@ -104,16 +103,18 @@ export class OficinasMenu extends HTMLElement {
                                     <label class="label-form" for="inPhone">Phone</label>
                                     <input class="input-form" id="inPhone" name="inPhone" type="text">
                                 </div>
-    
-                                <button id="createNewOffice" class="button-new">ADD</button>
+
+                                <div class="button-add">
+                                    <button id="createNewOffice" class="button-new">ADD</button>
+                                </div>   
                             </form>
                         </div>
                     </div>
                 </div>
     
         </section>
-        `;
-    }
+		`
+	}
 
     goBack() {
         const btnVolver = document.querySelector("#btnVolver");
@@ -128,23 +129,10 @@ export class OficinasMenu extends HTMLElement {
         })
     }
 
-    controlModalAdd() {
-        const overlay = document.getElementById("overlay");
-        const popUpAdd = document.getElementById("popUpAdd");
-        const btnAbrir = document.getElementById("btnAddOffice");
-        const btnCerrar = document.getElementById("btnCancelAdd");
 
-        const selectCountry = document.querySelector("#inCountryOffice");
-        const selectCity = document.querySelector("#inCityOffice");
-        const selectHood = document.querySelector("#inHoodOffice");
-
-        const btnAddOffice = document.querySelector("#createNewOffice")
-
-        const formOffice = document.getElementById("addOfficeForm");
-
-        const inputs = document.querySelectorAll(".input-form");
-
+    showOffices() {
         const endpoint = "oficinas"
+
 
         const endpointCountries = "pais";
         const endpointCities = "ciudad";
@@ -366,44 +354,40 @@ export class OficinasMenu extends HTMLElement {
                     // Create a new card element for each office
                     const card = document.createElement("div");
                     card.classList.add("card-element");
+
+        const contShowOffices = document.querySelector("#containerShowOffices");
+
+        getData(endpoint)
+        .then(({ data, error }) => { 
+            if (error) {
+                console.error(`Error en la solicitud GET: ${error.message}`);
+                return;
+            } else {
+                data.forEach(office => {
+                    const card = document.createElement("div")
+                    card.classList.add("card-element")
                     card.innerHTML = `
-                        <p class="card-text">${oficina.id}</p>
-                        <p class="card-text">${oficina.telefono.nombre}</p>
-                        <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
-            
-                        <div class="card-buttons_container">
-                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnInfoOffice">
-                                <box-icon name='info-circle' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnDeleteOffice">
-                                <box-icon name='trash' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button">
-                                <box-icon name='pencil' color='#508C9B'></box-icon>
-                            </a>
-                        </div>
-                    `;
-    
-                    contShowOffices.appendChild(card);
-    
-                    // Add event listener to show info modal
-                    card.querySelector("#btnInfoOffice").addEventListener("click", (e) => {
-                        e.preventDefault();
-                        this.showInfoModal(oficina);
-                    });
-
-                    card.querySelector("#btnDeleteOffice").addEventListener("click", (e) => {
-                        e.preventDefault();
-                        this.deleteOffice(oficina);
-                    });
-
-
+                    <p class="card-text">${office.id}</p>
+                    <p class="card-text">${office.telefono.nombre}</p>
+                    <p class="card-text">${office.ciudad.nombreCiudad}</p>
+        
+                    <div class="card-buttons_container">
+                        <a href="#" class="card-button" data-id="${office.id}" id="btnInfoOffice">
+                            <box-icon name='info-circle' color='#508C9B'></box-icon>
+                        </a>
+                        <a href="#" class="card-button" data-id="${office.id}" id="btnDeleteOffice">
+                            <box-icon name='trash' color='#508C9B'></box-icon>
+                        </a>
+                        <a href="#" class="card-button">
+                            <box-icon name='pencil' color='#508C9B'></box-icon>
+                        </a>
+                    </div>
+                `;
+                    
                 });
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
+            }
+        });
     }
-
 }
-customElements.define("oficinas-menu", OficinasMenu);
+customElements.define("oficinas-menu",OficinasMenu)
+
