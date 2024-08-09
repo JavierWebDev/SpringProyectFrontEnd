@@ -1,4 +1,6 @@
-import { getData } from "../../../API/API.js";
+
+import { deleteData, getData, postData, updateData, getElementData, getDataTry } from '/API/API.js';
+
 
 export class OficinasMenu extends HTMLElement {
 	constructor() {
@@ -130,6 +132,228 @@ export class OficinasMenu extends HTMLElement {
 
     showOffices() {
         const endpoint = "oficinas"
+
+
+        const endpointCountries = "pais";
+        const endpointCities = "ciudad";
+        const endpointHood = "barrio";
+
+        getDataTry(endpointCountries)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Error en la solicitud GET: ${response.status} - ${response.statusText}`);
+                }
+            })
+            .then((responseData) => {
+                responseData.forEach(pais => {
+                    const opc = document.createElement("option");
+                    opc.value = getElementData(endpointCountries, pais.id);
+                    console.log(opc.value)
+                    opc.innerHTML = `${pais.name}`;
+    
+                    selectCountry.appendChild(opc);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+
+        getDataTry(endpointCities)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Error en la solicitud GET: ${response.status} - ${response.statusText}`);
+                }
+            })
+            .then((responseData) => {
+                responseData.forEach(ciudad => {
+                    const opc = document.createElement("option");
+                    opc.value = ciudad.id;
+                    opc.innerHTML = `${ciudad.nombreCiudad}`;
+    
+                    selectCity.appendChild(opc);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+
+            getDataTry(endpointHood)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Error en la solicitud GET: ${response.status} - ${response.statusText}`);
+                }
+            })
+            .then((responseData) => {
+                responseData.forEach(hood => {
+                    const opc = document.createElement("option");
+                    opc.value = hood.id;
+                    opc.innerHTML = `${hood.nombreBarrio}`;
+    
+                    selectHood.appendChild(opc);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+
+        btnAddOffice.addEventListener("click", e => {
+            e.preventDefault();
+
+            let datos = Object.fromEntries(new FormData(addOfficeForm).entries());
+            datos.id = 0;
+
+            postData(datos, endpoint)
+        })
+
+        btnAbrir.addEventListener("click", e => {
+            overlay.classList.add("active")
+            popUpAdd.classList.add("active")
+            e.preventDefault();
+        })
+
+        btnCerrar.addEventListener("click", e => {
+            overlay.classList.remove("active")
+            popUpAdd.classList.remove("active")
+            e.preventDefault();
+        })
+
+
+    }
+
+    showInfoModal(oficina) {
+        const overlay2 = document.getElementById("overlay2");
+        const popUpInfo = document.getElementById("popupInfo");
+        const infoModal = document.getElementById("infoModalOffice");
+    
+        // Clear existing content
+        infoModal.innerHTML = `
+            <div class="cont-info_p">
+                <label for="pOfficeTel" class="label-form">Telefono</label>
+                <p name="pOfficeTel" class="card-text">${oficina.telefono.nombre}</p>
+            </div>
+    
+            <div class="cont-info_p">
+                <label for="pOfficeCity" class="label-form">Ciudad</label>
+                <p name="pOfficeCity" class="card-text">${oficina.ciudad.nombreCiudad}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficeCountry" class="label-form">Pais</label>
+                <p name="pOfficeCountry" class="card-text">${oficina.pais.nombre}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficePCode" class="label-form">Codigo Postal</label>
+                <p name="pOfficePCode" class="card-text">${oficina.codigoPostal.codigo}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficeAddr" class="label-form">Direccion</label>
+                <p class="card-text">Calle ${oficina.direccion.calle} #${oficina.direccion.numero}</p>
+            </div>
+        `;
+    
+        overlay2.classList.add("active");
+        popUpInfo.classList.add("active");
+    
+        // Add event listener to close the info modal
+        document.getElementById("btnCancelOfficeInfo").addEventListener("click", (e) => {
+            e.preventDefault();
+            overlay2.classList.remove("active");
+            popUpInfo.classList.remove("active");
+        });
+    }
+    
+    deleteOffice(office) {
+        const endpoint = "oficinas";
+        const overlay3 = document.querySelector("#overlay3");
+        const popUpDelete = document.getElementById("popupDelete");
+        const btnConfirmDelOffice = document.querySelector("#btnConfirmDelOffice");
+        const btnCancelDelOffice = document.querySelector("#btnCancelDelOffice");
+    
+        const closeDeletePopup = () => {
+            overlay3.classList.remove("active");
+            popUpDelete.classList.remove("active");
+        };
+    
+        // Mostrar el modal de confirmación de eliminación
+        overlay3.classList.add("active");
+        popUpDelete.classList.add("active");
+    
+        // Evitar la duplicación de event listeners
+        const handleConfirmDelete = (e) => {
+            e.preventDefault();
+            deleteData(endpoint, office.id)
+                .then(response => {
+                    if (response.ok) {
+                        // Mostrar mensaje de éxito
+                        const msg = document.createElement("div");
+                        msg.innerHTML = `
+                            <box-icon name='check-circle' type='solid' color='#6bf54a'></box-icon>
+                            <div id="btnCloseDel" class="button-cancel_modal">&#10005;</div>
+                        `;
+    
+                        // Añadir el mensaje al modal
+                        popUpDelete.innerHTML = msg.innerHTML;
+    
+                        const btnCloseConfirm = document.querySelector("#btnCloseDel");
+                        btnCloseConfirm.addEventListener("click", e => {
+                            e.preventDefault();
+                            closeDeletePopup();
+                        });
+                    } else {
+                        throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la eliminación de datos:", error);
+                    // Manejo de errores y mensaje al usuario
+                    popUpDelete.innerHTML = `
+                        <div>Error al eliminar la oficina. Por favor, inténtelo de nuevo.</div>
+                        <div id="btnCloseDelError" class="button-cancel_modal">&#10005;</div>
+                    `;
+    
+                    const btnCloseError = document.querySelector("#btnCloseDelError");
+                    btnCloseError.addEventListener("click", e => {
+                        e.preventDefault();
+                        closeDeletePopup();
+                    });
+                });
+        };
+    
+        // Añadir el event listener para la confirmación de eliminación
+        btnConfirmDelOffice.addEventListener("click", handleConfirmDelete, { once: true });
+    
+        // Añadir el event listener para cancelar la eliminación
+        btnCancelDelOffice.addEventListener("click", (e) => {
+            e.preventDefault();
+            closeDeletePopup();
+        });
+    }
+    
+
+    listOffices() {
+        const endpoint = "oficinas";
+    
+        const contShowOffices = document.querySelector("#containerShowOffices");
+        const contInfoOffices = document.querySelector("#infoModalOffice");
+    
+        getDataTry(endpoint)
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Error en la solicitud GET: ${response.status} - ${response.statusText}`);
+                }
+            })
+            .then((responseData) => {
+                responseData.forEach(oficina => {
+                    // Create a new card element for each office
+                    const card = document.createElement("div");
+                    card.classList.add("card-element");
 
         const contShowOffices = document.querySelector("#containerShowOffices");
 
