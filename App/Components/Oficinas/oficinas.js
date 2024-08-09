@@ -1,5 +1,4 @@
-import { getData } from '../../../API/API';
-import { deleteData, getDataTry } from '/API/API.js';
+import { deleteData, getData } from '/API/API.js';
 
 export class OficinasMenu extends HTMLElement {
 	constructor() {
@@ -29,7 +28,7 @@ export class OficinasMenu extends HTMLElement {
                 </div>
 
                 <div id="containerShowOffices" class="elements-list"></div>
-
+                
                 <div class="overlay" id="overlay3">
                     <div id="popupDelete" class="popup-delete">
                         <div id="delModalOffice" class="cont">
@@ -99,6 +98,7 @@ export class OficinasMenu extends HTMLElement {
                 </div>
             </div>
         </section>`;
+               
 	}
 
 	goBack() {
@@ -113,18 +113,57 @@ export class OficinasMenu extends HTMLElement {
         });
     }
 
-    arrayOffices() {
-        endpoint = "oficinas"
-        getData(endpoint)
-         .then((response) => {
-            if (!response.ok) {
-                console.log(`${response}`)
+    async addNewOffice(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const newOfficeData = {
+            pais: formData.get('inCountry'),
+            ciudad: formData.get('inCity'),
+            direccion: {
+                calle: formData.get('inStreet'),
+                numero: formData.get('inNumberStreet'),
+            },
+            barrio: formData.get('inHood'),
+            codigoPostal: formData.get('inPostalCode'),
+            telefono: formData.get('inPhone')
+        };
+    
+        try {
+            const response = await postData('oficinas', newOfficeData); // postData es una función que deberías tener en tu API.js
+    
+            if (response.ok) {
+                this.showOffices(); // Refresca la lista de oficinas después de añadir una nueva
+                this.closeAddOfficeModal(); // Cierra el modal de añadir oficina
+            } else {
+                throw new Error('Error al añadir la oficina');
             }
-         })
+        } catch (error) {
+            console.error('Error al añadir la oficina:', error);
+        }
+    }
+    
+    closeAddOfficeModal() {
+        const overlay = document.getElementById("overlay");
+        const popUpAdd = document.getElementById("popUpAdd");
+        overlay.classList.remove("active");
+        popUpAdd.classList.remove("active");
+    }
+    
+
+    async arrayOffices() {
+        const endpoint = "oficinas";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
     }
 
     showOffices() {
-        const endpoint = "oficinas";
         const endpointCountries = "pais";
         const endpointCities = "ciudad";
         const endpointHood = "barrio";
@@ -135,6 +174,7 @@ export class OficinasMenu extends HTMLElement {
         const overlay = document.getElementById("overlay");
         const popUpAdd = document.getElementById("popUpAdd");
         const btnCerrar = document.getElementById("btnCancelAdd");
+        const contShowOffices = document.querySelector("#containerShowOffices");
 
         btnAddOffice.addEventListener("click", e => {
             e.preventDefault();
@@ -142,13 +182,46 @@ export class OficinasMenu extends HTMLElement {
             popUpAdd.classList.add("active");
         });
 
-
-
         btnCerrar.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.remove("active");
             popUpAdd.classList.remove("active");
         });
+
+        this.arrayOffices()
+        .then((oficinas) => {
+            if (oficinas) {
+                console.log(oficinas); 
+                oficinas.forEach(oficina => {
+                    const card = document.createElement("div");
+                    card.classList.add("card-element");
+                    card.innerHTML = `
+                        <p class="card-text">${oficina.id}</p>
+                        <p class="card-text">${oficina.telefono.nombre}</p>
+                        <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
+                        <div class="card-buttons_container">
+                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnInfoOffice">
+                                <box-icon name='info-circle' color='#508C9B'></box-icon>
+                            </a>
+                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnDeleteOffice">
+                                <box-icon name='trash' color='#508C9B'></box-icon>
+                            </a>
+                            <a href="#" class="card-button">
+                                <box-icon name='pencil' color='#508C9B'></box-icon>
+                            </a>
+                        </div>`;
+
+                    contShowOffices.appendChild(card);
+                })
+            } else {
+                console.log("No se pudieron obtener las oficinas.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error al obtener las oficinas:", error);
+        });
+
+
     }
 
     showInfoModal(oficina) {
@@ -243,7 +316,7 @@ export class OficinasMenu extends HTMLElement {
 
     listOffices() {
         const endpoint = "oficinas";
-        const contShowOffices = document.querySelector("#containerShowOffices");
+        
 
         getDataTry(endpoint)
             .then(response => {
@@ -255,25 +328,7 @@ export class OficinasMenu extends HTMLElement {
             })
             .then(responseData => {
                 responseData.forEach(oficina => {
-                    const card = document.createElement("div");
-                    card.classList.add("card-element");
-                    card.innerHTML = `
-                        <p class="card-text">${oficina.id}</p>
-                        <p class="card-text">${oficina.telefono.nombre}</p>
-                        <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
-                        <div class="card-buttons_container">
-                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnInfoOffice">
-                                <box-icon name='info-circle' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnDeleteOffice">
-                                <box-icon name='trash' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button">
-                                <box-icon name='pencil' color='#508C9B'></box-icon>
-                            </a>
-                        </div>`;
 
-                    contShowOffices.appendChild(card);
                 });
             })
             .catch(error => {
