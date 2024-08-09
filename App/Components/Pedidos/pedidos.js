@@ -8,6 +8,7 @@ export class PedidosMenu extends HTMLElement {
         // this.controllerAction();
         this.goBack();
         this.controlModalAdd();
+        this.showOffices();
     }
 
     render() {
@@ -26,8 +27,8 @@ export class PedidosMenu extends HTMLElement {
             <div class="cont-list_big">
                 <div class="cont-list">
                     <p class="titulo-list-id">ID</p>
-                    <p class="titulo-list-id">Telefono</p>
-                    <p class="titulo-list-id">Ciudad</p>
+                    <p class="titulo-list-id">Cliente</p>
+                    <p class="titulo-list-id">Estado</p>
                 </div>
 
                 <div id="containerShowPedidos" class="elements-list">
@@ -37,7 +38,7 @@ export class PedidosMenu extends HTMLElement {
                 <div class="overlay" id="overlay3">
                     <div id="popupDelete" class="popup-delete">
                         <div id="delModalPedido" class="cont">
-                            <p>Estas seguro que deseas eliminar la oficina?</p>
+                            <p>Estas seguro que deseas eliminar la pedido?</p>
 
                             <div class="cont-buttons_delete">
                                 <a id="btnConfirmDelPedido" class="button-confirm_delete">Confirm</a>
@@ -188,7 +189,7 @@ export class PedidosMenu extends HTMLElement {
                 console.error("Error fetching data:", error);
             });
 
-        btnAddPedido.addEventListener("click", e => {
+        btnAddPedido.addEventListener("click", async e => {
             e.preventDefault();
 
             let datos = Object.fromEntries(new FormData(addPedidoForm).entries());
@@ -204,7 +205,18 @@ export class PedidosMenu extends HTMLElement {
 
             console.log(datos)
 
-            postData(datos, endpoint);
+            try {
+                const response = await postData(datos, endpoint); // postData es una función que deberías tener en tu API.js
+        
+                if (response.ok) {
+                    this.showOffices(); 
+                    this.closeAddOfficeModal(); 
+                } else {
+                    throw new Error('Error al añadir el pedido');
+                }
+            } catch (error) {
+                console.error('Error al añadir el pedido:', error);
+            }
         })
 
         btnAbrirPedido.addEventListener("click", e => {
@@ -220,6 +232,182 @@ export class PedidosMenu extends HTMLElement {
         })
 
 
+    }
+
+    async arrayRequest() {
+        const endpoint = "pedidos";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+
+    showOffices() {
+        const btnAddPedido = document.getElementById("btnAddPedido");
+        const overlay = document.getElementById("overlay");
+        const popUpAdd = document.getElementById("popUpAdd");
+        const btnCerrar = document.getElementById("btnCancelAdd");
+        const contShowPedidos = document.querySelector("#containerShowPedidos");
+        contShowPedidos.innerHTML=''
+
+        btnAddPedido.addEventListener("click", e => {
+            e.preventDefault();
+            overlay.classList.add("active");
+            popUpAdd.classList.add("active");
+        });
+
+        btnCerrar.addEventListener("click", e => {
+            e.preventDefault();
+            overlay.classList.remove("active");
+            popUpAdd.classList.remove("active");
+        });
+
+        this.arrayRequest()
+        .then((pedidos) => {
+            if (pedidos) {
+                console.log(pedidos); 
+                pedidos.forEach(pedido => {
+                    const card = document.createElement("div");
+                    card.classList.add("card-element");
+                    card.innerHTML = `
+                        <p class="card-text">${pedido.id}</p>
+                        <p class="card-text">${pedido.clientePedido.nombre}</p>
+                        <p class="card-text">${pedido.estadoPedido.estado}</p>
+                        <div class="card-buttons_container">
+                            <a href="#" class="card-button" data-id="${pedido.id}" id="btnInfoPedido">
+                                <box-icon name='info-circle' color='#508C9B'></box-icon>
+                            </a>
+                            <a href="#" class="card-button" data-id="${pedido.id}" id="btnDeletePedido">
+                                <box-icon name='trash' color='#508C9B'></box-icon>
+                            </a>
+                            <a href="#" class="card-button">
+                                <box-icon name='pencil' color='#508C9B'></box-icon>
+                            </a>
+                        </div>`;
+
+                    contShowPedidos.appendChild(card);
+                    
+
+                    
+                })
+
+                document.querySelectorAll("btnInfoPedido").forEach(button => {
+                    button.addEventListener("click", e => {
+                        e.preventDefault();
+                        const pedidoId = button.getAttribute("data-id");
+                        const pedido = pedidos.find(o => o.id.toString() === pedidoId);
+    
+                        if (pedido) {
+                            this.showInfoModal(pedido);
+                        } else {
+                            console.error(`No se encontró la oficina con id: ${pedidoId}`);
+                        }
+                    });
+                });
+                
+            } else {
+                console.log("No se pudieron obtener las pedidos.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error al obtener las pedidos:", error);
+        });
+
+
+    }
+
+    showInfoPedido(pedido) {
+        const overlay2 = document.getElementById("overlay2");
+        const popUpInfo = document.getElementById("popupInfo");
+        const infoModal = document.getElementById("infoModalPedido");
+
+        infoModal.innerHTML = `
+            <div class="cont-info_p">
+                <label for="pOfficeTel" class="label-form">Fecha Pedido</label>
+                <p name="pOfficeTel" class="card-text">${pedido.fechaPedido}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficeCity" class="label-form">Fecha Esperada</label>
+                <p name="pOfficeCity" class="card-text">${pedido.fechaEsperada}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficeCountry" class="label-form">Fecha Entrega</label>
+                <p name="pOfficeCountry" class="card-text">${pedido.fechaEntrega}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficePCode" class="label-form">Cliente</label>
+                <p name="pOfficePCode" class="card-text">ID: ${pedido.clientePedido.id} Nombre: ${pedido.clientePedido.nombre}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pOfficeAddr" class="label-form">Estado</label>
+                <p class="card-text">${pedido.estadoPedido.estado}</p>
+            </div>`;
+
+        overlay2.classList.add("active");
+        popUpInfo.classList.add("active");
+
+        document.getElementById("btnCancelPedidoInfo").addEventListener("click", e => {
+            e.preventDefault();
+            overlay2.classList.remove("active");
+            popUpInfo.classList.remove("active");
+        });
+    }
+
+    deleteOffice(pedido) {
+        const endpoint = "pedidos";
+        const overlay3 = document.querySelector("#overlay3");
+        const popUpDelete = document.getElementById("popupDelete");
+        const btnConfirmDelPedido = document.querySelector("#btnConfirmDelPedido");
+        const btnCancelDelPedido = document.querySelector("#btnCancelDelPedido");
+
+        const closeDeletePopup = () => {
+            overlay3.classList.remove("active");
+            popUpDelete.classList.remove("active");
+        };
+
+        overlay3.classList.add("active");
+        popUpDelete.classList.add("active");
+
+        const handleConfirmDelete = e => {
+            e.preventDefault();
+            deleteData(endpoint, pedido.id)
+                .then(response => {
+                    if (response.ok) {
+                        popUpDelete.innerHTML = `
+                            <box-icon name='check-circle' type='solid' color='#6bf54a'></box-icon>
+                            <div id="btnCloseDel" class="button-cancel_modal">&#10005;</div>`;
+                        
+                        document.getElementById("btnCloseDel").addEventListener("click", e => {
+                            e.preventDefault();
+                            closeDeletePopup();
+                        });
+                    } else {
+                        throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la eliminación de datos:", error);
+                    popUpDelete.innerHTML = `
+                        <div>Error al eliminar la oficina. Por favor, inténtelo de nuevo.</div>
+                        <div id="btnCloseDelError" class="button-cancel_modal">&#10005;</div>`;
+                    
+                    document.getElementById("btnCloseDelError").addEventListener("click", e => {
+                        e.preventDefault();
+                        closeDeletePopup();
+                    });
+                });
+        };
+
+        btnConfirmDelPedido.addEventListener("click", handleConfirmDelete, { once: true });
+
+        btnCancelDelPedido.addEventListener("click", e => {
+            e.preventDefault();
+            closeDeletePopup();
+        });
     }
 
     // findAll = async () =>{
