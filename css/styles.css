@@ -582,7 +582,7 @@ register-component {
 }
 
 /* WEB COMPONENTS */
-oficinas-menu, pedidos-menu {
+oficinas-menu, pedidos-menu, producto-menu {
     display: none;
 }
 
