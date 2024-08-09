@@ -92,14 +92,14 @@ export class PedidosMenu extends HTMLElement {
                                 <div class="cont-input_two cont-input">
                                     <div class="cont-input_twoo">
                                         <label class="label-form" for="inCountry">Cliente dueño del pedido</label>
-                                        <select class="input-form input-select" name="client" id="inClientPedido"></select>
+                                        <select class="input-form input-select"  id="inClientPedido"></select>
                                     </div>
                                 </div>
     
                                 <div class="cont-input_two cont-input">
                                     <div class="cont-input_twoo">
                                         <label class="label-form" for="inCountry">Estado del pedido</label>
-                                        <select class="input-form input-select" name="status" id="inStatusPedido"></select>
+                                        <select class="input-form input-select"  id="inStatusPedido"></select>
                                     </div>
                                 </div>
     
