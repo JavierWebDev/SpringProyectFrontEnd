@@ -1,4 +1,4 @@
-import { deleteData, getDataTry, postData } from '/API/API.js';
+import { deleteData, getDataTry } from '/API/API.js';
 
 export class OficinasMenu extends HTMLElement {
 	constructor() {
@@ -124,8 +124,7 @@ export class OficinasMenu extends HTMLElement {
         const addOfficeForm = document.getElementById("addOfficeForm");
         const overlay = document.getElementById("overlay");
         const popUpAdd = document.getElementById("popUpAdd");
-        const btnAbrir = document.getElementById("btnAbrir");
-        const btnCerrar = document.getElementById("btnCerrar");
+        const btnCerrar = document.getElementById("btnCancelAdd");
 
         const fetchData = (endpoint, selectElement, key) => {
             getDataTry(endpoint)
@@ -155,16 +154,11 @@ export class OficinasMenu extends HTMLElement {
 
         btnAddOffice.addEventListener("click", e => {
             e.preventDefault();
-            let datos = Object.fromEntries(new FormData(addOfficeForm).entries());
-            datos.id = 0;
-            postData(datos, endpoint);
-        });
-
-        btnAbrir.addEventListener("click", e => {
-            e.preventDefault();
             overlay.classList.add("active");
             popUpAdd.classList.add("active");
         });
+
+
 
         btnCerrar.addEventListener("click", e => {
             e.preventDefault();
