@@ -1,3 +1,4 @@
+import { getData } from '../../../API/API';
 import { deleteData, getDataTry } from '/API/API.js';
 
 export class OficinasMenu extends HTMLElement {
@@ -112,6 +113,16 @@ export class OficinasMenu extends HTMLElement {
         });
     }
 
+    arrayOffices() {
+        endpoint = "oficinas"
+        getData(endpoint)
+         .then((response) => {
+            if (!response.ok) {
+                console.log(`${response}`)
+            }
+         })
+    }
+
     showOffices() {
         const endpoint = "oficinas";
         const endpointCountries = "pais";
@@ -121,36 +132,9 @@ export class OficinasMenu extends HTMLElement {
         const selectCity = document.getElementById("inCityOffice");
         const selectHood = document.getElementById("inHoodOffice");
         const btnAddOffice = document.getElementById("btnAddOffice");
-        const addOfficeForm = document.getElementById("addOfficeForm");
         const overlay = document.getElementById("overlay");
         const popUpAdd = document.getElementById("popUpAdd");
         const btnCerrar = document.getElementById("btnCancelAdd");
-
-        const fetchData = (endpoint, selectElement, key) => {
-            getDataTry(endpoint)
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error(`Error en la solicitud GET: ${response.status} - ${response.statusText}`);
-                    }
-                })
-                .then(responseData => {
-                    responseData.forEach(item => {
-                        const opc = document.createElement("option");
-                        opc.value = item.id;
-                        opc.innerHTML = item[key];
-                        selectElement.appendChild(opc);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                });
-        };
-
-        fetchData(endpointCountries, selectCountry, 'name');
-        fetchData(endpointCities, selectCity, 'nombreCiudad');
-        fetchData(endpointHood, selectHood, 'nombreBarrio');
 
         btnAddOffice.addEventListener("click", e => {
             e.preventDefault();
