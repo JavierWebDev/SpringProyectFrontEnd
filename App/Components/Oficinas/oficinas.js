@@ -1,4 +1,3 @@
-import { getData } from '../../../API/API';
 import { deleteData, getDataTry } from '/API/API.js';
 
 export class OficinasMenu extends HTMLElement {
