@@ -6,6 +6,7 @@ export class OficinasMenu extends HTMLElement {
 		this.render();
 		this.goBack();
 		this.showOffices();
+        document.getElementById("createNewOffice").addEventListener("DOMContentLoaded", (event) => this.addNewOffice(event));
 	}
 
 	render() {
@@ -100,6 +101,7 @@ export class OficinasMenu extends HTMLElement {
         </section>`;
                
 	}
+    
 
 	goBack() {
         const btnVolver = document.querySelector("#btnVolver");
@@ -113,44 +115,6 @@ export class OficinasMenu extends HTMLElement {
         });
     }
 
-    async addNewOffice(event) {
-        event.preventDefault();
-        
-        const formData = new FormData(event.target);
-        const newOfficeData = {
-            pais: formData.get('inCountry'),
-            ciudad: formData.get('inCity'),
-            direccion: {
-                calle: formData.get('inStreet'),
-                numero: formData.get('inNumberStreet'),
-            },
-            barrio: formData.get('inHood'),
-            codigoPostal: formData.get('inPostalCode'),
-            telefono: formData.get('inPhone')
-        };
-    
-        try {
-            const response = await postData('oficinas', newOfficeData); // postData es una función que deberías tener en tu API.js
-    
-            if (response.ok) {
-                this.showOffices(); // Refresca la lista de oficinas después de añadir una nueva
-                this.closeAddOfficeModal(); // Cierra el modal de añadir oficina
-            } else {
-                throw new Error('Error al añadir la oficina');
-            }
-        } catch (error) {
-            console.error('Error al añadir la oficina:', error);
-        }
-    }
-    
-    closeAddOfficeModal() {
-        const overlay = document.getElementById("overlay");
-        const popUpAdd = document.getElementById("popUpAdd");
-        overlay.classList.remove("active");
-        popUpAdd.classList.remove("active");
-    }
-    
-
     async arrayOffices() {
         const endpoint = "oficinas";
         const { data, error } = await getData(endpoint);
@@ -163,35 +127,139 @@ export class OficinasMenu extends HTMLElement {
         return data;
     }
 
+    async arrayCountries() {
+        const endpoint = "pais";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        console.log("Paises:", data); // Verifica los datos
+        return data;
+    }
+    
+    async arrayCities() {
+        const endpoint = "ciudad";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+
+    async arrayHood() {
+        const endpoint = "barrio";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+    
+    async addNewOffice(event) {
+        if (!event) {
+            console.error("Evento no definido.");
+            return;
+        }
+        
+        event.preventDefault();
+        
+        const selectCountryOficinas = document.getElementById("inCountryOffice");
+        const selectCityOficinas = document.getElementById("inCityOffice");
+        const selectHoodOficinas = document.getElementById("inHoodOffice");
+    
+        try {
+            const paises = await this.arrayCountries();
+            if (paises && Array.isArray(paises)) {
+                selectCountryOficinas.innerHTML = ""; // Limpia las opciones anteriores
+                paises.forEach(pais => {
+                    const opc = document.createElement("option");
+                    opc.value = pais.id;
+                    opc.textContent = pais.name;
+                    selectCountryOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener los países.");
+            }
+        } catch (error) {
+            console.error("Error al obtener los países:", error);
+        }
+    
+        try {
+            const ciudades = await this.arrayCities();
+            if (ciudades && Array.isArray(ciudades)) {
+                selectCityOficinas.innerHTML = ""; // Limpia las opciones anteriores
+                ciudades.forEach(ciudad => {
+                    const opc = document.createElement("option");
+                    opc.value = ciudad.id;
+                    opc.textContent = ciudad.name;
+                    selectCityOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener las ciudades.");
+            }
+        } catch (error) {
+            console.error("Error al obtener las ciudades:", error);
+        }
+    
+        try {
+            const barrios = await this.arrayHood();
+            if (barrios && Array.isArray(barrios)) {
+                selectHoodOficinas.innerHTML = ""; // Limpia las opciones anteriores
+                barrios.forEach(barrio => {
+                    const opc = document.createElement("option");
+                    opc.value = barrio.id;
+                    opc.textContent = barrio.name;
+                    selectHoodOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener los barrios.");
+            }
+        } catch (error) {
+            console.error("Error al obtener los barrios:", error);
+        }
+    }
+    
+    
+    
+    closeAddOfficeModal() {
+        const overlay = document.getElementById("overlay");
+        const popUpAdd = document.getElementById("popUpAdd");
+        overlay.classList.remove("active");
+        popUpAdd.classList.remove("active");
+    }
+    
+
     showOffices() {
-        const endpointCountries = "pais";
-        const endpointCities = "ciudad";
-        const endpointHood = "barrio";
-        const selectCountry = document.getElementById("inCountryOffice");
-        const selectCity = document.getElementById("inCityOffice");
-        const selectHood = document.getElementById("inHoodOffice");
         const btnAddOffice = document.getElementById("btnAddOffice");
         const overlay = document.getElementById("overlay");
         const popUpAdd = document.getElementById("popUpAdd");
         const btnCerrar = document.getElementById("btnCancelAdd");
         const contShowOffices = document.querySelector("#containerShowOffices");
-
+    
         btnAddOffice.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.add("active");
             popUpAdd.classList.add("active");
         });
-
+    
         btnCerrar.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.remove("active");
             popUpAdd.classList.remove("active");
         });
-
+    
         this.arrayOffices()
         .then((oficinas) => {
             if (oficinas) {
-                console.log(oficinas); 
+                contShowOffices.innerHTML = ''; // Limpiar la lista antes de añadir nuevas oficinas
                 oficinas.forEach(oficina => {
                     const card = document.createElement("div");
                     card.classList.add("card-element");
@@ -200,19 +268,36 @@ export class OficinasMenu extends HTMLElement {
                         <p class="card-text">${oficina.telefono.nombre}</p>
                         <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
                         <div class="card-buttons_container">
-                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnInfoOffice">
+                            <a href="#" class="card-button btnInfoOffice" data-id="${oficina.id}">
                                 <box-icon name='info-circle' color='#508C9B'></box-icon>
                             </a>
-                            <a href="#" class="card-button" data-id="${oficina.id}" id="btnDeleteOffice">
+                            <a href="#" class="card-button btnDeleteOffice" data-id="${oficina.id}">
                                 <box-icon name='trash' color='#508C9B'></box-icon>
                             </a>
                             <a href="#" class="card-button">
                                 <box-icon name='pencil' color='#508C9B'></box-icon>
                             </a>
                         </div>`;
-
+    
                     contShowOffices.appendChild(card);
-                })
+                });
+    
+                // Añadir los event listeners después de haber añadido los botones al DOM
+                document.querySelectorAll(".btnInfoOffice").forEach(button => {
+                    button.addEventListener("click", e => {
+                        e.preventDefault();
+                        const officeId = button.getAttribute("data-id");
+                        const oficina = oficinas.find(o => o.id.toString() === officeId);
+    
+                        if (oficina) {
+                            this.showInfoModal(oficina);
+                        } else {
+                            console.error(`No se encontró la oficina con id: ${officeId}`);
+                        }
+                    });
+                });
+    
+                // También puedes añadir listeners para los botones de eliminar y editar aquí
             } else {
                 console.log("No se pudieron obtener las oficinas.");
             }
@@ -220,16 +305,15 @@ export class OficinasMenu extends HTMLElement {
         .catch((error) => {
             console.error("Error al obtener las oficinas:", error);
         });
-
-
     }
-
+    
+    
     showInfoModal(oficina) {
         const overlay2 = document.getElementById("overlay2");
         const popUpInfo = document.getElementById("popupInfo");
         const infoModal = document.getElementById("infoModalOffice");
 
-        infoModal.innerHTML = `
+        infoModal.innerHTML =` 
             <div class="cont-info_p">
                 <label for="pOfficeTel" class="label-form">Telefono</label>
                 <p name="pOfficeTel" class="card-text">${oficina.telefono.nombre}</p>
@@ -260,7 +344,7 @@ export class OficinasMenu extends HTMLElement {
             popUpInfo.classList.remove("active");
         });
     }
-
+    
     deleteOffice(office) {
         const endpoint = "oficinas";
         const overlay3 = document.querySelector("#overlay3");
@@ -312,28 +396,6 @@ export class OficinasMenu extends HTMLElement {
             e.preventDefault();
             closeDeletePopup();
         });
-    }
-
-    listOffices() {
-        const endpoint = "oficinas";
-        
-
-        getDataTry(endpoint)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error(`Error en la solicitud GET: ${response.status} - ${response.statusText}`);
-                }
-            })
-            .then(responseData => {
-                responseData.forEach(oficina => {
-
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
     }
 }
 
