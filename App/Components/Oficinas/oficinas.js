@@ -163,7 +163,7 @@ export class OficinasMenu extends HTMLElement {
         return data;
     }
     
-    async addNewOffice(event) {
+    addNewOffice() {
         if (!event) {
             console.error("Evento no definido.");
             return;
@@ -175,56 +175,7 @@ export class OficinasMenu extends HTMLElement {
         const selectCityOficinas = document.getElementById("inCityOffice");
         const selectHoodOficinas = document.getElementById("inHoodOffice");
     
-        try {
-            const paises = await this.arrayCountries();
-            if (paises && Array.isArray(paises)) {
-                selectCountryOficinas.innerHTML = ""; // Limpia las opciones anteriores
-                paises.forEach(pais => {
-                    const opc = document.createElement("option");
-                    opc.value = pais.id;
-                    opc.textContent = pais.name;
-                    selectCountryOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener los países.");
-            }
-        } catch (error) {
-            console.error("Error al obtener los países:", error);
-        }
-    
-        try {
-            const ciudades = await this.arrayCities();
-            if (ciudades && Array.isArray(ciudades)) {
-                selectCityOficinas.innerHTML = ""; // Limpia las opciones anteriores
-                ciudades.forEach(ciudad => {
-                    const opc = document.createElement("option");
-                    opc.value = ciudad.id;
-                    opc.textContent = ciudad.name;
-                    selectCityOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener las ciudades.");
-            }
-        } catch (error) {
-            console.error("Error al obtener las ciudades:", error);
-        }
-    
-        try {
-            const barrios = await this.arrayHood();
-            if (barrios && Array.isArray(barrios)) {
-                selectHoodOficinas.innerHTML = ""; // Limpia las opciones anteriores
-                barrios.forEach(barrio => {
-                    const opc = document.createElement("option");
-                    opc.value = barrio.id;
-                    opc.textContent = barrio.name;
-                    selectHoodOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener los barrios.");
-            }
-        } catch (error) {
-            console.error("Error al obtener los barrios:", error);
-        }
+
     }
     
     
@@ -291,6 +242,7 @@ export class OficinasMenu extends HTMLElement {
     
                         if (oficina) {
                             this.showInfoModal(oficina);
+
                         } else {
                             console.error(`No se encontró la oficina con id: ${officeId}`);
                         }
@@ -324,7 +276,7 @@ export class OficinasMenu extends HTMLElement {
             </div>
             <div class="cont-info_p">
                 <label for="pOfficeCountry" class="label-form">Pais</label>
-                <p name="pOfficeCountry" class="card-text">${oficina.pais.nombre}</p>
+                <p name="pOfficeCountry" class="card-text">${oficina.pais.name}</p>
             </div>
             <div class="cont-info_p">
                 <label for="pOfficePCode" class="label-form">Codigo Postal</label>
