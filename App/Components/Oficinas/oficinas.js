@@ -1,4 +1,4 @@
-import { deleteData, getDataTry, getData } from '/API/API.js';
+import { deleteData, getDataTry, getData, postData } from '/API/API.js';
 
 export class OficinasMenu extends HTMLElement {
 	constructor() {
@@ -6,7 +6,7 @@ export class OficinasMenu extends HTMLElement {
 		this.render();
 		this.goBack();
 		this.showOffices();
-        document.getElementById("createNewOffice").addEventListener("DOMContentLoaded", (event) => this.addNewOffice(event));
+        this.addNewOffice();
 	}
 
 	render() {
@@ -61,6 +61,17 @@ export class OficinasMenu extends HTMLElement {
                             <form id="addOfficeForm" class="form-new">
                                 <div class="cont-input_two cont-input">
                                     <div class="cont-input_twoo">
+                                        <label class="label-form" for="inPhoneOffice">Phone</label>
+                                        <input type="tel" class="input-form" name="inPhoneOffice" id="inPhoneOffice">
+                                    </div>
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inTypePhone">Phone Type</label>
+                                        <select class="input-form input-select" name="inTypePhoneOffice" id="inTypePhoneOffice"></select>
+                                    </div>
+                                </div>
+
+                                <div class="cont-input_two cont-input">
+                                    <div class="cont-input_twoo">
                                         <label class="label-form" for="inCountry">Country</label>
                                         <select class="input-form input-select" name="inCountry" id="inCountryOffice"></select>
                                     </div>
@@ -72,8 +83,8 @@ export class OficinasMenu extends HTMLElement {
                                 <div class="cont-input_wide cont-input">
                                     <label class="label-form" for="inAddres">Address</label>
                                     <div id="inAddres">
-                                        <label class="label-form_addr" for="inStreet">Street</label>
-                                        <input class="input-form input-addr" id="inStreet" name="inStreet" type="text">
+                                        <label class="label-form_addr" for="inStreetOffice">Street</label>
+                                        <input class="input-form input-addr" id="inStreetOffice" name="inStreetOffice" type="text">
                                         <label for="inNumberStreet">#</label>
                                         <input class="input-form input-addr" id="inNumberStreet" name="inNumberStreet" type="text">
                                     </div>
@@ -83,12 +94,12 @@ export class OficinasMenu extends HTMLElement {
                                     <select class="input-form input-select" name="inHood" id="inHoodOffice"></select>
                                 </div>
                                 <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inPostalCode">Postal Code</label>
-                                    <input class="input-form" id="inPostalCode" name="inPostalCode" type="text">
+                                    <label class="label-form" for="inPostalCodeOffice">Postal Code</label>
+                                    <input class="input-form" id="inPostalCodeOffice" name="inPostalCodeOffice" type="text">
                                 </div>
                                 <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inPhone">Phone</label>
-                                    <input class="input-form" id="inPhone" name="inPhone" type="text">
+                                    <label class="label-form" for="inRegionOffice">Region</label>
+                                    <select class="input-form input-select" name="inRegionOffice" id="inRegionOffice"></select>
                                 </div>
                                 <div class="button-add">
                                     <button id="createNewOffice" class="button-new">ADD</button>
@@ -127,6 +138,17 @@ export class OficinasMenu extends HTMLElement {
         return data;
     }
 
+    async arrayPhoneTypes() {
+        const endpoint = "tipotelefono";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        return data;
+    }
+
     async arrayCountries() {
         const endpoint = "pais";
         const { data, error } = await getData(endpoint);
@@ -135,7 +157,6 @@ export class OficinasMenu extends HTMLElement {
             console.log(`Error: ${error.message}`);
             return null;
         }
-        console.log("Paises:", data); // Verifica los datos
         return data;
     }
     
@@ -162,23 +183,271 @@ export class OficinasMenu extends HTMLElement {
         
         return data;
     }
-    
-    addNewOffice() {
-        if (!event) {
-            console.error("Evento no definido.");
-            return;
+
+    async arrayRegion() {
+        const endpoint = "region";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
         }
         
-        event.preventDefault();
+        return data;
+    }
+
+    async arrayTelefonos() {
+        const endpoint = "telefono";
+        const { data, error } = await getData(endpoint);
         
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+
+    async arrayDireccion() {
+        const endpoint = "direccion";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+
+    async arrayPostalCode() {
+        const endpoint = "codigopostal";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+    
+    addNewOffice() {
+        const officeForm = document.getElementById("addOfficeForm");
+    
         const selectCountryOficinas = document.getElementById("inCountryOffice");
         const selectCityOficinas = document.getElementById("inCityOffice");
         const selectHoodOficinas = document.getElementById("inHoodOffice");
+        const selectPhoneTypeOficinas = document.getElementById("inTypePhoneOffice");
+        const selectRegionOficinas = document.getElementById("inRegionOffice");
     
+        const btnSendOffice = document.getElementById("createNewOffice");
+    
+        // Llenar los selects con los datos obtenidos de las respectivas funciones
+        this.fillSelects();
+    
+        btnSendOffice.addEventListener("click", async (e) => {
+            e.preventDefault();
+    
+            try {
+                // Obtener los valores de los inputs
+                let nombreTelefono = document.getElementById("inPhoneOffice").value;
+                let calleDir = document.getElementById("inStreetOffice").value;
+                let numeroDir = Number.parseInt(document.getElementById("inNumberStreet").value);
+                let postalOffice = document.getElementById("inPostalCodeOffice").value;
+    
+                // Obtener las opciones seleccionadas
+                const selectedOptionPhoneType = selectPhoneTypeOficinas.options[selectPhoneTypeOficinas.selectedIndex];
+                const selectedPhoneType = JSON.parse(selectedOptionPhoneType.value);
+    
+                const selectedPais = JSON.parse(selectCountryOficinas.value);
+                const selectedCity = JSON.parse(selectCityOficinas.value);
+    
+                const selectedOptionHood = selectHoodOficinas.options[selectHoodOficinas.selectedIndex];
+                const selectedHood = JSON.parse(selectedOptionHood.value);
+    
+                const selectedOptionRegion = selectRegionOficinas.options[selectRegionOficinas.selectedIndex];
+                const selectedRegion = JSON.parse(selectedOptionRegion.value);
+    
+                // Calcular el maxIDTel
+                let maxIDTel = await this.calculateMaxId("telefono");
+                let maxIDDir = await this.calculateMaxId("direccion");
+                let maxIDPos = await this.calculateMaxId("codigopostal");
+    
+                // Crear el objeto teléfono
+                let telefono = {
+                    id: 0,
+                    nombre: Number.parseInt(nombreTelefono),
+                    tipoTelefono: selectedPhoneType
+                };
+    
+                await postData(telefono, "telefono");
+    
+                // Crear el objeto dirección
+                let direccion = {
+                    id: 0,
+                    calle: calleDir,
+                    numero: numeroDir,
+                    dirBarrio: selectedHood
+                };
+    
+                await postData(direccion, "direccion");
+    
+                // Crear el objeto código postal
+                let postalCode = {
+                    id: 0,
+                    codigo: postalOffice,
+                    region: selectedRegion
+                };
+    
+                await postData(postalCode, "codigopostal");
+    
+                // Crear el objeto nuevaOficina
+                let nuevaOficina = {
+                    id: 0,
+                    telefono: {
+                        id: maxIDTel,
+                        nombre: telefono.nombre,
+                        tipoTelefono: selectedPhoneType
+                    },
+                    ciudad: selectedCity,
+                    pais: selectedPais,
+                    direccion: {
+                        id: maxIDDir,
+                        calle: direccion.calle,
+                        numero: direccion.numero,
+                        dirBarrio: selectedHood
+                    },
+                    codigoPostal: {
+                        id: maxIDPos,
+                        codigo: postalCode.codigo,
+                        region: selectedRegion
+                    }
+                };
+    
+                console.log("Oficina creada:", nuevaOficina);
+    
+                await postData(nuevaOficina, "oficinas");
+    
+                this.showOffices();
+    
+            } catch (error) {
+                console.error("Error al crear la oficina:", error);
+            }
+        });
+    }
 
+        
+    async calculateMaxId(endpoint) {
+        try {
+            const { data } = await getData(endpoint);  // Destructura solo 'data' del resultado
+            if (!Array.isArray(data)) {
+                throw new Error('Los datos no son un array');
+            }
+    
+            let maxID = 0;
+            data.forEach((item) => {
+                if (item.id >= maxID) {
+                    maxID = item.id + 1;
+                }
+            });
+            return maxID;
+        } catch (error) {
+            console.error(`Error al calcular maxID para ${endpoint}:`, error);
+            throw error;
+        }
     }
     
     
+
+    fillSelects() {
+        const selectCountryOficinas = document.getElementById("inCountryOffice");
+        const selectCityOficinas = document.getElementById("inCityOffice");
+        const selectHoodOficinas = document.getElementById("inHoodOffice");
+        const selectPhoneTypeOficinas = document.getElementById("inTypePhoneOffice");
+        const selectRegionOficinas = document.getElementById("inRegionOffice");
+    
+        // Llenar los selects con los datos obtenidos de las respectivas funciones
+        this.arrayPhoneTypes().then((tipostel) => {
+            if (tipostel) {
+                selectPhoneTypeOficinas.innerHTML = ''; 
+                tipostel.forEach(tipotel => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(tipotel);
+                    opc.textContent = tipotel.nombre;
+                    selectPhoneTypeOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener los tipos de teléfono.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los tipos de teléfono:", error);
+        });
+    
+        this.arrayCountries().then((paises) => {
+            if (paises) {
+                selectCountryOficinas.innerHTML = ''; 
+                paises.forEach(pais => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(pais);
+                    opc.textContent = pais.name;
+                    selectCountryOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener los países.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los países:", error);
+        });
+    
+        this.arrayCities().then((ciudades) => {
+            if (ciudades) {
+                selectCityOficinas.innerHTML = ''; 
+                ciudades.forEach(city => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(city);
+                    opc.textContent = city.nombreCiudad;
+                    selectCityOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener las ciudades.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener las ciudades:", error);
+        });
+    
+        this.arrayHood().then((barrios) => {
+            if (barrios) {
+                selectHoodOficinas.innerHTML = ''; 
+                barrios.forEach(barrio => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(barrio);
+                    opc.textContent = barrio.nombreBarrio;
+                    selectHoodOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener los barrios.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los barrios:", error);
+        });
+    
+        this.arrayRegion().then((regions) => {
+            if (regions) {
+                selectRegionOficinas.innerHTML = ''; 
+                regions.forEach(region => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(region);
+                    opc.textContent = region.nombre;
+                    selectRegionOficinas.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudieron obtener las regiones.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener las regiones:", error);
+        });
+    }
     
     closeAddOfficeModal() {
         const overlay = document.getElementById("overlay");
