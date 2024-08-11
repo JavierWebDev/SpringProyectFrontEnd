@@ -445,8 +445,41 @@ a {
     visibility: visible;
     opacity: 1;
     transform: translateY(0%);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); /* Sombra elevada */
+    background-color: #fff; /* Fondo blanco */
+    transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave para la sombra */
 }
 
+.popup-add.active:hover,
+.popup-info.active:hover,
+.popup-delete.active:hover,
+.popup-edit.active:hover,
+.popup-allright.active:hover  {
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.popup-allright.active .box-icon {
+    color: #4CAF50; /* Verde */
+    margin-right: 16px;
+}
+
+.popup-allright.active .button-cancel_modal {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    
+}
+
+.popup-allright.active p {
+    font-size: 16px;
+    margin-left: 1rem;
+    color: var(--text-color); 
+    text-align: center;
+}
+
+.allRigthContainer {
+    display: flex;
+}
 .cont-top_modal {
     display: flex;
     justify-content: space-between;
@@ -510,10 +543,14 @@ register-component {
     width: 100%;
 }
 
+.cont-input_two:only-child { 
+    grid-template-columns: 1fr; 
+}
+
 .cont-input_twoo {
     display: flex;
     flex-direction: column;
-    width: 100%;
+
 }
 
 .label-form {
@@ -549,6 +586,11 @@ register-component {
     color: var(--text-color);
 }
 
+.btnDeleteOffice:hover{
+    color: red;
+    transition: .3s;
+}
+
 /* WEB COMPONENTS */
 oficinas-menu, pedidos-menu, producto-menu {
     display: none;
@@ -559,6 +601,45 @@ oficinas-menu, pedidos-menu, producto-menu {
     width: 90%;
     margin: auto;
 }
+
+/* Modal Eliminar */
+
+.cont-buttons_delete {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: end;
+}
+.button-confirm_delete {
+    cursor: pointer;
+    transition: .3s;
+}
+
+.button-confirm_delete:hover{
+    color: var(--primary-color);
+}
+
+
+.button-cancel_delete {
+    cursor: pointer;
+    transition: .3s;
+}
+
+.button-cancel_delete:hover {
+    color: var(--primary-color);
+}
+
+
+/* modal informacion */
+
+.cont {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Una columna para etiquetas, dos para valores */
+    gap: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
+
 
 /* MEDIA QUERIES */
 @media (max-width: 850px) {
