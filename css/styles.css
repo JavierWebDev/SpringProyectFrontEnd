@@ -468,6 +468,26 @@ a {
     transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
 }
 
+.popup-allright {
+    background-color: var(--surface-color);
+    padding: 20px;
+    border-radius: 1em;
+    display: flex;
+    align-items: top;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh; 
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-50px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+    margin: 2rem auto;
+    overflow-y: auto; 
+    transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
+    z-index: 10;
+}
+
 .popup-add.active {
     visibility: visible;
     opacity: 1;
@@ -484,6 +504,11 @@ a {
     opacity: 1;
     transform: translateY(0%);
 }
+.popup-allright.active {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0%);
+}
 
 .cont-top_modal {
     display: flex;
@@ -494,6 +519,12 @@ a {
 .cont-info_p {
     text-align: center;
     font-size: 1.8rem;
+}
+
+.txt-showbox {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--lightBlue);
 }
 
 login-component {

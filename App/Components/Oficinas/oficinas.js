@@ -29,6 +29,13 @@ export class OficinasMenu extends HTMLElement {
                 </div>
 
                 <div id="containerShowOffices" class="elements-list"></div>
+
+                <div class="overlay" id="overlay4">
+                    <div id="popupAllrigth" class="popup-allright">
+                        <box-icon name='check-circle' color='#69ff94' ></box-icon>
+                        <div id="btnCloseModalsAllrigth" class="button-cancel_modal">&#10005;</div>
+                    </div>
+                </div>
                 
                 <div class="overlay" id="overlay3">
                     <div id="popupDelete" class="popup-delete">
@@ -45,7 +52,7 @@ export class OficinasMenu extends HTMLElement {
                 <div class="overlay" id="overlay2">
                     <div id="popupInfo" class="popup-info">
                         <div class="cont-top_modal">
-                            <div id="btnCancelOfficeInfo" class="button-cancel_modal">&#10005;</div>
+                            <div id="btnCloseAllrigth" class="button-cancel_modal">&#10005;</div>
                         </div>
                         <div id="infoModalOffice" class="cont"></div>
                     </div>
@@ -62,7 +69,7 @@ export class OficinasMenu extends HTMLElement {
                                 <div class="cont-input_two cont-input">
                                     <div class="cont-input_twoo">
                                         <label class="label-form" for="inPhoneOffice">Phone</label>
-                                        <input type="tel" class="input-form" name="inPhoneOffice" id="inPhoneOffice">
+                                        <input type="tel" class="input-form input-txt" name="inPhoneOffice" id="inPhoneOffice">
                                     </div>
                                     <div class="cont-input_twoo">
                                         <label class="label-form" for="inTypePhone">Phone Type</label>
@@ -84,9 +91,9 @@ export class OficinasMenu extends HTMLElement {
                                     <label class="label-form" for="inAddres">Address</label>
                                     <div id="inAddres">
                                         <label class="label-form_addr" for="inStreetOffice">Street</label>
-                                        <input class="input-form input-addr" id="inStreetOffice" name="inStreetOffice" type="text">
+                                        <input class="input-form input-addr input-txt" id="inStreetOffice" name="inStreetOffice" type="text">
                                         <label for="inNumberStreet">#</label>
-                                        <input class="input-form input-addr" id="inNumberStreet" name="inNumberStreet" type="text">
+                                        <input class="input-form input-addr input-txt" id="inNumberStreet" name="inNumberStreet" type="text">
                                     </div>
                                 </div>
                                 <div class="cont-input_wide cont-input">
@@ -95,7 +102,7 @@ export class OficinasMenu extends HTMLElement {
                                 </div>
                                 <div class="cont-input_wide cont-input">
                                     <label class="label-form" for="inPostalCodeOffice">Postal Code</label>
-                                    <input class="input-form" id="inPostalCodeOffice" name="inPostalCodeOffice" type="text">
+                                    <input class="input-form input-txt" id="inPostalCodeOffice" name="inPostalCodeOffice" type="text">
                                 </div>
                                 <div class="cont-input_wide cont-input">
                                     <label class="label-form" for="inRegionOffice">Region</label>
@@ -250,6 +257,8 @@ export class OficinasMenu extends HTMLElement {
             e.preventDefault();
     
             try {
+                let inputsFormText = document.querySelectorAll(".input-txt")
+
                 // Obtener los valores de los inputs
                 let nombreTelefono = document.getElementById("inPhoneOffice").value;
                 let calleDir = document.getElementById("inStreetOffice").value;
@@ -330,6 +339,11 @@ export class OficinasMenu extends HTMLElement {
                 await postData(nuevaOficina, "oficinas");
     
                 this.showOffices();
+
+                inputsFormText.forEach((inpt) => {
+                    inpt.value = ""
+                })
+                
     
             } catch (error) {
                 console.error("Error al crear la oficina:", error);
@@ -455,7 +469,6 @@ export class OficinasMenu extends HTMLElement {
         overlay.classList.remove("active");
         popUpAdd.classList.remove("active");
     }
-    
 
     showOffices() {
         const btnAddOffice = document.getElementById("btnAddOffice");
@@ -478,49 +491,66 @@ export class OficinasMenu extends HTMLElement {
     
         this.arrayOffices()
         .then((oficinas) => {
-            if (oficinas) {
-                contShowOffices.innerHTML = ''; // Limpiar la lista antes de añadir nuevas oficinas
-                oficinas.forEach(oficina => {
-                    const card = document.createElement("div");
-                    card.classList.add("card-element");
-                    card.innerHTML = `
-                        <p class="card-text">${oficina.id}</p>
-                        <p class="card-text">${oficina.telefono.nombre}</p>
-                        <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
-                        <div class="card-buttons_container">
-                            <a href="#" class="card-button btnInfoOffice" data-id="${oficina.id}">
-                                <box-icon name='info-circle' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button btnDeleteOffice" data-id="${oficina.id}">
-                                <box-icon name='trash' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button">
-                                <box-icon name='pencil' color='#508C9B'></box-icon>
-                            </a>
-                        </div>`;
-    
-                    contShowOffices.appendChild(card);
-                });
-    
-                // Añadir los event listeners después de haber añadido los botones al DOM
-                document.querySelectorAll(".btnInfoOffice").forEach(button => {
-                    button.addEventListener("click", e => {
-                        e.preventDefault();
-                        const officeId = button.getAttribute("data-id");
-                        const oficina = oficinas.find(o => o.id.toString() === officeId);
-    
-                        if (oficina) {
-                            this.showInfoModal(oficina);
-
-                        } else {
-                            console.error(`No se encontró la oficina con id: ${officeId}`);
-                        }
-                    });
-                });
-    
-                // También puedes añadir listeners para los botones de eliminar y editar aquí
+            if (oficinas.length === 0) {
+                contShowOffices.innerHTML = '<p class="txt-showbox">No hay oficinas registradas</p>'
             } else {
-                console.log("No se pudieron obtener las oficinas.");
+                if (oficinas) {
+                    contShowOffices.innerHTML = ''; // Limpiar la lista antes de añadir nuevas oficinas
+                    oficinas.forEach(oficina => {
+                        const card = document.createElement("div");
+                        card.classList.add("card-element");
+                        card.innerHTML = `
+                            <p class="card-text">${oficina.id}</p>
+                            <p class="card-text">${oficina.telefono.nombre}</p>
+                            <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
+                            <div class="card-buttons_container">
+                                <a href="#" class="card-button btnInfoOffice" data-id="${oficina.id}">
+                                    <box-icon name='info-circle' color='#508C9B'></box-icon>
+                                </a>
+                                <a href="#" class="card-button btnDeleteOffice" data-id="${oficina.id}">
+                                    <box-icon name='trash' color='#508C9B'></box-icon>
+                                </a>
+                                <a href="#" class="card-button">
+                                    <box-icon name='pencil' color='#508C9B'></box-icon>
+                                </a>
+                            </div>`;
+        
+                        contShowOffices.appendChild(card);
+                    });
+        
+                    // Añadir los event listeners después de haber añadido los botones al DOM
+                    document.querySelectorAll(".btnInfoOffice").forEach(button => {
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const officeId = button.getAttribute("data-id");
+                            const oficina = oficinas.find(o => o.id.toString() === officeId);
+        
+                            if (oficina) {
+                                this.showInfoModal(oficina);
+    
+                            } else {
+                                console.error(`No se encontró la oficina con id: ${officeId}`);
+                            }
+                        });
+                    });
+        
+                    document.querySelectorAll(".btnDeleteOffice").forEach(button => {
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const officeId = button.getAttribute("data-id");
+                            const oficina = oficinas.find(o => o.id.toString() === officeId);
+        
+                            if (oficina) {
+                                this.deleteOffice(oficina);
+    
+                            } else {
+                                console.error(`No se encontró la oficina con id: ${officeId}`);
+                            }
+                        });
+                    });
+                } else {
+                    console.log("No se pudieron obtener las oficinas.");
+                }
             }
         })
         .catch((error) => {
@@ -572,27 +602,45 @@ export class OficinasMenu extends HTMLElement {
         const popUpDelete = document.getElementById("popupDelete");
         const btnConfirmDelOffice = document.querySelector("#btnConfirmDelOffice");
         const btnCancelDelOffice = document.querySelector("#btnCancelDelOffice");
-
+        const contShowOffices = document.querySelector("#containerShowOffices");
+        const overlay4 = document.querySelector("#overlay4");
+        const popUpAllrigth = document.getElementById("popupAllrigth")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigth")
+    
         const closeDeletePopup = () => {
             overlay3.classList.remove("active");
             popUpDelete.classList.remove("active");
         };
 
+        const closeConfirmPopup = () => {
+            overlay4.classList.remove("active");
+            popUpAllrigth.classList.remove("active");
+        };
+    
         overlay3.classList.add("active");
         popUpDelete.classList.add("active");
-
+    
         const handleConfirmDelete = e => {
             e.preventDefault();
             deleteData(endpoint, office.id)
                 .then(response => {
                     if (response.ok) {
-                        popUpDelete.innerHTML = `
-                            <box-icon name='check-circle' type='solid' color='#6bf54a'></box-icon>
-                            <div id="btnCloseDel" class="button-cancel_modal">&#10005;</div>`;
+                        closeDeletePopup();
                         
-                        document.getElementById("btnCloseDel").addEventListener("click", e => {
+                        overlay4.classList.add("active")
+                        popUpAllrigth.classList.add("active")
+
+                        // Espera un pequeño retraso antes de actualizar la lista
+                        setTimeout(() => {
+                            contShowOffices.innerHTML = "";  // Limpiar lista actual
+                            this.showOffices();  // Vuelve a cargar y renderizar la lista de oficinas
+                        }, 200);  // Agrega un retraso corto
+    
+                        // Escuchar el evento de cierre del popup
+                        btnCloseModals.addEventListener("click", e => {
                             e.preventDefault();
-                            closeDeletePopup();
+                            overlay4.classList.remove("active")
+                            popUpAllrigth.classList.remove("active")
                         });
                     } else {
                         throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
@@ -610,14 +658,15 @@ export class OficinasMenu extends HTMLElement {
                     });
                 });
         };
-
+    
+        // Se asegura de que solo se escuche una vez el evento de confirmación
         btnConfirmDelOffice.addEventListener("click", handleConfirmDelete, { once: true });
-
+    
         btnCancelDelOffice.addEventListener("click", e => {
             e.preventDefault();
-            closeDeletePopup();
+            closeConfirmPopup();
         });
     }
-}
+}    
 
 customElements.define("oficinas-menu", OficinasMenu);

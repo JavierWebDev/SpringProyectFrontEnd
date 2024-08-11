@@ -50,7 +50,7 @@ class RegisterComponent extends HTMLElement {
                 // Almacenar el token
                 localStorage.setItem('authToken', data.token);
                 // Redireccionar a la página principal 
-                window.location.href = './index.html'; 
+                window.location.href = './login.html'; 
             } else {
                 this.shadowRoot.getElementById('message').textContent = data.message || 'Error en el registro';
             }
