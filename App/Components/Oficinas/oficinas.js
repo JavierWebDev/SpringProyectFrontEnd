@@ -969,7 +969,7 @@ export class OficinasMenu extends HTMLElement {
     
         btnCancelDelOffice.addEventListener("click", e => {
             e.preventDefault();
-            closeConfirmPopup();
+            closeDeletePopup();
         });
     }
 }    
