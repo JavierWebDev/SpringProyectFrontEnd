@@ -69,42 +69,46 @@ export class PedidosMenu extends HTMLElement {
     
                         <div class="cont-form">
                             <form id="addPedidoForm" class="form-new">
-                                <div>
-                                    <label class=label-form_addr>Fecha Pedido</label>
-                                    <input type=date class="input-form input-addr" name="fechaPedido">
-                                </div>
-                                <div>
-                                    <label class=label-form_addr>Fecha Esperada</label>
-                                    <input type=date class="input-form input-addr" name="fechaEsperada">
-                                </div>
 
-                                <div>
-                                    <label class=label-form_addr>Fecha Entrega</label>
-                                    <input type=date class="input-form input-addr" name="fechaEntrega">
-                                </div>
-
-
-                                <div>
-                                    <label class=label-form_addr>Comentarios adicionales</label>
-                                    <input type="text" class="input-form input-addr" name="comentarios">
-                                </div>
-
-
-                                <div class="cont-input_two cont-input">
+                                <div class="cont-input_two cont-input"> 
                                     <div class="cont-input_twoo">
-                                        <label class="label-form" for="inCountry">Cliente dueño del pedido</label>
-                                        <select class="input-form input-select"  id="inClientPedido"></select>
+                                        <label class="label-form" for="fechaPedido">Fecha Pedido</label>
+                                        <input type="date" class="input-form input-txt" name="fechaPedido" id="fechaPedido"> 
+                                    </div>
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="fechaEsperada">Fecha Esperada</label>
+                                        <input type="date" class="input-form input-txt" name="fechaEsperada" id="fechaEsperada">
                                     </div>
                                 </div>
-    
-                                <div class="cont-input_two cont-input">
+
+                                <div class="cont-input_two cont-input"> 
                                     <div class="cont-input_twoo">
-                                        <label class="label-form" for="inCountry">Estado del pedido</label>
-                                        <select class="input-form input-select"  id="inStatusPedido"></select>
+                                        <label class="label-form" for="fechaEntrega">Fecha Entrega</label>
+                                        <input type="date" class="input-form input-txt" name="fechaEntrega" id="fechaEntrega">
                                     </div>
                                 </div>
-    
-                                <button id="createNewPedido" class="button-new">ADD</button>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="comentarios">Comentarios adicionales</label>
+                                    <input type="text" class="input-form input-txt" name="comentarios" id="comentarios">
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inClientPedido">Cliente dueño del pedido</label>
+                                        <select class="input-form input-select" id="inClientPedido"></select>
+                                    </div>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inStatusPedido">Estado del pedido</label>
+                                        <select class="input-form input-select" id="inStatusPedido"></select>
+                                    </div>
+                                </div>
+
+                                <div class="button-add"> <button id="createNewPedido" class="button-new">ADD</button> </div>
+
                             </form>
                         </div>
                     </div>

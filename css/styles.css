@@ -543,10 +543,14 @@ register-component {
     width: 100%;
 }
 
+.cont-input_two:only-child { 
+    grid-template-columns: 1fr; 
+}
+
 .cont-input_twoo {
     display: flex;
     flex-direction: column;
-    width: 100%;
+
 }
 
 .label-form {

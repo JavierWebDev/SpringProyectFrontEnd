@@ -61,60 +61,60 @@ export class OficinasMenu extends HTMLElement {
                     </div>
                 </div>
 
-                <div id="overlay5" class="overlay">
-                    <div id="popUpEditOffice" class="popup-edit">
-                        <div class="cont-top_modal">
-                            <h1 class="titulo-list">Edit Office</h1>
-                            <div id="btnCancelEdit" class="button-cancel_modal">&#10005;</div>
-                        </div>
-                        <div class="cont-form">
-                            <form id="editOfficeForm" class="form-new">
-                                <div class="cont-input_two cont-input">
-                                    <div class="cont-input_twoo">
-                                        <label class="label-form" for="inPhoneEditOffice">Phone</label>
-                                        <input type="tel" class="input-form input-txt" name="inPhoneEditOffice" id="inPhoneEditOffice">
+                    <div id="overlay5" class="overlay">
+                        <div id="popUpEditOffice" class="popup-edit">
+                            <div class="cont-top_modal">
+                                <h1 class="titulo-list">Edit Office</h1>
+                                <div id="btnCancelEdit" class="button-cancel_modal">&#10005;</div>
+                            </div>
+                            <div class="cont-form">
+                                <form id="editOfficeForm" class="form-new">
+                                    <div class="cont-input_two cont-input">
+                                        <div class="cont-input_twoo">
+                                            <label class="label-form" for="inPhoneEditOffice">Phone</label>
+                                            <input type="tel" class="input-form input-txt" name="inPhoneEditOffice" id="inPhoneEditOffice">
+                                        </div>
+                                        <div class="cont-input_twoo">
+                                            <label class="label-form" for="inTypePhoneEditOffice">Phone Type</label>
+                                            <select class="input-form input-select" name="inTypePhoneEditOffice" id="inTypePhoneEditOffice"></select>
+                                        </div>
                                     </div>
-                                    <div class="cont-input_twoo">
-                                        <label class="label-form" for="inTypePhoneEditOffice">Phone Type</label>
-                                        <select class="input-form input-select" name="inTypePhoneEditOffice" id="inTypePhoneEditOffice"></select>
-                                    </div>
-                                </div>
 
-                                <div class="cont-input_two cont-input">
-                                    <div class="cont-input_twoo">
-                                        <label class="label-form" for="inCountryOfficeEdit">Country</label>
-                                        <select class="input-form input-select" name="inCountryOfficeEdit" id="inCountryOfficeEdit"></select>
+                                    <div class="cont-input_two cont-input">
+                                        <div class="cont-input_twoo">
+                                            <label class="label-form" for="inCountryOfficeEdit">Country</label>
+                                            <select class="input-form input-select" name="inCountryOfficeEdit" id="inCountryOfficeEdit"></select>
+                                        </div>
+                                        <div class="cont-input_twoo">
+                                            <label class="label-form" for="inCityOfficeEdit">City</label>
+                                            <select class="input-form input-select" name="inCityOfficeEdit" id="inCityOfficeEdit"></select>
+                                        </div>
                                     </div>
-                                    <div class="cont-input_twoo">
-                                        <label class="label-form" for="inCityOfficeEdit">City</label>
-                                        <select class="input-form input-select" name="inCityOfficeEdit" id="inCityOfficeEdit"></select>
+                                    <div class="cont-input_wide cont-input">
+                                        <label class="label-form" for="inAddres">Address</label>
+                                        <div id="inAddres">
+                                            <label class="label-form_addr" for="inStreetOfficeEdit">Street</label>
+                                            <input class="input-form input-addr input-txt" id="inStreetOfficeEdit" name="inStreetOfficeEdit" type="text">
+                                            <label for="inNumberStreetEdit">#</label>
+                                            <input class="input-form input-addr input-txt" id="inNumberStreetEdit" name="inNumberStreetEdit" type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inAddres">Address</label>
-                                    <div id="inAddres">
-                                        <label class="label-form_addr" for="inStreetOfficeEdit">Street</label>
-                                        <input class="input-form input-addr input-txt" id="inStreetOfficeEdit" name="inStreetOfficeEdit" type="text">
-                                        <label for="inNumberStreetEdit">#</label>
-                                        <input class="input-form input-addr input-txt" id="inNumberStreetEdit" name="inNumberStreetEdit" type="text">
+                                    <div class="cont-input_wide cont-input">
+                                        <label class="label-form" for="inHoodOfficeEdit">Neighborhood</label>
+                                        <select class="input-form input-select" name="inHoodOfficeEdit" id="inHoodOfficeEdit"></select>
                                     </div>
-                                </div>
-                                <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inHoodOfficeEdit">Neighborhood</label>
-                                    <select class="input-form input-select" name="inHoodOfficeEdit" id="inHoodOfficeEdit"></select>
-                                </div>
-                                <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inPostalCodeOfficeEdit">Postal Code</label>
-                                    <input class="input-form input-txt" id="inPostalCodeOfficeEdit" name="inPostalCodeOfficeEdit" type="text">
-                                </div>
-                                <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inRegionOfficeEdit">Region</label>
-                                    <select class="input-form input-select" name="inRegionOfficeEdit" id="inRegionOfficeEdit"></select>
-                                </div>
-                                <div class="button-add">
-                                    <button id="editOffice" class="button-new">FINISH</button>
-                                </div>   
-                            </form>
+                                    <div class="cont-input_wide cont-input">
+                                        <label class="label-form" for="inPostalCodeOfficeEdit">Postal Code</label>
+                                        <input class="input-form input-txt" id="inPostalCodeOfficeEdit" name="inPostalCodeOfficeEdit" type="text">
+                                    </div>
+                                    <div class="cont-input_wide cont-input">
+                                        <label class="label-form" for="inRegionOfficeEdit">Region</label>
+                                        <select class="input-form input-select" name="inRegionOfficeEdit" id="inRegionOfficeEdit"></select>
+                                    </div>
+                                    <div class="button-add">
+                                        <button id="editOffice" class="button-new">FINISH</button>
+                                    </div>   
+                                </form>
                         </div>
                     </div>
                 </div>
