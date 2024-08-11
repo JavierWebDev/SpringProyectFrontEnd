@@ -67,7 +67,7 @@ const updateData = async (newData, endpoint, id) => {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error en la solicitud PATCH:', error.message);
+        console.error('Error en la solicitud PUT:', error.message);
         throw error;
     }
 };

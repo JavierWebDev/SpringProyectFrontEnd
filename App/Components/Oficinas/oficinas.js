@@ -299,6 +299,10 @@ export class OficinasMenu extends HTMLElement {
     
     addNewOffice() {
         const officeForm = document.getElementById("addOfficeForm");
+
+        const overlay4 = document.querySelector("#overlay4");
+        const popUpAllrigth = document.getElementById("popupAllrigth")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigth")
     
         const selectCountryOficinas = document.getElementById("inCountryOffice");
         const selectCityOficinas = document.getElementById("inCityOffice");
@@ -402,6 +406,16 @@ export class OficinasMenu extends HTMLElement {
                     inpt.value = ""
                 })
                 
+                this.closeAddOfficeModal()
+
+                overlay4.classList.add("active")
+                popUpAllrigth.classList.add("active")
+
+                btnCloseModals.addEventListener("click", e => {
+                    e.preventDefault();
+                    overlay4.classList.remove("active")
+                    popUpAllrigth.classList.remove("active")
+                });
     
             } catch (error) {
                 console.error("Error al crear la oficina:", error);
@@ -620,17 +634,17 @@ export class OficinasMenu extends HTMLElement {
     editOffice(oficina) {
         const overlay = document.getElementById("overlay5");
         const popUpEdit = document.getElementById("popUpEditOffice")
-        const btnCerrar = document.getElementById("btnCancelEdit")
-
+        const btnCerrar = document.getElementById("btnCancelEdit");
+    
         overlay.classList.add("active");
         popUpEdit.classList.add("active");
-
+    
         btnCerrar.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.remove("active");
             popUpEdit.classList.remove("active");
         });
-
+    
         const selectCountryOficinas = document.getElementById("inCountryOfficeEdit");
         const selectCityOficinas = document.getElementById("inCityOfficeEdit");
         const selectHoodOficinas = document.getElementById("inHoodOfficeEdit");
@@ -646,8 +660,8 @@ export class OficinasMenu extends HTMLElement {
             e.preventDefault();
     
             try {
-                let inputsFormText = document.querySelectorAll(".input-txt")
-
+                let inputsFormText = document.querySelectorAll(".input-txt");
+    
                 // Obtener los valores de los inputs
                 let nombreTelefono = document.getElementById("inPhoneEditOffice").value;
                 let calleDir = document.getElementById("inStreetOfficeEdit").value;
@@ -667,7 +681,7 @@ export class OficinasMenu extends HTMLElement {
                 const selectedOptionRegion = selectRegionOficinas.options[selectRegionOficinas.selectedIndex];
                 const selectedRegion = JSON.parse(selectedOptionRegion.value);
     
-                // Calcular el maxIDTel
+                // Calcular el maxIDTel, maxIDDir y maxIDPos
                 let maxIDTel = await this.calculateMaxId("telefono");
                 let maxIDDir = await this.calculateMaxId("direccion");
                 let maxIDPos = await this.calculateMaxId("codigopostal");
@@ -727,18 +741,21 @@ export class OficinasMenu extends HTMLElement {
     
                 await updateData(nuevaOficina, "oficinas", oficina.id);
     
-                this.showOffices();
-
-                inputsFormText.forEach((inpt) => {
-                    inpt.value = ""
-                })
+                // Refrescar la lista de oficinas inmediatamente después de la actualización
+                contShowOffices.innerHTML = "";  // Limpiar lista actual
+                this.showOffices();  // Vuelve a cargar y renderizar la lista de oficinas
                 
+                // Limpiar los campos del formulario
+                inputsFormText.forEach((inpt) => {
+                    inpt.value = "";
+                });
     
             } catch (error) {
                 console.error("Error al crear la oficina:", error);
             }
         });
     }
+    
 
     showOffices() {
         const btnAddOffice = document.getElementById("btnAddOffice");
