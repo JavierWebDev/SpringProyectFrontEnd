@@ -33,6 +33,7 @@ export class OficinasMenu extends HTMLElement {
                 <div class="overlay" id="overlay4">
                     <div id="popupAllrigth" class="popup-allright">
                         <box-icon name='check-circle' color='#69ff94' ></box-icon>
+                        <p> Eliminado!</p>
                         <div id="btnCloseModalsAllrigth" class="button-cancel_modal">&#10005;</div>
                     </div>
                 </div>

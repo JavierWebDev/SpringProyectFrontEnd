@@ -442,9 +442,42 @@ a {
 .popup-delete.active,
 .popup-edit.active,
 .popup-allright.active  {
+    display: flex;
+    flex-direction: row;
     visibility: visible;
     opacity: 1;
     transform: translateY(0%);
+    /* Material Design */
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); /* Sombra elevada */
+    background-color: #fff; /* Fondo blanco */
+    transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave para la sombra */
+}
+
+.popup-add.active:hover,
+.popup-info.active:hover,
+.popup-delete.active:hover,
+.popup-edit.active:hover,
+.popup-allright.active:hover  {
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.popup-allright.active .box-icon {
+    color: #4CAF50; /* Verde */
+    margin-right: 16px;
+}
+
+.popup-allright.active .button-cancel_modal {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    
+}
+
+.popup-allright.active p {
+    font-size: 16px;
+    margin-left: 1rem;
+    color: var(--text-color); 
+    text-align: center;
 }
 
 .cont-top_modal {
@@ -558,6 +591,32 @@ oficinas-menu, pedidos-menu, producto-menu {
 .container-oficinas {
     width: 90%;
     margin: auto;
+}
+
+/* Modal Eliminar */
+
+.cont-buttons_delete {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.button-confirm_delete {
+    cursor: pointer;
+    transition: .3s;
+}
+
+.button-confirm_delete:hover{
+    color: var(--primary-color);
+}
+
+
+.button-cancel_delete {
+    cursor: pointer;
+    transition: .3s;
+}
+
+.button-cancel_delete:hover {
+    color: var(--primary-color);
 }
 
 /* MEDIA QUERIES */
