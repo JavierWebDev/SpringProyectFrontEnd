@@ -582,6 +582,11 @@ register-component {
     color: var(--text-color);
 }
 
+.btnDeleteOffice:hover{
+    color: red;
+    transition: .3s;
+}
+
 /* WEB COMPONENTS */
 oficinas-menu, pedidos-menu, producto-menu {
     display: none;
@@ -599,6 +604,7 @@ oficinas-menu, pedidos-menu, producto-menu {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
+    justify-content: end;
 }
 .button-confirm_delete {
     cursor: pointer;
@@ -618,6 +624,18 @@ oficinas-menu, pedidos-menu, producto-menu {
 .button-cancel_delete:hover {
     color: var(--primary-color);
 }
+
+
+/* modal informacion */
+
+.cont {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Una columna para etiquetas, dos para valores */
+    gap: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
+
 
 /* MEDIA QUERIES */
 @media (max-width: 850px) {
