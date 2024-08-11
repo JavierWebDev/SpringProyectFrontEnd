@@ -58,6 +58,64 @@ export class OficinasMenu extends HTMLElement {
                     </div>
                 </div>
 
+                <div id="overlay" class="overlay5">
+                    <div id="popUpEditOffice" class="popup-edit">
+                        <div class="cont-top_modal">
+                            <h1 class="titulo-list">Edit Office</h1>
+                            <div id="btnCancelAdd" class="button-cancel_modal">&#10005;</div>
+                        </div>
+                        <div class="cont-form">
+                            <form id="editOfficeForm" class="form-new">
+                                <div class="cont-input_two cont-input">
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inPhoneEditOffice">Phone</label>
+                                        <input type="tel" class="input-form input-txt" name="inPhoneEditOffice" id="inPhoneEditOffice">
+                                    </div>
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inTypePhoneEditOffice">Phone Type</label>
+                                        <select class="input-form input-select" name="inTypePhoneEditOffice" id="inTypePhoneEditOffice"></select>
+                                    </div>
+                                </div>
+
+                                <div class="cont-input_two cont-input">
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inCountry">Country</label>
+                                        <select class="input-form input-select" name="inCountry" id="inCountryOffice"></select>
+                                    </div>
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inCity">City</label>
+                                        <select class="input-form input-select" name="inCity" id="inCityOffice"></select>
+                                    </div>
+                                </div>
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inAddres">Address</label>
+                                    <div id="inAddres">
+                                        <label class="label-form_addr" for="inStreetOffice">Street</label>
+                                        <input class="input-form input-addr input-txt" id="inStreetOffice" name="inStreetOffice" type="text">
+                                        <label for="inNumberStreet">#</label>
+                                        <input class="input-form input-addr input-txt" id="inNumberStreet" name="inNumberStreet" type="text">
+                                    </div>
+                                </div>
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inNeighHood">Neighborhood</label>
+                                    <select class="input-form input-select" name="inHood" id="inHoodOffice"></select>
+                                </div>
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inPostalCodeOffice">Postal Code</label>
+                                    <input class="input-form input-txt" id="inPostalCodeOffice" name="inPostalCodeOffice" type="text">
+                                </div>
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inRegionOffice">Region</label>
+                                    <select class="input-form input-select" name="inRegionOffice" id="inRegionOffice"></select>
+                                </div>
+                                <div class="button-add">
+                                    <button id="createNewOffice" class="button-new">ADD</button>
+                                </div>   
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="overlay" class="overlay">
                     <div id="popUpAdd" class="popup-add">
                         <div class="cont-top_modal">
@@ -470,6 +528,10 @@ export class OficinasMenu extends HTMLElement {
         popUpAdd.classList.remove("active");
     }
 
+    editOffice(oficina) {
+        const overlay = document.getElementById("overlay5");
+    }
+
     showOffices() {
         const btnAddOffice = document.getElementById("btnAddOffice");
         const overlay = document.getElementById("overlay");
@@ -510,7 +572,7 @@ export class OficinasMenu extends HTMLElement {
                                 <a href="#" class="card-button btnDeleteOffice" data-id="${oficina.id}">
                                     <box-icon name='trash' color='#508C9B'></box-icon>
                                 </a>
-                                <a href="#" class="card-button">
+                                <a href="#" class="card-button btnEditOffice"  data-id="${oficina.id}>
                                     <box-icon name='pencil' color='#508C9B'></box-icon>
                                 </a>
                             </div>`;
@@ -542,6 +604,21 @@ export class OficinasMenu extends HTMLElement {
         
                             if (oficina) {
                                 this.deleteOffice(oficina);
+    
+                            } else {
+                                console.error(`No se encontró la oficina con id: ${officeId}`);
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll(".btnEditOffice").forEach(button => {
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const officeId = button.getAttribute("data-id");
+                            const oficina = oficinas.find(o => o.id.toString() === officeId);
+        
+                            if (oficina) {
+                                this.editOffice(oficina);
     
                             } else {
                                 console.error(`No se encontró la oficina con id: ${officeId}`);

@@ -347,12 +347,13 @@ a {
 
 .cont-list_big {
     min-width: 90%;
-    min-height: 600px;
+    max-height: 600px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-shadow: .4em .4em 2em#00000041;
+    overflow: scroll;
 }
 
 .cont-list, .card-element {
@@ -414,67 +415,16 @@ a {
     opacity: 1;
 }
 
-.popup-add {
-    background-color: var(--surface-color);
-    padding: 20px;
-    border-radius: 1em;
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh; 
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-50px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-    margin: 2rem auto;
-    overflow-y: auto; 
-    transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
-}
-
-.popup-info {
-    background-color: var(--surface-color);
-    padding: 20px;
-    border-radius: 1em;
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh; 
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-50px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-    margin: 2rem auto;
-    overflow-y: auto; 
-    transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
-}
-
-.popup-delete {
-    background-color: var(--surface-color);
-    padding: 20px;
-    border-radius: 1em;
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh; 
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-50px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-    margin: 2rem auto;
-    overflow-y: auto; 
-    transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
-}
-
+.popup-add,
+.popup-info,
+.popup-delete,
+.popup-edit,
 .popup-allright {
     background-color: var(--surface-color);
     padding: 20px;
     border-radius: 1em;
     display: flex;
-    align-items: top;
-    justify-content: space-between;
+    flex-direction: column;
     width: 90%;
     max-width: 500px;
     max-height: 90vh; 
@@ -485,26 +435,13 @@ a {
     margin: 2rem auto;
     overflow-y: auto; 
     transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
-    z-index: 10;
 }
 
-.popup-add.active {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0%);
-}
-
-.popup-info.active {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0%);
-}
-.popup-delete.active {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0%);
-}
-.popup-allright.active {
+.popup-add.active,
+.popup-info.active,
+.popup-delete.active,
+.popup-edit.active,
+.popup-allright.active  {
     visibility: visible;
     opacity: 1;
     transform: translateY(0%);
