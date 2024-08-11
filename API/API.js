@@ -55,7 +55,7 @@ const getElementData = async(endpoint, id) => {
 const updateData = async (newData, endpoint, id) => {
     try {
         const response = await fetch(`${URL_API}/${endpoint}/${id}`, {
-            method: "PATCH",
+            method: "PUT",
             headers: myHeaders(),
             body: JSON.stringify(newData)
         });
