@@ -52,7 +52,7 @@ export class OficinasMenu extends HTMLElement {
                 <div class="overlay" id="overlay2">
                     <div id="popupInfo" class="popup-info">
                         <div class="cont-top_modal">
-                            <div id="btnCloseAllrigth" class="button-cancel_modal">&#10005;</div>
+                            <div id="btnCancelOfficeInfo" class="button-cancel_modal">&#10005;</div>
                         </div>
                         <div id="infoModalOffice" class="cont"></div>
                     </div>
@@ -626,7 +626,7 @@ export class OficinasMenu extends HTMLElement {
                 .then(response => {
                     if (response.ok) {
                         closeDeletePopup();
-                        
+
                         overlay4.classList.add("active")
                         popUpAllrigth.classList.add("active")
 
