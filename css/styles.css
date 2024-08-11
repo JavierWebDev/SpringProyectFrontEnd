@@ -442,12 +442,9 @@ a {
 .popup-delete.active,
 .popup-edit.active,
 .popup-allright.active  {
-    display: flex;
-    flex-direction: row;
     visibility: visible;
     opacity: 1;
     transform: translateY(0%);
-    /* Material Design */
     box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); /* Sombra elevada */
     background-color: #fff; /* Fondo blanco */
     transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave para la sombra */
@@ -480,6 +477,9 @@ a {
     text-align: center;
 }
 
+.allRigthContainer {
+    display: flex;
+}
 .cont-top_modal {
     display: flex;
     justify-content: space-between;
