@@ -34,7 +34,7 @@ export class OficinasMenu extends HTMLElement {
                     <div id="popupAllrigth" class="popup-allright">
                         <div class="allRigthContainer">
                             <box-icon name='check-circle' color='#69ff94' ></box-icon>
-                            <p> Eliminado!</p>
+                            <p> Correcto!</p>
                             <div id="btnCloseModalsAllrigth" class="button-cancel_modal">&#10005;</div>
                         </div>
                     </div>
