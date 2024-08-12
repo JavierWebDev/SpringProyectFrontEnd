@@ -46,11 +46,11 @@ export class MainMenu extends HTMLElement {
     controlComponents() {
         const menuprincipal = document.querySelector("main-menu")
 
-        const btnProductos = document.querySelector("#btnProductos");
-        const secProductos = document.querySelector("productos-menu")
-
         const btnOficinas = document.querySelector("#btnOficinas")
         const secOficinas = document.querySelector("oficinas-menu")
+
+        const btnProductos = document.querySelector("#btnProductos");
+        const secProductos = document.querySelector("productos-menu")
 
         const btnPedidos = document.querySelector("#btnPedidos")
         const secPedidos = document.querySelector("pedidos-menu")
@@ -68,6 +68,13 @@ export class MainMenu extends HTMLElement {
             secOficinas.style.display = "block"
         })
 
+        /* CONTROLADOR PRODUCTOS */
+
+        btnProductos.addEventListener("click", () => {
+            menuprincipal.style.display = "none"
+            secProductos.style.display = "block"
+        })
+
         /* CONTROLADOR PEDIDOS */
 
         btnPedidos.addEventListener("click", () => {
@@ -80,7 +87,6 @@ export class MainMenu extends HTMLElement {
         btnClients.addEventListener("click", () => {
             menuprincipal.style.display = "none"
             secClients.style.display = "block"
-            secProductos.style.display = "block"
         })
 
         /* CONTROLADOR PAGOS */

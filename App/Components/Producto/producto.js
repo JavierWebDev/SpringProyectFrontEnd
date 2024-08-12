@@ -1,4 +1,5 @@
 import { deleteData, getDataTry, getData, postData, updateData } from '/API/API.js';
+import { filterByRange } from '/API/USAPI.js';
 
 export class ProductosMenu extends HTMLElement {
     constructor() {
@@ -8,6 +9,7 @@ export class ProductosMenu extends HTMLElement {
         this.showProducts();
         this.addNewProduct();
         this.controlModalFilter();
+        this.filterProductsByRange();
     }
 
     render() {
@@ -23,35 +25,7 @@ export class ProductosMenu extends HTMLElement {
                 <a id="btnAddProduct" class="button-new" href="#"><box-icon name='plus' color="#FFF"></box-icon> New Product</a>
             </div>
 
-            <div class="cont-list_big">
-                <div class="cont-list">
-                    <p class="titulo-list-id">ID</p>
-                    <p class="titulo-list-id">Name</p>
-                    <p class="titulo-list-id">Sale Price</p>
-                </div>
-
-                <div id="containerShowProducts" class="elements-list"></div>
-
-                <div class="overlay" id="overlay4-product">
-                    <div id="popupAllright-product" class="popup-allright">
-                        <box-icon name='check-circle' color='#69ff94' ></box-icon>
-                        <div id="btnCloseModalsAllrigth-product" class="button-cancel_modal">&#10005;</div>
-                    </div>
-                </div>
-
-                <div class="overlay" id="overlayFilterByRange">
-                    <div id="popUpFilterByRange" class="popup-filter">
-                        <div id="btnCloseModalFilterProduct" class="button-cancel_modal">&#10005;</div>
-                    
-                        <div class="cont-input_wide cont-input">
-                            <label class="label-form" for="selRangeFilterProduct">Product Range</label>
-                            <select class="input-form input-select" name="selRangeFilterProduct" id="selRangeFilterProduct" onchange="filterProductsByRange()">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="overlay" id="overlay3-product">
+            <div class="overlay" id="overlay3-product">
                     <div id="popupDelete-product" class="popup-delete">
                         <div id="delModalProduct" class="cont">
                             <p>Would you delete the product?</p>
@@ -199,6 +173,37 @@ export class ProductosMenu extends HTMLElement {
                         </div>
                     </div>
                 </div>
+
+            <div class="cont-list_big">
+                <div class="cont-list">
+                    <p class="titulo-list-id">ID</p>
+                    <p class="titulo-list-id">Name</p>
+                    <p class="titulo-list-id">Sale Price</p>
+                </div>
+
+                <div id="containerShowProducts" class="elements-list"></div>
+
+                <div class="overlay" id="overlay4-product">
+                    <div id="popupAllright-product" class="popup-allright">
+                        <box-icon name='check-circle' color='#69ff94' ></box-icon>
+                        <div id="btnCloseModalsAllrigth-product" class="button-cancel_modal">&#10005;</div>
+                    </div>
+                </div>
+
+                <div class="overlay" id="overlayFilterByRange">
+                    <div id="popUpFilterByRange" class="popup-filter">
+                        <div id="btnCloseModalFilterProduct" class="button-cancel_modal">&#10005;</div>
+                    
+                        <div class="cont-input_wide cont-input">
+                            <label class="label-form" for="selRangeFilterProduct">Product Range</label>
+                            <select class="input-form input-select" name="selRangeFilterProduct" id="selRangeFilterProduct">
+                            </select>
+
+                            <div id="contFilteredProductsByRange">
+                            <div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>`;
     }
@@ -250,18 +255,6 @@ export class ProductosMenu extends HTMLElement {
         return data;
     }
 
-    async arrayProductRanges() {
-        const endpoint = "gamaproductos";
-        const { data, error } = await getData(endpoint);
-
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-
-        return data;
-    }
-
     controlModalFilter() {
         const btnFilterProductos = document.getElementById("btnProductByGama")
         const btnCloseProducts = document.getElementById("btnCloseModalFilterProduct")
@@ -302,9 +295,24 @@ export class ProductosMenu extends HTMLElement {
     }
 
     filterProductsByRange() {
-        const selectedRange = document.getElementById("selRangeFilterProduct").value
+        const selFilterProduc = document.getElementById("selRangeFilterProduct")
 
-        
+        selFilterProduc.addEventListener("change", e => {
+            const selectedRange = document.getElementById("selRangeFilterProduct").value
+
+            filterByRange(selectedRange)
+            .then(result => {
+                if (result.data) {
+                    console.log('Productos:', result.data);
+                    // Aquí puedes procesar los datos como quieras
+                } else {
+                    console.error('Error al obtener productos:', result.error);
+                }
+            })
+            .catch(error => {
+                console.error('Unhandled error:', error);
+            });
+        })
     }
 
     addNewProduct() {
@@ -770,7 +778,7 @@ export class ProductosMenu extends HTMLElement {
         const overlay3 = document.getElementById("overlay3-product");
         const popUpDelete = document.getElementById("popupDelete-product");
         const btnConfirmDelProduct = document.querySelector("#btnConfirmDelProduct");
-        const btnCancelDelProduct = document.querySelector("#btnCloseModalsAllrigth-product");
+        const btnCancelDelProduct = document.querySelector("#btnCancelDelProduct");
         const contShowProducts = document.querySelector("#containerShowProducts");
         const overlay4 = document.querySelector("#overlay4-product");
         const popUpAllright = document.getElementById("popupAllright-product")
@@ -806,8 +814,7 @@ export class ProductosMenu extends HTMLElement {
 
                         btnCancelDelProduct.addEventListener("click", e => {
                             e.preventDefault();
-                            overlay4.classList.remove("active")
-                            popUpAllright.classList.remove("active")
+                            closeConfirmPopup()
                         });
                     } else {
                         throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
