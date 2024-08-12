@@ -1,4 +1,4 @@
-import { deleteData, getDataTry, getData, postData } from '/API/API.js';
+import { deleteData, getDataTry, getData, postData, updateData } from '/API/API.js';
 
 export class ProductosMenu extends HTMLElement {
     constructor() {
@@ -7,6 +7,7 @@ export class ProductosMenu extends HTMLElement {
         this.goBack();
         this.showProducts();
         this.addNewProduct();
+        this.controlModalFilter();
     }
 
     render() {
@@ -18,6 +19,7 @@ export class ProductosMenu extends HTMLElement {
 
             <div class="container-titulos_list">
                 <h1 class="titulo-list">Products</h1>
+                <a id="btnProductByGama" class="button-filter" href="#"><box-icon name='plus' color="#FFF"></box-icon>Filter By Range</a>
                 <a id="btnAddProduct" class="button-new" href="#"><box-icon name='plus' color="#FFF"></box-icon> New Product</a>
             </div>
 
@@ -34,6 +36,18 @@ export class ProductosMenu extends HTMLElement {
                     <div id="popupAllright-product" class="popup-allright">
                         <box-icon name='check-circle' color='#69ff94' ></box-icon>
                         <div id="btnCloseModalsAllrigth-product" class="button-cancel_modal">&#10005;</div>
+                    </div>
+                </div>
+
+                <div class="overlay" id="overlayFilterByRange">
+                    <div id="popUpFilterByRange" class="popup-filter">
+                        <div id="btnCloseModalFilterProduct" class="button-cancel_modal">&#10005;</div>
+                    
+                        <div class="cont-input_wide cont-input">
+                            <label class="label-form" for="selRangeFilterProduct">Product Range</label>
+                            <select class="input-form input-select" name="selRangeFilterProduct" id="selRangeFilterProduct" onchange="filterProductsByRange()">
+                            </select>
+                        </div>
                     </div>
                 </div>
                 
@@ -55,6 +69,70 @@ export class ProductosMenu extends HTMLElement {
                             <div id="btnCancelProductInfo" class="button-cancel_modal">&#10005;</div>
                         </div>
                         <div id="infoModalProduct" class="cont"></div>
+                    </div>
+                </div>
+
+                <div id="overlayEditproduct" class="overlay">
+                    <div id="popUpEditProduct" class="popup-edit">
+                        <div class="cont-top_modal">
+                            <h1 class="titulo-list">Edit Product</h1>
+                            <div id="btnCancelEditProduct" class="button-cancel_modal">&#10005;</div>
+                        </div>
+                        <div class="cont-form">
+                            <form id="editProductForm" class="form-new">
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inNameEditProduct">Name</label>
+                                    <input type="text" class="input-form" name="inNameEditProduct" id="inNameEditProduct" placeholder="Enter product name" required>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inSalePriceEditProduct">Sale Price</label>
+                                    <input type="number" class="input-form" name="inSalePriceEditProduct" id="inSalePriceEditProduct" placeholder="Enter sale price" required>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inSupplierPriceEditProduct">Supplier Price</label>
+                                    <input type="number" class="input-form" name="inSupplierPriceEditProduct" id="inSupplierPriceEditProduct" placeholder="Enter supplier price" required>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inProductRangeEditProduct">Product Range</label>
+                                    <select class="input-form input-select" name="inProductRangeEditProduct" id="inProductRangeEditProduct"></select>
+                                </div>
+
+                            <div class="cont-input_wide cont-input">
+                                <label class="label-form" for="indimensions">Dimensions</label>
+                                <div id="indimensions">
+
+                                    <label class="label-form" for="heightEdit">Height</label>
+                                    <input class="input-form" id="heightEdit" name="heightEdit" type="number" step="0.01" placeholder="Enter height" required>
+
+
+                                    <label class="label-form" for="widthEdit">Width</label>
+                                    <input class="input-form" id="widthEdit" name="widthEdit" type="number" step="0.01" placeholder="Enter width" required>
+
+
+                                    <label class="label-form" for="lengthEdit">Length</label>
+                                    <input class="input-form" id="lengthEdit" name="lengthEdit" type="number" step="0.01" placeholder="Enter length" required>
+                                
+                                </div>
+                            </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inSupplierProductEdit">Supplier</label>
+                                    <select class="input-form input-select" name="inSupplierProductEdit" id="inSupplierProductEdit"></select>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="inStockProductEdit">Stock</label>
+                                    <input type="number" class="input-form" name="inStockProductEdit" id="inStockProductEdit" placeholder="Enter stock quantity" required>
+                                </div>
+
+                                <div class="button-add">
+                                    <button id="editProduct" class="button-new">FINISH</button>
+                                </div>   
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -140,19 +218,19 @@ export class ProductosMenu extends HTMLElement {
     async arrayProducts() {
         const endpoint = "productos";
         const { data, error } = await getData(endpoint);
-        
+
         if (error) {
             console.log(`Error: ${error.message}`);
             return null;
         }
-        
+
         return data;
     }
 
     async arrayProductRanges() {
         const endpoint = "gamaproductos";
         const { data, error } = await getData(endpoint);
-        
+
         if (error) {
             console.log(`Error: ${error.message}`);
             return null;
@@ -163,29 +241,92 @@ export class ProductosMenu extends HTMLElement {
     async arraySuppliers() {
         const endpoint = "proveedor";
         const { data, error } = await getData(endpoint);
-        
+
         if (error) {
             console.log(`Error: ${error.message}`);
             return null;
         }
-        
+
         return data;
+    }
+
+    async arrayProductRanges() {
+        const endpoint = "gamaproductos";
+        const { data, error } = await getData(endpoint);
+
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+
+        return data;
+    }
+
+    controlModalFilter() {
+        const btnFilterProductos = document.getElementById("btnProductByGama")
+        const btnCloseProducts = document.getElementById("btnCloseModalFilterProduct")
+        const overlay = document.getElementById("overlayFilterByRange")
+        const popupFilter = document.getElementById("popUpFilterByRange")
+        const selectProductFilterRange = document.getElementById("selRangeFilterProduct")
+
+
+        btnFilterProductos.addEventListener("click", e => {
+            e.preventDefault()
+
+            overlay.classList.add("active")
+            popupFilter.classList.add("active")
+        })
+
+        btnCloseProducts.addEventListener("click", e => {
+            e.preventDefault()
+
+            overlay.classList.remove("active")
+            popupFilter.classList.remove("active")
+        })
+
+        this.arrayProductRanges().then((ranges) => {
+            if (ranges) {
+                selectProductFilterRange.innerHTML = '';
+                ranges.forEach(range => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(range);
+                    opc.textContent = range.nombre;
+                    selectProductFilterRange.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudo obtener las gamas de producto.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener las gamas de producto:", error);
+        });
+    }
+
+    filterProductsByRange() {
+        const selectedRange = document.getElementById("selRangeFilterProduct").value
+
+        
     }
 
     addNewProduct() {
         const productForm = document.getElementById("addProductForm");
-    
-        const selectProductRange = document.getElementById("inProductRangeProduct");
+
+        const overlay4 = document.querySelector("#overlay4-product");
+        const popUpAllrigth = document.getElementById("popupAllright-product")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigth-product")
+
+        const selectedOptionProductRange = document.getElementById("inProductRangeProduct");
         const selectSupplier = document.getElementById("inSupplierProduct");
-    
+
         const btnSendProduct = document.getElementById("createNewProduct");
-    
+
         this.fillSelects();
-    
+
         btnSendProduct.addEventListener("click", async (e) => {
             e.preventDefault();
-    
+
             try {
+                let inputsFormText = document.querySelectorAll(".input-txt")
+
                 let nameProduct = document.getElementById("inNameProduct").value;
                 let salePriceProduct = Number.parseFloat(document.getElementById("inSalePriceProduct").value);
                 let supplierPriceProduct = Number.parseFloat(document.getElementById("inSupplierPriceProduct").value);
@@ -193,11 +334,20 @@ export class ProductosMenu extends HTMLElement {
                 let widthDimension = document.getElementById("width").value;
                 let lengthDimension = document.getElementById("length").value;
                 let stockProduct = Number.parseInt(document.getElementById("inStockProduct").value);
-    
+
                 const selectedProductRange = JSON.parse(selectedOptionProductRange.value);
                 const selectedSupplier = JSON.parse(selectSupplier.value);
-    
+
                 let maxIdDimensiones = await this.calculateMaxId("dimensiones");
+                let maxIdstock = await this.calculateMaxId("stock");
+
+                
+                let stockProducto = {
+                    id : 0,
+                    stock : stockProduct
+                }
+
+                await postData(stockProducto, "stock")
 
                 let dimensiones = {
                     id: 0,
@@ -207,29 +357,47 @@ export class ProductosMenu extends HTMLElement {
                 };
 
                 await postData(dimensiones, "dimensiones")
-    
+
                 let newProduct = {
                     id: 0,
-                    name: nameProduct,
-                    salePrice: salePriceProduct,
-                    supplierPrice: supplierPriceProduct,
-                    productRange: selectedProductRange,
-                    dimensiones: {
+                    nombreProducto: nameProduct,
+                    precioProveedor: supplierPriceProduct,
+                    precioVenta: salePriceProduct,
+                    gamaProducto : selectedProductRange,
+                    dimensionesProducto: {
                         id: maxIdDimensiones,
                         ancho: dimensiones.ancho,
                         largo: dimensiones.largo,
                         alto: dimensiones.alto
                     },
-                    supplier: selectedSupplier,
-                    stock: stockProduct
+                    proveedorProducto: selectedSupplier,
+                    stockProducto: {
+                        id : maxIdstock,
+                        stock : stockProducto.stock
+                    }
                 };
-    
+
                 console.log("Producto creado:", newProduct);
-    
+
                 await postData(newProduct, "productos");
-    
+
                 this.showProducts();
-    
+
+                inputsFormText.forEach((inpt) => {
+                    inpt.value = ""
+                })
+                
+                this.closeAddOfficeModal()
+
+                overlay4.classList.add("active")
+                popUpAllrigth.classList.add("active")
+
+                btnCloseModals.addEventListener("click", e => {
+                    e.preventDefault();
+                    overlay4.classList.remove("active")
+                    popUpAllrigth.classList.remove("active")
+                });
+
             } catch (error) {
                 console.error("Error creating product:", error);
             }
@@ -242,7 +410,7 @@ export class ProductosMenu extends HTMLElement {
             if (!Array.isArray(data)) {
                 throw new Error('Data is not an array');
             }
-    
+
             let maxID = 0;
             data.forEach((item) => {
                 if (item.id >= maxID) {
@@ -255,14 +423,14 @@ export class ProductosMenu extends HTMLElement {
             throw error;
         }
     }
-    
+
     fillSelects() {
         const selectProductRange = document.getElementById("inProductRangeProduct");
         const selectSupplier = document.getElementById("inSupplierProduct");
-    
+
         this.arrayProductRanges().then((ranges) => {
             if (ranges) {
-                selectProductRange.innerHTML = ''; 
+                selectProductRange.innerHTML = '';
                 ranges.forEach(range => {
                     const opc = document.createElement("option");
                     opc.value = JSON.stringify(range);
@@ -275,10 +443,155 @@ export class ProductosMenu extends HTMLElement {
         }).catch((error) => {
             console.error("Error al obtener las gamas de producto:", error);
         });
-    
+
         this.arraySuppliers().then((suppliers) => {
             if (suppliers) {
-                selectSupplier.innerHTML = ''; 
+                selectSupplier.innerHTML = '';
+                suppliers.forEach(supplier => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(supplier);
+                    opc.textContent = supplier.nombre;
+                    selectSupplier.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudo obtener los proveedores.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener proveedores:", error);
+        });
+    }
+
+    editProduct(producto) {
+        const overlay = document.getElementById("overlayEditproduct");
+        const popUpEdit = document.getElementById("popUpEditProduct")
+        const btnCerrar = document.getElementById("btnCancelEditProduct");
+
+        const overlay4 = document.querySelector("#overlay4-product");
+        const popUpAllrigth = document.getElementById("popupAllright-product")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigth-product")
+    
+        overlay.classList.add("active");
+        popUpEdit.classList.add("active");
+    
+        btnCerrar.addEventListener("click", e => {
+            e.preventDefault();
+            overlay.classList.remove("active");
+            popUpEdit.classList.remove("active");
+        });
+
+        const selectedOptionProductRange = document.getElementById("inProductRangeEditProduct");
+        const selectSupplier = document.getElementById("inSupplierProductEdit");
+
+        const btnSendProduct = document.getElementById("editProduct");
+
+        this.fillSelectsEdit();
+
+        btnSendProduct.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            try {
+                let inputsFormText = document.querySelectorAll(".input-txt")
+                
+                let nameProduct = document.getElementById("inNameEditProduct").value;
+                let salePriceProduct = Number.parseFloat(document.getElementById("inSalePriceEditProduct").value);
+                let supplierPriceProduct = Number.parseFloat(document.getElementById("inSupplierPriceEditProduct").value);
+                let heightDimension = document.getElementById("heightEdit").value;
+                let widthDimension = document.getElementById("widthEdit").value;
+                let lengthDimension = document.getElementById("lengthEdit").value;
+                let stockProduct = Number.parseInt(document.getElementById("inStockProductEdit").value);
+
+                const selectedProductRange = JSON.parse(selectedOptionProductRange.value);
+                const selectedSupplier = JSON.parse(selectSupplier.value);
+
+                let maxIdDimensiones = await this.calculateMaxId("dimensiones");
+                let maxIdstock = await this.calculateMaxId("stock");
+
+                
+                let stockProducto = {
+                    id : 0,
+                    stock : stockProduct
+                }
+
+                await postData(stockProducto, "stock")
+
+                let dimensiones = {
+                    id: 0,
+                    ancho: Number.parseInt(widthDimension),
+                    largo: Number.parseInt(lengthDimension),
+                    alto: Number.parseInt(heightDimension)
+                };
+
+                await postData(dimensiones, "dimensiones")
+
+                let newProduct = {
+                    id: producto.id,
+                    nombreProducto: nameProduct,
+                    precioProveedor: supplierPriceProduct,
+                    precioVenta: salePriceProduct,
+                    gamaProducto : selectedProductRange,
+                    dimensionesProducto: {
+                        id: maxIdDimensiones,
+                        ancho: dimensiones.ancho,
+                        largo: dimensiones.largo,
+                        alto: dimensiones.alto
+                    },
+                    proveedorProducto: selectedSupplier,
+                    stockProducto: {
+                        id : maxIdstock,
+                        stock : stockProducto.stock
+                    }
+                };
+
+                console.log("Producto creado:", newProduct);
+
+                await updateData(newProduct, "productos", producto.id);
+
+                this.showProducts();
+
+                inputsFormText.forEach((inpt) => {
+                    inpt.value = ""
+                })
+                
+                this.closeAddOfficeModal()
+
+                overlay4.classList.add("active")
+                popUpAllrigth.classList.add("active")
+
+                btnCloseModals.addEventListener("click", e => {
+                    e.preventDefault();
+                    overlay4.classList.remove("active")
+                    popUpAllrigth.classList.remove("active")
+                });
+
+            } catch (error) {
+                console.error("Error creating product:", error);
+            }
+        });
+    }
+
+    fillSelectsEdit() {
+        const selectProductRange = document.getElementById("inProductRangeEditProduct");
+        const selectSupplier = document.getElementById("inSupplierProductEdit");
+
+        this.arrayProductRanges().then((ranges) => {
+            if (ranges) {
+                selectProductRange.innerHTML = '';
+                ranges.forEach(range => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(range);
+                    opc.textContent = range.nombre;
+                    selectProductRange.appendChild(opc);
+                });
+            } else {
+                console.log("No se pudo obtener las gamas de producto.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener las gamas de producto:", error);
+        });
+
+        this.arraySuppliers().then((suppliers) => {
+            if (suppliers) {
+                selectSupplier.innerHTML = '';
                 suppliers.forEach(supplier => {
                     const opc = document.createElement("option");
                     opc.value = JSON.stringify(supplier);
@@ -299,20 +612,20 @@ export class ProductosMenu extends HTMLElement {
         overlay.classList.remove("active");
         popUpAdd.classList.remove("active");
     }
-    
+
     async showProducts() {
         const btnAddProduct = document.getElementById("btnAddProduct");
         const overlay = document.getElementById("overlay-product");
         const popUpAdd = document.getElementById("popUpAdd-product");
         const btnCerrar = document.getElementById("btnCancelAddProduct");
         const containerShowProducts = document.querySelector("#containerShowProducts");
-        
+
         btnAddProduct.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.add("active");
             popUpAdd.classList.add("active");
-        });   
-        
+        });
+
         btnCerrar.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.remove("active");
@@ -320,16 +633,16 @@ export class ProductosMenu extends HTMLElement {
         });
 
         this.arrayProducts()
-        .then((productos) => {
-            if (productos.length === 0) {
-                containerShowProducts.innerHTML = '<p class="txt-showbox">No hay productos registrados</p>';
-            } else {
-                if (productos) {
-                    containerShowProducts.innerHTML = ''; // Limpiar la lista antes de añadir nuevos productos
-                    productos.forEach(producto => {
-                        const card = document.createElement("div");
-                        card.classList.add("card-element");
-                        card.innerHTML = `
+            .then((productos) => {
+                if (productos.length === 0) {
+                    containerShowProducts.innerHTML = '<p class="txt-showbox">No hay productos registrados</p>';
+                } else {
+                    if (productos) {
+                        containerShowProducts.innerHTML = ''; // Limpiar la lista antes de añadir nuevos productos
+                        productos.forEach(producto => {
+                            const card = document.createElement("div");
+                            card.classList.add("card-element");
+                            card.innerHTML = `
                             <p class="card-text">${producto.id}</p>
                             <p class="card-text">${producto.nombreProducto}</p>
                             <p class="card-text">${producto.precioVenta}</p>
@@ -344,89 +657,108 @@ export class ProductosMenu extends HTMLElement {
                                     <box-icon name='pencil' color='#508C9B'></box-icon>
                                 </a>
                             </div>`;
-    
+
                             containerShowProducts.appendChild(card);
-                    });
-    
-                    // Manejo de eventos para los botones
-                    const btnInfoProduct = document.querySelectorAll('.btnInfoProduct');
-                    btnInfoProduct.forEach(button => {
-                        button.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            const productId = button.getAttribute('data-id');
-                            const producto = productos.find(o => o.id.toString() === productId);
-        
-                            if (producto) {
-                                this.showInfoModal(producto);
-    
-                            } else {
-                                console.error(`No se encontró el producto con id: ${productId}`);
-                            }
                         });
-                    });
-    
-                    const btnDeleteProduct = document.querySelectorAll('.btnDeleteProduct');
-                    btnDeleteProduct.forEach(button => {
-                        button.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            const productId = button.getAttribute('data-id');
-                            const producto = productos.find(o => o.id.toString() === productId);
-        
-                            if (producto) {
-                                this.deleteProduct(producto);
-    
-                            } else {
-                                console.error(`No se encontró el producto con id: ${productId}`);
-                            }
+
+                        // Manejo de eventos para los botones
+                        const btnInfoProduct = document.querySelectorAll('.btnInfoProduct');
+                        btnInfoProduct.forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const productId = button.getAttribute('data-id');
+                                const producto = productos.find(o => o.id.toString() === productId);
+
+                                if (producto) {
+                                    this.showProductInfo(producto);
+
+                                } else {
+                                    console.error(`No se encontró el producto con id: ${productId}`);
+                                }
+                            });
                         });
-                    });
-                } else {
-                    console.log("No se pudieron obtener los productos.");
+
+                        const btnDeleteProduct = document.querySelectorAll('.btnDeleteProduct');
+                        btnDeleteProduct.forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const productId = button.getAttribute('data-id');
+                                const producto = productos.find(o => o.id.toString() === productId);
+
+                                if (producto) {
+                                    this.deleteProduct(producto);
+
+                                } else {
+                                    console.error(`No se encontró el producto con id: ${productId}`);
+                                }
+                            });
+                        });
+
+                        const btnEditProduct = document.querySelectorAll('.btnEditProduct');
+                        btnEditProduct.forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const productId = button.getAttribute('data-id');
+                                const producto = productos.find(o => o.id.toString() === productId);
+
+                                if (producto) {
+                                    this.editProduct(producto);
+
+                                } else {
+                                    console.error(`No se encontró el producto con id: ${productId}`);
+                                }
+                            });
+                        });
+                    } else {
+                        console.log("No se pudieron obtener los productos.");
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            console.error("Error al obtener los productos:", error);
-        });
+            })
+            .catch((error) => {
+                console.error("Error al obtener los productos:", error);
+            });
     }
-    
+
 
     async showProductInfo(product) {
-        const overlay2 = document.getElementById("overlay2");
-        const popUpInfo = document.getElementById("popupInfo");
+        const overlay2 = document.getElementById("overlay2-product");
+        const popUpInfo = document.getElementById("popupInfo-product");
         const infoModal = document.getElementById('infoModalProduct');
 
-        infoModal.innerHTML =` 
+        overlay2.classList.add("active")
+        popUpInfo.classList.add("active")
+
+        infoModal.innerHTML = ` 
         <div class="cont-info_p">
             <label for="pProductName" class="label-form">Nombre del Producto</label>
-            <p name="pProductName" class="card-text">${producto.nombreProducto}</p>
+            <p name="pProductName" class="card-text">${product.nombreProducto}</p>
         </div>
         <div class="cont-info_p">
             <label for="pProductSupPrice" class="label-form">Precio de proveedor</label>
-            <p name="pProductSupPrice" class="card-text">${producto.precioProveedor}</p>
+            <p name="pProductSupPrice" class="card-text">${product.precioProveedor}</p>
         </div>
         <div class="cont-info_p">
             <label for="pProductPrice" class="label-form">Precio de venta</label>
-            <p name="pProductPrice" class="card-text">$${producto.precioVenta}</p>
+            <p name="pProductPrice" class="card-text">$${product.precioVenta}</p>
         </div>
         <div class="cont-info_p">
             <label for="pProductRange" class="label-form">Descripción</label>
-            <p name="pProductRange" class="card-text">${producto.gamaProducto.nombre}</p>
+            <p name="pProductRange" class="card-text">${product.gamaProducto.nombre}</p>
         </div>
         <div class="cont-info_p">
             <label for="pProductSupplier" class="label-form">Cantidad en Stock</label>
-            <p name="pProductSupplier" class="card-text">${producto.proveedorProducto.nombre}</p>
+            <p name="pProductSupplier" class="card-text">${product.proveedorProducto.nombre}</p>
         </div>
         <div class="cont-info_p">
             <label for="pProductStock" class="label-form">Cantidad en Stock</label>
-            <p name="pProductStock" class="card-text">${producto.stock}</p>
+            <p name="pProductStock" class="card-text">${product.stockProducto.stock}</p>
         </div>
         `;
 
         overlay2.classList.add("active");
         popUpInfo.classList.add("active");
 
-        document.getElementById("btnCancelOfficeInfo").addEventListener("click", e => {
+        document.getElementById("btnCancelProductInfo").addEventListener("click", e => {
             e.preventDefault();
             overlay2.classList.remove("active");
             popUpInfo.classList.remove("active");
@@ -438,45 +770,44 @@ export class ProductosMenu extends HTMLElement {
         const overlay3 = document.getElementById("overlay3-product");
         const popUpDelete = document.getElementById("popupDelete-product");
         const btnConfirmDelProduct = document.querySelector("#btnConfirmDelProduct");
-        const btnCancelDelProduct = document.querySelector("#btnCancelDelProduct");
+        const btnCancelDelProduct = document.querySelector("#btnCloseModalsAllrigth-product");
         const contShowProducts = document.querySelector("#containerShowProducts");
         const overlay4 = document.querySelector("#overlay4-product");
         const popUpAllright = document.getElementById("popupAllright-product")
-        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigth-product");
-    
+
         const closeDeletePopup = () => {
             overlay3.classList.remove("active");
             popUpDelete.classList.remove("active");
         };
-    
+
         const closeConfirmPopup = () => {
             overlay4.classList.remove("active");
             popUpAllright.classList.remove("active");
         };
-    
+
         overlay3.classList.add("active");
         popUpDelete.classList.add("active");
-    
+
         const handleConfirmDelete = e => {
             e.preventDefault();
             deleteData(endpoint, producto.id)
                 .then(response => {
                     if (response.ok) {
                         closeDeletePopup();
-    
+
                         overlay4.classList.add("active");
                         popUpAllright.classList.add("active");
-    
+
                         // Espera un pequeño retraso antes de actualizar la lista
                         setTimeout(() => {
                             contShowProducts.innerHTML = "";  // Limpiar lista actual
                             this.showProducts();  // Vuelve a cargar y renderizar la lista de productos
                         }, 200);  // Agrega un retraso corto
-    
-                        // Escuchar el evento de cierre del popup
-                        btnCloseModals.addEventListener("click", e => {
+
+                        btnCancelDelProduct.addEventListener("click", e => {
                             e.preventDefault();
-                            closeConfirmPopup();
+                            overlay4.classList.remove("active")
+                            popUpAllright.classList.remove("active")
                         });
                     } else {
                         throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
@@ -487,21 +818,21 @@ export class ProductosMenu extends HTMLElement {
                     popUpDelete.innerHTML = `
                         <div>Error al eliminar el producto. Por favor, inténtelo de nuevo.</div>
                         <div id="btnCloseDelError" class="button-cancel_modal">&#10005;</div>`;
-                    
+
                     document.getElementById("btnCloseDelError").addEventListener("click", e => {
                         e.preventDefault();
                         closeDeletePopup();
                     });
                 });
         };
-    
+
         // Se asegura de que solo se escuche una vez el evento de confirmación
         btnConfirmDelProduct.addEventListener("click", handleConfirmDelete, { once: true });
-    
+
         btnCancelDelProduct.addEventListener("click", e => {
             e.preventDefault();
-            closeConfirmPopup();
+            closeDeletePopup();
         });
-    }    
+    }
 }
 customElements.define('productos-menu', ProductosMenu);
