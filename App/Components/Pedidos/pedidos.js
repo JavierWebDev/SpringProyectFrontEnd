@@ -506,7 +506,7 @@ export class PedidosMenu extends HTMLElement {
                         card.classList.add("card-element");
                         card.innerHTML = `
                             <p class="card-text">${pedido.id}</p>
-                            <p class="card-text">${pedido.cliente.nombre}</p>
+                            <p class="card-text">${pedido.cliente ? pedido.cliente.nombre : 'Cliente eliminado'}</p>
                             <p class="card-text">${pedido.estadoPedido.estado}</p>
                             <div class="card-buttons_container">
                                 <a href="#" class="card-button btnInfoPedido" data-id="${pedido.id}">
