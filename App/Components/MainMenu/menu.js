@@ -55,6 +55,10 @@ export class MainMenu extends HTMLElement {
         const btnPedidos = document.querySelector("#btnPedidos")
         const secPedidos = document.querySelector("pedidos-menu")
 
+        const btnClients = document.querySelector("#btnClientes")
+        const secClients = document.querySelector("clientes-menu")
+        
+
         /* CONTROLADOR OFICINAS */
 
         btnOficinas.addEventListener("click", () => {
@@ -69,12 +73,14 @@ export class MainMenu extends HTMLElement {
             secPedidos.style.display = "block"
         })
 
-        /* CONTROLADOR PEDIDOS */
+        /* CONTROLADOR CLIENTES */
 
-        btnProductos.addEventListener("click", () => {
+        btnClients.addEventListener("click", () => {
             menuprincipal.style.display = "none"
-            secProbtnProductos.style.display = "block"
+            secClients.style.display = "block"
         })
+
+       
     }
 
 }

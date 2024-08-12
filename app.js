@@ -24,3 +24,7 @@ import '/App/Components/login/login.js'
 // Register
 
 import '/App/Components/register/register.js'
+
+// Client
+
+import '/App/Components/Clientes/clientes.js'

@@ -592,7 +592,7 @@ register-component {
 }
 
 /* WEB COMPONENTS */
-oficinas-menu, pedidos-menu, producto-menu {
+oficinas-menu, pedidos-menu, producto-menu, clientes-menu {
     display: none;
 }
 

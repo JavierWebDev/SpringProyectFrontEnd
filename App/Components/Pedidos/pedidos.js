@@ -120,6 +120,60 @@ export class PedidosMenu extends HTMLElement {
                         </div>
                     </div>
                 </div>
+
+                <div id="overlayPedidoUpdate" class="overlay">
+                    <div id="popUpUpdatePedido" class="popup-add">
+                        <div class="cont-top_modal">
+                            <h1 class="titulo-list">Edit Pedido</h1>
+                            <div id="btnCancelUpdatePedido" class="button-cancel_modal">&#10005;</div>
+                        </div>
+    
+                        <div class="cont-form">
+                            <form id="updatePedidoForm" class="form-new">
+
+                                <div class="cont-input_two cont-input"> 
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="fechaPedido">Fecha Pedido</label>
+                                        <input type="date" class="input-form input-txt" name="fechaPedido" id="fechaPedido"> 
+                                    </div>
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="fechaEsperada">Fecha Esperada</label>
+                                        <input type="date" class="input-form input-txt" name="fechaEsperada" id="fechaEsperada">
+                                    </div>
+                                </div>
+
+                                <div class="cont-input_two cont-input"> 
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="fechaEntrega">Fecha Entrega</label>
+                                        <input type="date" class="input-form input-txt" name="fechaEntrega" id="fechaEntrega">
+                                    </div>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <label class="label-form" for="comentarios">Comentarios adicionales</label>
+                                    <input type="text" class="input-form input-txt" name="comentarios" id="comentarios">
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inClientPedidoUpdate">Cliente dueño del pedido</label>
+                                        <select class="input-form input-select" id="inClientPedidoUpdate"></select>
+                                    </div>
+                                </div>
+
+                                <div class="cont-input_wide cont-input">
+                                    <div class="cont-input_twoo">
+                                        <label class="label-form" for="inStatusPedidoUpdate">Estado del pedido</label>
+                                        <select class="input-form input-select" id="inStatusPedidoUpdate"></select>
+                                    </div>
+                                </div>
+
+                                <div class="button-add"> <button id="UpdatePedido" class="button-new">SAVE</button> </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
     
         </section>
         `;
@@ -138,6 +192,106 @@ export class PedidosMenu extends HTMLElement {
         })
     }
 
+    async arrayClients() {
+        const endpoint = "cliente";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        
+        return data;
+    }
+
+    async arrayEstado() {
+        const endpoint = "estado";
+        const { data, error } = await getData(endpoint);
+        
+        if (error) {
+            console.log(`Error: ${error.message}`);
+            return null;
+        }
+        return data;
+    }
+
+    fillSelectsUpdate(){
+        const selectClients = document.querySelector("#inClientPedidoUpdate");
+        const selectEstado = document.querySelector("#inStatusPedidoUpdate");
+    
+        this.arrayClients().then((client) => {
+            if (client){
+                selectClients.innerHTML= ''
+                client.forEach(client => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(client);
+                    opc.textContent = client.nombre;
+                    selectClients.appendChild(opc);
+                })
+            } else {
+                console.log("No se pudieron obtener los clientes.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los clientos:", error);
+        });
+    
+        this.arrayEstado().then((status) => {
+            if (status){
+                selectEstado.innerHTML= ''
+                status.forEach(status => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(status);
+                    opc.textContent = status.estado;
+                    selectEstado.appendChild(opc);
+                })
+            } else {
+                console.log("No se pudieron obtener los estados.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los estados:", error);
+        });
+    }
+
+    fillSelects(){
+        const selectClients = document.querySelector("#inClientPedido");
+        const selectEstado = document.querySelector("#inStatusPedido");
+    
+        this.arrayClients().then((client) => {
+            if (client){
+                selectClients.innerHTML= ''
+                client.forEach(client => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(client);
+                    opc.textContent = client.nombre;
+                    selectClients.appendChild(opc);
+                })
+            } else {
+                console.log("No se pudieron obtener los clientes.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los clientos:", error);
+        });
+    
+        this.arrayEstado().then((status) => {
+            if (status){
+                selectEstado.innerHTML= ''
+                status.forEach(status => {
+                    const opc = document.createElement("option");
+                    opc.value = JSON.stringify(status);
+                    opc.textContent = status.estado;
+                    selectEstado.appendChild(opc);
+                })
+            } else {
+                console.log("No se pudieron obtener los estados.");
+            }
+        }).catch((error) => {
+            console.error("Error al obtener los estados:", error);
+        });
+    }
+
+
+    // CREATE
+
     controlModalAdd() {
         const overlay = document.getElementById("overlayPedido");
         const popUpAdd = document.getElementById("popUpAddPedido");
@@ -147,11 +301,75 @@ export class PedidosMenu extends HTMLElement {
         const selectClient = document.querySelector("#inClientPedido");
         const selectStatus = document.querySelector("#inStatusPedido");
 
+
         const btnAddPedido = document.querySelector("#createNewPedido")
 
         const formPedido = document.getElementById("addPedidoForm");
 
         const inputs = document.querySelectorAll(".input-form");
+
+        const endpoint = "pedidos"
+
+        this.fillSelects();
+
+
+        btnAddPedido.addEventListener("click", async e => {
+            e.preventDefault();
+
+            let datos = Object.fromEntries(new FormData(addPedidoForm).entries());
+            datos.id = 0;
+
+            datos.fechaPedido = new Date(datos.fechaPedido).toISOString(); 
+            datos.fechaEsperada = new Date(datos.fechaEsperada).toISOString();
+            datos.fechaEntrega = new Date(datos.fechaEntrega).toISOString();
+
+
+            datos.cliente = JSON.parse(selectClient.value);
+            datos.estadoPedido = JSON.parse(selectStatus.value);
+
+            console.log(datos)
+
+            try {
+                const response = await postData(datos, endpoint); 
+        
+                if (response.ok) {
+                    this.showOffices(); 
+                } else {
+                    throw new Error('Error al añadir el pedido');
+                }
+            } catch (error) {
+                console.error('Error al añadir el pedido:', error);
+            }
+        })
+
+        btnAbrirPedido.addEventListener("click", e => {
+            overlay.classList.add("active")
+            popUpAdd.classList.add("active")
+            e.preventDefault();
+        })
+
+        btnCerrar.addEventListener("click", e => {
+            overlay.classList.remove("active")
+            popUpAdd.classList.remove("active")
+            e.preventDefault();
+        })
+
+
+    }
+
+    //UPDATE
+
+    controlModalUpdate(pedido) {
+        const overlayUpdate = document.getElementById("overlayPedidoUpdate");
+        const popUpUpdate = document.getElementById("popUpUpdatePedido");
+        const btnAbrirPedido = document.getElementById("btnUpdatePedido");
+        const btnCerrar = document.getElementById("btnCancelUpdatePedido");
+
+        const selectClient = document.querySelector("#inClientPedidoUpdate");
+        const selectStatus = document.querySelector("#inStatusPedidoUpdate");
+
+        const btnUpdatePedido = document.getElementById("UpdatePedido")
+        const updatePedidoForm = document.getElementById("updatePedidoForm");
 
         const endpoint = "pedidos"
 
@@ -200,11 +418,11 @@ export class PedidosMenu extends HTMLElement {
                 console.error("Error fetching data:", error);
             });
 
-        btnAddPedido.addEventListener("click", async e => {
+        btnUpdatePedido.addEventListener("click", async e => {
             e.preventDefault();
 
-            let datos = Object.fromEntries(new FormData(addPedidoForm).entries());
-            datos.id = 0;
+            let datos = Object.fromEntries(new FormData(updatePedidoForm).entries());
+            datos.id = pedido.id;
 
             datos.fechaPedido = new Date(datos.fechaPedido).toISOString(); // Enviar en formato ISO
             datos.fechaEsperada = new Date(datos.fechaEsperada).toISOString();
@@ -217,13 +435,12 @@ export class PedidosMenu extends HTMLElement {
             console.log(datos)
 
             try {
-                const response = await postData(datos, endpoint); // postData es una función que deberías tener en tu API.js
-        
+                const response = await updateData(datos, endpoint, pedido.id); // postData es una función que deberías tener en tu API.js
+
                 if (response.ok) {
                     this.showOffices(); 
-                    this.closeAddOfficeModal(); 
                 } else {
-                    throw new Error('Error al añadir el pedido');
+                    throw new Error('Error al actualizar el pedido');
                 }
             } catch (error) {
                 console.error('Error al añadir el pedido:', error);
@@ -231,14 +448,14 @@ export class PedidosMenu extends HTMLElement {
         })
 
         btnAbrirPedido.addEventListener("click", e => {
-            overlay.classList.add("active")
-            popUpAdd.classList.add("active")
+            overlayUpdate.classList.add("active")
+            popUpUpdate.classList.add("active")
             e.preventDefault();
         })
 
         btnCerrar.addEventListener("click", e => {
-            overlay.classList.remove("active")
-            popUpAdd.classList.remove("active")
+            overlayUpdate.classList.remove("active")
+            popUpUpdate.classList.remove("active")
             e.preventDefault();
         })
 
@@ -298,7 +515,7 @@ export class PedidosMenu extends HTMLElement {
                                 <a href="#" class="card-button btnDeletePedido" data-id="${pedido.id}" >
                                     <box-icon name='trash' color='#508C9B'></box-icon>
                                 </a>
-                                <a href="#" class="card-button">
+                                <a href="#" class="card-button btnUpdatePedido" id="btnUpdatePedido"data-id="${pedido.id}">
                                     <box-icon name='pencil' color='#508C9B'></box-icon>
                                 </a>
                             </div>`;
@@ -331,6 +548,20 @@ export class PedidosMenu extends HTMLElement {
         
                             if (pedido) {
                                 this.deleteOffice(pedido);
+                            } else {
+                                console.error(`No se encontró la oficina con id: ${pedidoId}`);
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll(".btnUpdatePedido").forEach(button => {
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const pedidoId = button.getAttribute("data-id");
+                            const pedido = pedidos.find(o => o.id.toString() === pedidoId);
+        
+                            if (pedido) {
+                                this.controlModalUpdate(pedido);
                             } else {
                                 console.error(`No se encontró la oficina con id: ${pedidoId}`);
                             }
