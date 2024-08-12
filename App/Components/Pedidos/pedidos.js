@@ -35,21 +35,28 @@ export class PedidosMenu extends HTMLElement {
 
                 </div>
 
-                <div class="overlay" id="overlay3">
-                    <div id="popupDelete" class="popup-delete">
+                <div class="overlay" id="overlay4Pedidos">
+                    <div id="popupAllrigthPedido" class="popup-allright">
+                        <box-icon name='check-circle' color='#69ff94' ></box-icon>
+                        <div id="btnCloseModalsAllrigthPedido" class="button-cancel_modal">&#10005;</div>
+                    </div>
+                </div>
+
+                <div class="overlay" id="overlay3Pedido">
+                    <div id="popupDeletePedido" class="popup-delete">
                         <div id="delModalPedido" class="cont">
                             <p>Estas seguro que deseas eliminar la pedido?</p>
 
                             <div class="cont-buttons_delete">
-                                <a id="btnConfirmDelPedido" class="button-confirm_delete">Confirm</a>
-                                <a id="btnCancelDelPedido" class="button-cancel_delete">Cancel</a>
+                                <a href="" id="btnConfirmDelPedido" class="button-confirm_delete">Confirm</a>
+                                <a href="" id="btnCancelDelPedido" class="button-cancel_delete">Cancel</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="overlay" id="overlay2">
-                    <div id="popupInfo" class="popup-info">
+                <div class="overlay" id="overlay2Pedido">
+                    <div id="popUpInfoPedido" class="popup-info">
                         <div class="cont-top_modal">
                             <div id="btnCancelPedidoInfo" class="button-cancel_modal">&#10005;</div>
                         </div>
@@ -200,7 +207,7 @@ export class PedidosMenu extends HTMLElement {
             datos.fechaEntrega = new Date(datos.fechaEntrega).getTime();
 
 
-            datos.clientePedido = JSON.parse(selectClient.value);
+            datos.cliente = JSON.parse(selectClient.value);
             datos.estadoPedido = JSON.parse(selectStatus.value);
 
             console.log(datos)
@@ -252,7 +259,7 @@ export class PedidosMenu extends HTMLElement {
         const popUpAdd = document.getElementById("popUpAdd");
         const btnCerrar = document.getElementById("btnCancelAdd");
         const contShowPedidos = document.querySelector("#containerShowPedidos");
-        contShowPedidos.innerHTML=''
+        
 
         btnAddPedido.addEventListener("click", e => {
             e.preventDefault();
@@ -268,50 +275,70 @@ export class PedidosMenu extends HTMLElement {
 
         this.arrayRequest()
         .then((pedidos) => {
-            if (pedidos) {
-                console.log(pedidos); 
-                pedidos.forEach(pedido => {
-                    const card = document.createElement("div");
-                    card.classList.add("card-element");
-                    card.innerHTML = `
-                        <p class="card-text">${pedido.id}</p>
-                        <p class="card-text">${pedido.clientePedido.nombre}</p>
-                        <p class="card-text">${pedido.estadoPedido.estado}</p>
-                        <div class="card-buttons_container">
-                            <a href="#" class="card-button" data-id="${pedido.id}" id="btnInfoPedido">
-                                <box-icon name='info-circle' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button" data-id="${pedido.id}" id="btnDeletePedido">
-                                <box-icon name='trash' color='#508C9B'></box-icon>
-                            </a>
-                            <a href="#" class="card-button">
-                                <box-icon name='pencil' color='#508C9B'></box-icon>
-                            </a>
-                        </div>`;
-
-                    contShowPedidos.appendChild(card);
-                    
-
-                    
-                })
-
-                document.querySelectorAll("btnInfoPedido").forEach(button => {
-                    button.addEventListener("click", e => {
-                        e.preventDefault();
-                        const pedidoId = button.getAttribute("data-id");
-                        const pedido = pedidos.find(o => o.id.toString() === pedidoId);
+            if (pedidos.length === 0) {
+                contShowPedidos.innerHTML='<p class="txt-showbox">No hay pedidos registrados</p>'
+            }else {
+                if (pedidos) {
+                    contShowPedidos.innerHTML=''
+                    pedidos.forEach(pedido => {
+                        const card = document.createElement("div");
+                        card.classList.add("card-element");
+                        card.innerHTML = `
+                            <p class="card-text">${pedido.id}</p>
+                            <p class="card-text">${pedido.cliente.nombre}</p>
+                            <p class="card-text">${pedido.estadoPedido.estado}</p>
+                            <div class="card-buttons_container">
+                                <a href="#" class="card-button btnInfoPedido" data-id="${pedido.id}">
+                                    <box-icon name='info-circle' color='#508C9B'></box-icon>
+                                </a>
+                                <a href="#" class="card-button btnDeletePedido" data-id="${pedido.id}" >
+                                    <box-icon name='trash' color='#508C9B'></box-icon>
+                                </a>
+                                <a href="#" class="card-button">
+                                    <box-icon name='pencil' color='#508C9B'></box-icon>
+                                </a>
+                            </div>`;
     
-                        if (pedido) {
-                            this.showInfoModal(pedido);
-                        } else {
-                            console.error(`No se encontró la oficina con id: ${pedidoId}`);
-                        }
+                        contShowPedidos.appendChild(card);
+                        
+    
+                        
+                    })
+    
+                    document.querySelectorAll(".btnInfoPedido").forEach(button => {
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const pedidoId = button.getAttribute("data-id");
+                            const pedido = pedidos.find(o => o.id.toString() === pedidoId);
+        
+                            if (pedido) {
+                                this.showInfoPedido(pedido);
+                            } else {
+                                console.error(`No se encontró la oficina con id: ${pedidoId}`);
+                            }
+                        });
                     });
-                });
-                
-            } else {
-                console.log("No se pudieron obtener las pedidos.");
+    
+                    document.querySelectorAll(".btnDeletePedido").forEach(button => {
+                        button.addEventListener("click", e => {
+                            e.preventDefault();
+                            const pedidoId = button.getAttribute("data-id");
+                            const pedido = pedidos.find(o => o.id.toString() === pedidoId);
+        
+                            if (pedido) {
+                                this.deleteOffice(pedido);
+                            } else {
+                                console.error(`No se encontró la oficina con id: ${pedidoId}`);
+                            }
+                        });
+                    });
+                    
+                } else {
+                    console.log("No se pudieron obtener las pedidos.");
+                }
+
             }
+            
         })
         .catch((error) => {
             console.error("Error al obtener las pedidos:", error);
@@ -321,8 +348,8 @@ export class PedidosMenu extends HTMLElement {
     }
 
     showInfoPedido(pedido) {
-        const overlay2 = document.getElementById("overlay2");
-        const popUpInfo = document.getElementById("popupInfo");
+        const overlay2 = document.getElementById("overlay2Pedido");
+        const popUpInfoPedido = document.getElementById("popUpInfoPedido");
         const infoModal = document.getElementById("infoModalPedido");
 
         infoModal.innerHTML = `
@@ -340,7 +367,7 @@ export class PedidosMenu extends HTMLElement {
             </div>
             <div class="cont-info_p">
                 <label for="pOfficePCode" class="label-form">Cliente</label>
-                <p name="pOfficePCode" class="card-text">ID: ${pedido.clientePedido.id} Nombre: ${pedido.clientePedido.nombre}</p>
+                <p name="pOfficePCode" class="card-text">ID: ${pedido.cliente.id} Nombre: ${pedido.cliente.nombre}</p>
             </div>
             <div class="cont-info_p">
                 <label for="pOfficeAddr" class="label-form">Estado</label>
@@ -348,42 +375,61 @@ export class PedidosMenu extends HTMLElement {
             </div>`;
 
         overlay2.classList.add("active");
-        popUpInfo.classList.add("active");
+        popUpInfoPedido.classList.add("active");
 
         document.getElementById("btnCancelPedidoInfo").addEventListener("click", e => {
             e.preventDefault();
             overlay2.classList.remove("active");
-            popUpInfo.classList.remove("active");
+            popUpInfoPedido.classList.remove("active");
         });
     }
 
     deleteOffice(pedido) {
         const endpoint = "pedidos";
-        const overlay3 = document.querySelector("#overlay3");
-        const popUpDelete = document.getElementById("popupDelete");
+        const overlay3pedido = document.querySelector("#overlay3Pedido");
+        const popupDeletePedido = document.getElementById("popupDeletePedido");
         const btnConfirmDelPedido = document.querySelector("#btnConfirmDelPedido");
         const btnCancelDelPedido = document.querySelector("#btnCancelDelPedido");
+        const contShowPedidos = document.querySelector("#containerShowPedidos");
+
+        const overlay4Pedido = document.querySelector("#overlay4Pedidos");
+        const popUpAllrigth = document.getElementById("popupAllrigthPedido")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigthPedido")
 
         const closeDeletePopup = () => {
-            overlay3.classList.remove("active");
-            popUpDelete.classList.remove("active");
+            overlay3pedido.classList.remove("active");
+            popupDeletePedido.classList.remove("active");
         };
 
-        overlay3.classList.add("active");
-        popUpDelete.classList.add("active");
+        const closeConfirmPopup = () => {
+            overlay4Pedido.classList.remove("active");
+            popUpAllrigth.classList.remove("active");
+        };
+
+        overlay3pedido.classList.add("active");
+        popupDeletePedido.classList.add("active");
 
         const handleConfirmDelete = e => {
             e.preventDefault();
             deleteData(endpoint, pedido.id)
                 .then(response => {
                     if (response.ok) {
-                        popUpDelete.innerHTML = `
-                            <box-icon name='check-circle' type='solid' color='#6bf54a'></box-icon>
-                            <div id="btnCloseDel" class="button-cancel_modal">&#10005;</div>`;
+                        closeDeletePopup();
                         
-                        document.getElementById("btnCloseDel").addEventListener("click", e => {
+                        overlay4Pedido.classList.add("active")
+                        popUpAllrigth.classList.add("active")
+
+                        // Espera un pequeño retraso antes de actualizar la lista
+                        setTimeout(() => {
+                            contShowPedidos.innerHTML = "";  // Limpiar lista actual
+                            this.showOffices();  
+                        }, 200);  
+    
+                        
+                        btnCloseModals.addEventListener("click", e => {
                             e.preventDefault();
-                            closeDeletePopup();
+                            overlay4Pedido.classList.remove("active")
+                            popUpAllrigth.classList.remove("active")
                         });
                     } else {
                         throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
@@ -391,8 +437,8 @@ export class PedidosMenu extends HTMLElement {
                 })
                 .catch(error => {
                     console.error("Error en la eliminación de datos:", error);
-                    popUpDelete.innerHTML = `
-                        <div>Error al eliminar la oficina. Por favor, inténtelo de nuevo.</div>
+                    popupDeletePedido.innerHTML = `
+                        <div>Error al eliminar el pedido. Por favor, inténtelo de nuevo.</div>
                         <div id="btnCloseDelError" class="button-cancel_modal">&#10005;</div>`;
                     
                     document.getElementById("btnCloseDelError").addEventListener("click", e => {
@@ -410,90 +456,7 @@ export class PedidosMenu extends HTMLElement {
         });
     }
 
-    // findAll = async () =>{
-    //     const endpoint = "pedidos"
-    //     const container = this.querySelector("#elements--container")
-
-    //     const data = await getData(endpoint);
-
-    //     container.innerHTML= ''
-
-    //     data.forEach(item => {
-    //         const clon = document.createElement("div");
-
-    //         clon.innerHTML = `
-            
-    //                 <div class="elements-list">
-    //                     <div class="card-element">
-    //                         <p class="card-text">AAA</p>
-    //                         <p class="card-text">AAA</p>
-    //                         <p class="card-text">AAA</p>
-
-    //                         <div class="card-buttons_container">
-    //                             <a id="btnInfo_Pedidos" href="" class="card-button"><box-icon name='info-circle' color='#000' ></box-icon></a>
-    //                             <a id="btnDelete_Pedidos" href="" class="card-button"><box-icon name='trash' color='#e00000' ></box-icon></a>
-    //                             <a id="btnUpdate_Pedidos" href="" class="card-button"><box-icon name='pencil' color='#02a0ff' ></box-icon></a>
-    //                         </div>
-    //                     </div>     
-    //                 </div>
-    //             `
-    //         container.appendChild(clon)
-
-    //     })
-
-        
-    // }
-
-    // controllerAction() {
-        
-
-    //     const btnCreatePedidos = this.querySelector("#btnCreate_Pedidos")
-    //     const btnDeletePedidos = this.querySelector("#btnDelete_Pedidos")
-    //     const btnUpdatePedidos = this.querySelector("#btnUpdate_Pedidos")
-    //     const btnInfoPedidos = this.querySelector("#btnInfo_Pedidos")
-
-    //     btnCreatePedidos.addEventListener("click", () =>{
-    //         this.innerHTML = /* html */ `
-    //         <section id="Pedidos--create">
-    //             <div>
-    //                 <h2>Registre Pedidos</h2>
-    //             </div>
-    //             <div>
-    //                 <h3>Nombre</h3>
-    //                 <input placeholder="Pedidos" id="name">
-    //             </div>
-    //             <div>
-    //                 <button id="savePedidos">Guardar</button>
-    //             </div>
-    //         </section>
-    //         `;
-
-    //         const btnSave = this.querySelector("#savePedidos")
-    //         btnSave.addEventListener("click", () => {
-    //             const endpoint = "Pedidos"
-    //             const nombre = this.querySelector("#name").value;
-
-    //             const newPedidos = {
-    //                 id : 0,
-    //                 nombre: nombre
-    //             }
-
-    //             postData(newPedidos, endpoint)
-    //                 .then(response => {
-    //                     if (response.ok){
-    //                         return response.json();
-    //                     }
-    //                     throw new Error('Error al crear el Pedidos')
-    //                 })
-    //                 .then(data => {
-    //                     console.log('Pedidos creado', data);
-    //                 })
-    //                 .catch(error => {
-    //                     console.error('Error', error);
-    //                 })
-    //         })
-    //     })
-    // }
+    
 
     
 }
