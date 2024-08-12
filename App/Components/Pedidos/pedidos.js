@@ -362,20 +362,20 @@ export class PedidosMenu extends HTMLElement {
     controlModalUpdate(pedido) {
         const overlayUpdate = document.getElementById("overlayPedidoUpdate");
         const popUpUpdate = document.getElementById("popUpUpdatePedido");
-        const btnAbrirPedido = document.getElementById("btnUpdatePedido");
+        const btnAbrirPedido = document.getElementsByClassName("card-button btnUpdatePedido");
         const btnCerrar = document.getElementById("btnCancelUpdatePedido");
-
+    
         const selectClient = document.querySelector("#inClientPedidoUpdate");
         const selectStatus = document.querySelector("#inStatusPedidoUpdate");
-
+    
         const btnUpdatePedido = document.getElementById("UpdatePedido")
         const updatePedidoForm = document.getElementById("updatePedidoForm");
-
-        const endpoint = "pedidos"
-
+    
+        const endpoint = "pedidos";
+    
         const endpointClient = "cliente";
         const endpointStatus = "estado";
-
+    
         getDataTry(endpointClient)
             .then((response) => {
                 if (response.ok) {
@@ -389,14 +389,13 @@ export class PedidosMenu extends HTMLElement {
                     const opc = document.createElement("option");
                     opc.value = JSON.stringify(client); 
                     opc.textContent = client.nombre; 
-
                     selectClient.appendChild(opc);
                 });
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
-
+    
         getDataTry(endpointStatus)
             .then((response) => {
                 if (response.ok) {
@@ -410,57 +409,64 @@ export class PedidosMenu extends HTMLElement {
                     const opc = document.createElement("option");
                     opc.value = JSON.stringify(status);
                     opc.textContent= status.estado;
-    
                     selectStatus.appendChild(opc);
                 });
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
-
-        btnUpdatePedido.addEventListener("click", async e => {
-            e.preventDefault();
-
-            let datos = Object.fromEntries(new FormData(updatePedidoForm).entries());
-            datos.id = pedido.id;
-
-            datos.fechaPedido = new Date(datos.fechaPedido).toISOString(); // Enviar en formato ISO
-            datos.fechaEsperada = new Date(datos.fechaEsperada).toISOString();
-            datos.fechaEntrega = new Date(datos.fechaEntrega).toISOString();
-
-
-            datos.cliente = JSON.parse(selectClient.value);
-            datos.estadoPedido = JSON.parse(selectStatus.value);
-
-            console.log(datos)
-
-            try {
-                const response = await updateData(datos, endpoint, pedido.id); // postData es una función que deberías tener en tu API.js
-
-                if (response.ok) {
-                    this.showOffices(); 
-                } else {
-                    throw new Error('Error al actualizar el pedido');
+    
+        if (btnUpdatePedido) {
+            btnUpdatePedido.addEventListener("click", async e => {
+                e.preventDefault();
+    
+                let datos = Object.fromEntries(new FormData(updatePedidoForm).entries());
+                datos.id = pedido.id;
+    
+                datos.fechaPedido = new Date(datos.fechaPedido).toISOString(); // Enviar en formato ISO
+                datos.fechaEsperada = new Date(datos.fechaEsperada).toISOString();
+                datos.fechaEntrega = new Date(datos.fechaEntrega).toISOString();
+    
+                datos.cliente = JSON.parse(selectClient.value);
+                datos.estadoPedido = JSON.parse(selectStatus.value);
+    
+                console.log(datos);
+    
+                try {
+                    const response = await updateData(datos, endpoint, pedido.id);
+    
+                    if (response.ok) {
+                        this.showOffices(); 
+                    } else {
+                        throw new Error('Error al actualizar el pedido');
+                    }
+                } catch (error) {
+                    console.error('Error al añadir el pedido:', error);
                 }
-            } catch (error) {
-                console.error('Error al añadir el pedido:', error);
-            }
-        })
-
-        btnAbrirPedido.addEventListener("click", e => {
-            overlayUpdate.classList.add("active")
-            popUpUpdate.classList.add("active")
-            e.preventDefault();
-        })
-
-        btnCerrar.addEventListener("click", e => {
-            overlayUpdate.classList.remove("active")
-            popUpUpdate.classList.remove("active")
-            e.preventDefault();
-        })
-
-
+            });
+        } else {
+            console.error("No se encontró el botón UpdatePedido");
+        }
+    
+        for (let i = 0; i < btnAbrirPedido.length; i++) {
+            btnAbrirPedido[i].addEventListener("click", e => {
+                overlayUpdate.classList.add("active");
+                popUpUpdate.classList.add("active");
+                e.preventDefault();
+            });
+        }
+    
+        if (btnCerrar) {
+            btnCerrar.addEventListener("click", e => {
+                overlayUpdate.classList.remove("active");
+                popUpUpdate.classList.remove("active");
+                e.preventDefault();
+            });
+        } else {
+            console.error("No se encontró el botón de cerrar");
+        }
     }
+    
 
     async arrayRequest() {
         const endpoint = "pedidos";
@@ -515,12 +521,24 @@ export class PedidosMenu extends HTMLElement {
                                 <a href="#" class="card-button btnDeletePedido" data-id="${pedido.id}" >
                                     <box-icon name='trash' color='#508C9B'></box-icon>
                                 </a>
-                                <a href="#" class="card-button btnUpdatePedido" id="btnUpdatePedido"data-id="${pedido.id}">
+                                <a href="#" class="card-button btnUpdatePedido" data-id="${pedido.id}">
                                     <box-icon name='pencil' color='#508C9B'></box-icon>
                                 </a>
                             </div>`;
     
                         contShowPedidos.appendChild(card);
+
+                        card.querySelector(".btnUpdatePedido").addEventListener("click", e => {
+                            e.preventDefault();
+                            const pedidoId = e.currentTarget.getAttribute("data-id");
+                            const pedido = pedidos.find(o => o.id.toString() === pedidoId);
+    
+                            if (pedido) {
+                                this.controlModalUpdate(pedido);
+                            } else {
+                                console.error(`No se encontró el pedido con id: ${pedidoId}`);
+                            }
+                        });
                         
     
                         
@@ -554,19 +572,7 @@ export class PedidosMenu extends HTMLElement {
                         });
                     });
 
-                    document.querySelectorAll(".btnUpdatePedido").forEach(button => {
-                        button.addEventListener("click", e => {
-                            e.preventDefault();
-                            const pedidoId = button.getAttribute("data-id");
-                            const pedido = pedidos.find(o => o.id.toString() === pedidoId);
-        
-                            if (pedido) {
-                                this.controlModalUpdate(pedido);
-                            } else {
-                                console.error(`No se encontró la oficina con id: ${pedidoId}`);
-                            }
-                        });
-                    });
+                    
                     
                 } else {
                     console.log("No se pudieron obtener las pedidos.");

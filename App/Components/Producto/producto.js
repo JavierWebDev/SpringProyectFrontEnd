@@ -754,7 +754,7 @@ export class ProductosMenu extends HTMLElement {
             <p name="pProductRange" class="card-text">${product.gamaProducto.nombre}</p>
         </div>
         <div class="cont-info_p">
-            <label for="pProductSupplier" class="label-form">Cantidad en Stock</label>
+            <label for="pProductSupplier" class="label-form">Proveedor</label>
             <p name="pProductSupplier" class="card-text">${product.proveedorProducto.nombre}</p>
         </div>
         <div class="cont-info_p">
