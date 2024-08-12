@@ -206,9 +206,9 @@ export class PedidosMenu extends HTMLElement {
             let datos = Object.fromEntries(new FormData(addPedidoForm).entries());
             datos.id = 0;
 
-            datos.fechaPedido = new Date(datos.fechaPedido).getTime();
-            datos.fechaEsperada = new Date(datos.fechaEsperada).getTime();
-            datos.fechaEntrega = new Date(datos.fechaEntrega).getTime();
+            datos.fechaPedido = new Date(datos.fechaPedido).toISOString(); // Enviar en formato ISO
+            datos.fechaEsperada = new Date(datos.fechaEsperada).toISOString();
+            datos.fechaEntrega = new Date(datos.fechaEntrega).toISOString();
 
 
             datos.cliente = JSON.parse(selectClient.value);
