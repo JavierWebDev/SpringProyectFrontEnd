@@ -24,3 +24,7 @@ import '/App/Components/login/login.js'
 // Register
 
 import '/App/Components/register/register.js'
+
+// Pagos Menu
+
+import '/App/Components/Pagos/pagos.js'
