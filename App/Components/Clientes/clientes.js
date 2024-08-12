@@ -724,7 +724,7 @@ export class ClientesMenu extends HTMLElement {
     controlModalUpdate(Client) {
         const overlayUpdate = document.getElementById("overlayClientUpdate");
         const popUpAddUpdate = document.getElementById("popUpUpdateClient");
-        const btnAbrirClientUpdate = document.getElementById("btnUpdateClient");
+        const btnAbrirClientUpdate = document.getElementsByClassName("card-button btnUpdateClient");
         const btnCerrarUpdate = document.getElementById("btnCancelUpdateClient");
 
         const selectContact = document.getElementById("inContactClientEdit");
@@ -738,7 +738,7 @@ export class ClientesMenu extends HTMLElement {
 
         
 
-        const btnUpdateClient = document.querySelector("#UpdateClient")
+        const btnUpdateClient = document.getElementById("UpdateClient")
 
         const UpdateClientForm = document.getElementById("updateClientForm");
 
@@ -750,48 +750,57 @@ export class ClientesMenu extends HTMLElement {
        this.fillSelectsUpdate();
 
         
-        btnUpdateClient.addEventListener("click", async e => {
-            e.preventDefault();
+        if (btnUpdateClient) {
+            btnUpdateClient.addEventListener("click", async e => {
+                e.preventDefault();
 
-            let datos = Object.fromEntries(new FormData(UpdateClientForm).entries());
-            datos.id = Client.id;
+                let datos = Object.fromEntries(new FormData(UpdateClientForm).entries());
+                datos.id = Client.id;
 
-            datos.contacto = JSON.parse(selectContact.value);
-            datos.telefono = JSON.parse(selectTelefono.value);
-            datos.fax = JSON.parse(selectFax.value);
-            datos.direccion = JSON.parse(selectDireccion.value);
-            datos.ciudad = JSON.parse(selectCity.value);
-            datos.codigoPostal = JSON.parse(selectCodPostal.value);
-            datos.pais = JSON.parse(selectPais.value);
-            datos.empleado = JSON.parse(selectEmpleado.value);
+                datos.contacto = JSON.parse(selectContact.value);
+                datos.telefono = JSON.parse(selectTelefono.value);
+                datos.fax = JSON.parse(selectFax.value);
+                datos.direccion = JSON.parse(selectDireccion.value);
+                datos.ciudad = JSON.parse(selectCity.value);
+                datos.codigoPostal = JSON.parse(selectCodPostal.value);
+                datos.pais = JSON.parse(selectPais.value);
+                datos.empleado = JSON.parse(selectEmpleado.value);
 
+                console.log(datos);
 
-            console.log(datos)
+                try {
+                    const response = await updateData(datos, endpoint, Client.id);
 
-            try {
-                const response = await updateData(datos, endpoint, Client.id); 
-        
-                if (response.ok) {
-                    this.showClientes(); 
-                } else {
-                    throw new Error('Error al añadir el Client');
+                    if (response.ok) {
+                        this.showOffices(); 
+                    } else {
+                        throw new Error('Error al actualizar el cliente');
+                    }
+                } catch (error) {
+                    console.error('Error al añadir el cliente:', error);
                 }
-            } catch (error) {
-                console.error('Error al añadir el Client:', error);
-            }
-        })
+                });
+        } else {
+            console.error("No se encontró el botón UpdatePedido");
+        }
 
-        btnAbrirClientUpdate.addEventListener("click", e => {
-            overlayUpdate.classList.add("active")
-            popUpAddUpdate.classList.add("active")
-            e.preventDefault();
-        })
+        for (let i = 0; i < btnAbrirClientUpdate.length; i++) {
+            btnAbrirClientUpdate[i].addEventListener("click", e => {
+                overlayUpdate.classList.add("active");
+                popUpAddUpdate.classList.add("active");
+                e.preventDefault();
+            });
+        }
 
-        btnCerrarUpdate.addEventListener("click", e => {
-            overlayUpdate.classList.remove("active")
-            popUpAddUpdate.classList.remove("active")
-            e.preventDefault();
-        })
+        if (btnCerrarUpdate) {
+            btnCerrarUpdate.addEventListener("click", e => {
+                overlayUpdate.classList.remove("active");
+                popUpAddUpdate.classList.remove("active");
+                e.preventDefault();
+            });
+        } else {
+            console.error("No se encontró el botón de cerrar");
+        }
 
 
     }
@@ -849,14 +858,24 @@ export class ClientesMenu extends HTMLElement {
                                 <a href="#" class="card-button btnDeleteClient" data-id="${Client.id}" >
                                     <box-icon name='trash' color='#508C9B'></box-icon>
                                 </a>
-                                <a href="#" class="card-button btnUpdateClient" id="btnUpdateClient"data-id="${Client.id}">
+                                <a href="#" class="card-button btnUpdateClient" data-id="${Client.id}">
                                     <box-icon name='pencil' color='#508C9B'></box-icon>
                                 </a>
                             </div>`;
     
                         contShowClientes.appendChild(card);
                         
+                        card.querySelector(".btnUpdateClient").addEventListener("click", e => {
+                            e.preventDefault();
+                            const clienteId = e.currentTarget.getAttribute("data-id");
+                            const cliente = Clientes.find(o => o.id.toString() === clienteId);
     
+                            if (cliente) {
+                                this.controlModalUpdate(cliente);
+                            } else {
+                                console.error(`No se encontró el cliente con id: ${clienteId}`);
+                            }
+                        });
                         
                     })
     
@@ -888,19 +907,7 @@ export class ClientesMenu extends HTMLElement {
                         });
                     });
 
-                    document.querySelectorAll(".btnUpdateClient").forEach(button => {
-                        button.addEventListener("click", e => {
-                            e.preventDefault();
-                            const ClientId = button.getAttribute("data-id");
-                            const Client = Clientes.find(o => o.id.toString() === ClientId);
-        
-                            if (Client) {
-                                this.controlModalUpdate(Client);
-                            } else {
-                                console.error(`No se encontró la oficina con id: ${ClientId}`);
-                            }
-                        });
-                    });
+                    
                     
                 } else {
                     console.log("No se pudieron obtener las Clientes.");
