@@ -1,24 +1,24 @@
 import { deleteData, getDataTry, getData, postData, updateData } from '/API/API.js';
 
 export class PagosMenu extends HTMLElement {
-	constructor() {
-		super();
-		this.render();
-		this.goBack();
-		this.showOffices();
-        this.addNewOffice();
-	}
+    constructor() {
+        super();
+        this.render();
+        this.goBack();
+        this.showPayments();
+        this.addNewPayment();
+    }
 
-	render() {
-		this.innerHTML = /* html */ `
+    render() {
+        this.innerHTML = /* html */ `
 		<section class="container-wc">
             <div class="cont-button">
-                <a href="#" id="btnVolver"><box-icon name='arrow-back'></box-icon></a>
+                <a href="#" id="btnVolverPayments"><box-icon name='arrow-back'></box-icon></a>
             </div>
 
             <div class="container-titulos_list">
                 <h1 class="titulo-list">Payments</h1>
-                <a id="btnAddPayment" class="button-new" href="#"><box-icon name='plus' color="#FFF"></box-icon> New Payment</a>
+                <a id="btnAddPayment" class="button-new" href="#"><box-icon name='plus' color="#FFF"></box-icon>New Payment</a>
             </div>
 
             <div class="cont-list_big">
@@ -30,614 +30,308 @@ export class PagosMenu extends HTMLElement {
 
                 <div id="containerShowPayments" class="elements-list"></div>
 
-                <div class="overlay" id="overlay4Offices">
-                    <div id="popupAllrigthOffices" class="popup-allright">
-                        <div class="allRigthContainer">
+                <div class="overlay" id="overlay4Payments">
+                    <div id="popupAllrigthPayment" class="popup-allright">
+                        <div class="popupAllrigthPayment">
                             <box-icon name='check-circle' color='#69ff94' ></box-icon>
                             <p> Correcto!</p>
-                            <div id="btnCloseModalsAllrigthOffices" class="button-cancel_modal">&#10005;</div>
+                            <div id="btnCloseModalsAllrigthPayment" class="button-cancel_modal">&#10005;</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="overlay" id="overlay3">
-                    <div id="popupDelete" class="popup-delete">
-                        <div id="delModalOffice" class="cont">
+                <div class="overlay" id="overlay3Payment">
+                    <div id="popupDeletePayment" class="popup-delete">
+                        <div id="delModalPayment" class="cont">
                             <p>Would you delete the payment?</p>
                             <div class="cont-buttons_delete">
-                                <a id="btnConfirmDelOffice" class="button-confirm_delete">Confirm</a>
-                                <a id="btnCancelDelOffice" class="button-cancel_delete">Cancel</a>
+                                <a id="btnConfirmDelPayment" class="button-confirm_delete">Confirm</a>
+                                <a id="btnCancelDelPayment" class="button-cancel_delete">Cancel</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="overlay" id="overlay2">
-                    <div id="popupInfo" class="popup-info">
+                <div class="overlay" id="overlay2Payment">
+                    <div id="popupInfoPayment" class="popup-info">
                         <div class="cont-top_modal">
-                            <div id="btnCancelOfficeInfo" class="button-cancel_modal">&#10005;</div>
+                            <div id="btnCancelPayementInfo" class="button-cancel_modal">&#10005;</div>
                         </div>
-                        <div id="infoModalOffice" class="cont"></div>
+                        <div id="infoModalPayment" class="cont"></div>
                     </div>
                 </div>
 
-                    <div id="overlay5" class="overlay">
-                        <div id="popUpEditOffice" class="popup-edit">
-                            <div class="cont-top_modal">
-                                <h1 class="titulo-list">Edit Office</h1>
-                                <div id="btnCancelEdit" class="button-cancel_modal">&#10005;</div>
-                            </div>
-                            <div class="cont-form">
-                                <form id="editOfficeForm" class="form-new">
-                                    <div class="cont-input_two cont-input">
-                                        <div class="cont-input_twoo">
-                                            <label class="label-form" for="inPhoneEditOffice">Phone</label>
-                                            <input type="tel" class="input-form input-txt" name="inPhoneEditOffice" id="inPhoneEditOffice">
-                                        </div>
-                                        <div class="cont-input_twoo">
-                                            <label class="label-form" for="inTypePhoneEditOffice">Phone Type</label>
-                                            <select class="input-form input-select" name="inTypePhoneEditOffice" id="inTypePhoneEditOffice"></select>
-                                        </div>
-                                    </div>
-
-                                    <div class="cont-input_two cont-input">
-                                        <div class="cont-input_twoo">
-                                            <label class="label-form" for="inCountryOfficeEdit">Country</label>
-                                            <select class="input-form input-select" name="inCountryOfficeEdit" id="inCountryOfficeEdit"></select>
-                                        </div>
-                                        <div class="cont-input_twoo">
-                                            <label class="label-form" for="inCityOfficeEdit">City</label>
-                                            <select class="input-form input-select" name="inCityOfficeEdit" id="inCityOfficeEdit"></select>
-                                        </div>
-                                    </div>
-                                    <div class="cont-input_wide cont-input">
-                                        <label class="label-form" for="inAddres">Address</label>
-                                        <div id="inAddres">
-                                            <label class="label-form_addr" for="inStreetOfficeEdit">Street</label>
-                                            <input class="input-form input-addr input-txt" id="inStreetOfficeEdit" name="inStreetOfficeEdit" type="text">
-                                            <label for="inNumberStreetEdit">#</label>
-                                            <input class="input-form input-addr input-txt" id="inNumberStreetEdit" name="inNumberStreetEdit" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="cont-input_wide cont-input">
-                                        <label class="label-form" for="inHoodOfficeEdit">Neighborhood</label>
-                                        <select class="input-form input-select" name="inHoodOfficeEdit" id="inHoodOfficeEdit"></select>
-                                    </div>
-                                    <div class="cont-input_wide cont-input">
-                                        <label class="label-form" for="inPostalCodeOfficeEdit">Postal Code</label>
-                                        <input class="input-form input-txt" id="inPostalCodeOfficeEdit" name="inPostalCodeOfficeEdit" type="text">
-                                    </div>
-                                    <div class="cont-input_wide cont-input">
-                                        <label class="label-form" for="inRegionOfficeEdit">Region</label>
-                                        <select class="input-form input-select" name="inRegionOfficeEdit" id="inRegionOfficeEdit"></select>
-                                    </div>
-                                    <div class="button-add">
-                                        <button id="editOffice" class="button-new">FINISH</button>
-                                    </div>   
-                                </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="overlay" class="overlay">
-                    <div id="popUpAdd" class="popup-add">
+                <div id="overlay5Payment" class="overlay">
+                    <div id="popUpEditPayment" class="popup-edit">
                         <div class="cont-top_modal">
-                            <h1 class="titulo-list">New Office</h1>
-                            <div id="btnCancelAdd" class="button-cancel_modal">&#10005;</div>
+                            <h1 class="titulo-list">Edit Payment</h1>
+                            <div id="btnCancelEditPayment" class="button-cancel_modal">&#10005;</div>
                         </div>
                         <div class="cont-form">
-                            <form id="addOfficeForm" class="form-new">
+                            <form id="editPaymentForm" class="form-new">
                                 <div class="cont-input_two cont-input">
                                     <div class="cont-input_twoo">
-                                        <label class="label-form" for="inPhoneOffice">Phone</label>
-                                        <input type="tel" class="input-form input-txt" name="inPhoneOffice" id="inPhoneOffice">
+                                        <label class="label-form" for="inTransactionEditPayment">Amount</label>
+                                        <input type="number" class="input-form input-txt" name="inTransactionEditPayment" id="inTransactionEditPayment">
                                     </div>
                                     <div class="cont-input_twoo">
-                                        <label class="label-form" for="inTypePhone">Phone Type</label>
-                                        <select class="input-form input-select" name="inTypePhoneOffice" id="inTypePhoneOffice"></select>
+                                        <label class="label-form" for="inPaymentMethodEditPayment">Payment Method</label>
+                                        <select class="input-form input-select" name="inPaymentMethodEditPayment" id="inPaymentMethodEditPayment"></select>
                                     </div>
                                 </div>
 
-                                <div class="cont-input_two cont-input">
-                                    <div class="cont-input_twoo">
-                                        <label class="label-form" for="inCountry">Country</label>
-                                        <select class="input-form input-select" name="inCountry" id="inCountryOffice"></select>
-                                    </div>
-                                    <div class="cont-input_twoo">
-                                        <label class="label-form" for="inCity">City</label>
-                                        <select class="input-form input-select" name="inCity" id="inCityOffice"></select>
-                                    </div>
-                                </div>
                                 <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inAddres">Address</label>
-                                    <div id="inAddres">
-                                        <label class="label-form_addr" for="inStreetOffice">Street</label>
-                                        <input class="input-form input-addr input-txt" id="inStreetOffice" name="inStreetOffice" type="text">
-                                        <label for="inNumberStreet">#</label>
-                                        <input class="input-form input-addr input-txt" id="inNumberStreet" name="inNumberStreet" type="text">
-                                    </div>
+                                    <label class="label-form" for="inPaymentDateEditPayment">Payment Date</label>
+                                    <input type="date" class="input-form input-txt" name="inPaymentDateEditPayment" id="inPaymentDateEditPayment">
                                 </div>
+
+
                                 <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inNeighHood">Neighborhood</label>
-                                    <select class="input-form input-select" name="inHood" id="inHoodOffice"></select>
+                                    <label class="label-form" for="inCustomerEditPayment">Customer</label>
+                                    <select class="input-form input-select" id="inCustomerEditPayment"></select>
                                 </div>
-                                <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inPostalCodeOffice">Postal Code</label>
-                                    <input class="input-form input-txt" id="inPostalCodeOffice" name="inPostalCodeOffice" type="text">
-                                </div>
-                                <div class="cont-input_wide cont-input">
-                                    <label class="label-form" for="inRegionOffice">Region</label>
-                                    <select class="input-form input-select" name="inRegionOffice" id="inRegionOffice"></select>
-                                </div>
-                                <div class="button-add">
-                                    <button id="createNewOffice" class="button-new">ADD</button>
-                                </div>   
+
+                                <div class="button-add"> <button id="editNewPayment" class="button-new">FINISH</button> </div>
                             </form>
                         </div>
                     </div>
                 </div>
+
+                <div id="overlayPayment" class="overlay">
+                    <div id="popUpAddPayment" class="popup-add">
+                        <div class="cont-top_modal">
+                            <h1 class="titulo-list">New Payment</h1>
+                            <div id="btnCancelAddPayment" class="button-cancel_modal">&#10005;</div>
+                        </div>
+                        <div class="cont-form">
+                            <form id="addPaymentForm" class="form-new">
+                            <div class="cont-input_two cont-input">
+                                <div class="cont-input_twoo">
+                                    <label class="label-form" for="inTransactionPayment">Amount</label>
+                                    <input type="number" class="input-form input-txt" name="inTransactionPayment" id="inTransactionPayment">
+                                </div>
+                                <div class="cont-input_twoo">
+                                    <label class="label-form" for="inPaymentMethodPayment">Payment Method</label>
+                                    <select class="input-form input-select" name="inPaymentMethodPayment" id="inPaymentMethodPayment"></select>
+                                </div>
+                            </div>
+
+                            <div class="cont-input_wide cont-input">
+                                <label class="label-form" for="inPaymentDatePayment">Payment Date</label>
+                                <input type="date" class="input-form input-txt" name="inPaymentDatePayment" id="inPaymentDatePayment">
+                            </div>
+
+                            <div class="cont-input_wide cont-input">
+                                <label class="label-form" for="inCustomerPayment">Customer</label>
+                                <select class="input-form input-select" id="inCustomerPayment"></select>
+                            </div>
+
+                            <div class="button-add"> <button id="createNewPayment" class="button-new">ADD</button> </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </section>`;
-               
-	}
-    
 
-	goBack() {
-        const btnVolver = document.querySelector("#btnVolver");
-        const oficinas = document.querySelector("oficinas-menu");
+    }
+
+
+    goBack() {
+        const btnVolverPayments = document.querySelector("#btnVolverPayments");
+        const pagos = document.querySelector("pagos-menu");
         const mainMenu = document.querySelector("main-menu");
 
-        btnVolver.addEventListener("click", e => {
-            oficinas.style.display = "none";
+        btnVolverPayments.addEventListener("click", e => {
+            pagos.style.display = "none";
             mainMenu.style.display = "block";
             e.preventDefault();
         });
     }
 
-    async arrayOffices() {
-        const endpoint = "oficinas";
+    async arrayPayments() {
+        const endpoint = "pagos";
         const { data, error } = await getData(endpoint);
-        
+
         if (error) {
             console.log(`Error: ${error.message}`);
             return null;
         }
-        
+
         return data;
     }
 
-    async arrayPhoneTypes() {
-        const endpoint = "tipotelefono";
+    async arrayPaymentMethods() {
+        const endpoint = "formaPago";
         const { data, error } = await getData(endpoint);
-        
+
         if (error) {
             console.log(`Error: ${error.message}`);
             return null;
         }
+
         return data;
     }
 
-    async arrayCountries() {
-        const endpoint = "pais";
+    async arrayCustomers() {
+        const endpoint = "cliente";
         const { data, error } = await getData(endpoint);
-        
+
         if (error) {
             console.log(`Error: ${error.message}`);
             return null;
         }
-        return data;
-    }
-    
-    async arrayCities() {
-        const endpoint = "ciudad";
-        const { data, error } = await getData(endpoint);
-        
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-        
+
         return data;
     }
 
-    async arrayHood() {
-        const endpoint = "barrio";
-        const { data, error } = await getData(endpoint);
-        
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-        
-        return data;
+    closeAddPaymentModal() {
+        const overlay = document.getElementById("overlayPayment");
+        const popUpAddPayment = document.getElementById("popUpAddPayment");
+        overlay.classList.remove("active");
+        popUpAddPayment.classList.remove("active");
     }
 
-    async arrayRegion() {
-        const endpoint = "region";
-        const { data, error } = await getData(endpoint);
-        
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-        
-        return data;
-    }
 
-    async arrayTelefonos() {
-        const endpoint = "telefono";
-        const { data, error } = await getData(endpoint);
-        
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-        
-        return data;
-    }
+    addNewPayment() {
+        const overlay4 = document.querySelector("#overlay4Payments");
+        const popUpAllrigth = document.getElementById("popupAllrigthPayment")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigthPayment")
 
-    async arrayDireccion() {
-        const endpoint = "direccion";
-        const { data, error } = await getData(endpoint);
-        
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-        
-        return data;
-    }
+        const selectPaymentMethodPayment = document.getElementById("inPaymentMethodPayment");
+        const selectCustomerPayment = document.getElementById("inCustomerPayment");
 
-    async arrayPostalCode() {
-        const endpoint = "codigopostal";
-        const { data, error } = await getData(endpoint);
-        
-        if (error) {
-            console.log(`Error: ${error.message}`);
-            return null;
-        }
-        
-        return data;
-    }
-    
-    addNewOffice() {
-        const officeForm = document.getElementById("addOfficeForm");
+        let formPaymentAdd = document.getElementById("addPedidoForm")
+        const btnSendPayment = document.getElementById("createNewPayment");
 
-        const overlay4Offices = document.querySelector("#overlay4Offices");
-        const popUpAllrigthOffices = document.getElementById("popupAllrigthOffices")
-        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigthOffices")
-    
-        const selectCountryOficinas = document.getElementById("inCountryOffice");
-        const selectCityOficinas = document.getElementById("inCityOffice");
-        const selectHoodOficinas = document.getElementById("inHoodOffice");
-        const selectPhoneTypeOficinas = document.getElementById("inTypePhoneOffice");
-        const selectRegionOficinas = document.getElementById("inRegionOffice");
-    
-        const btnSendOffice = document.getElementById("createNewOffice");
-    
-        // Llenar los selects con los datos obtenidos de las respectivas funciones
         this.fillSelects();
-    
-        btnSendOffice.addEventListener("click", async (e) => {
+
+        btnSendPayment.addEventListener("click", async (e) => {
             e.preventDefault();
-    
             try {
-                let inputsFormText = document.querySelectorAll(".input-txt")
+                // Obtener otras variables y opciones seleccionadas
+                let transaction = document.getElementById("inTransactionPayment").value;
+                let fechaPago = new Date(document.getElementById("inPaymentDatePayment").value).toISOString();
 
-                // Obtener los valores de los inputs
-                let nombreTelefono = document.getElementById("inPhoneOffice").value;
-                let calleDir = document.getElementById("inStreetOffice").value;
-                let numeroDir = Number.parseInt(document.getElementById("inNumberStreet").value);
-                let postalOffice = document.getElementById("inPostalCodeOffice").value;
-    
-                // Obtener las opciones seleccionadas
-                const selectedOptionPhoneType = selectPhoneTypeOficinas.options[selectPhoneTypeOficinas.selectedIndex];
-                const selectedPhoneType = JSON.parse(selectedOptionPhoneType.value);
-    
-                const selectedPais = JSON.parse(selectCountryOficinas.value);
-                const selectedCity = JSON.parse(selectCityOficinas.value);
-    
-                const selectedOptionHood = selectHoodOficinas.options[selectHoodOficinas.selectedIndex];
-                const selectedHood = JSON.parse(selectedOptionHood.value);
-    
-                const selectedOptionRegion = selectRegionOficinas.options[selectRegionOficinas.selectedIndex];
-                const selectedRegion = JSON.parse(selectedOptionRegion.value);
-    
-                // Calcular el maxIDTel
-                let maxIDTel = await this.calculateMaxId("telefono");
-                let maxIDDir = await this.calculateMaxId("direccion");
-                let maxIDPos = await this.calculateMaxId("codigopostal");
-    
-                // Crear el objeto teléfono
-                let telefono = {
+                const selectedOptionPaymentMethod = selectPaymentMethodPayment.options[selectPaymentMethodPayment.selectedIndex];
+                const selectedPaymentMethod = JSON.parse(selectedOptionPaymentMethod.value);
+        
+                const selectedOptionCustomer = selectCustomerPayment.options[selectCustomerPayment.selectedIndex];
+                const selectedCustomer = JSON.parse(selectedOptionCustomer.value);
+        
+                // Crear el objeto nuevapayment
+                let formPayment = {
                     id: 0,
-                    nombre: Number.parseInt(nombreTelefono),
-                    tipoTelefono: selectedPhoneType
+                    transaccion: transaction,
+                    formaPago: selectedPaymentMethod,
+                    fechaPago: fechaPago,
+                    cliente: selectedCustomer
                 };
-    
-                await postData(telefono, "telefono");
-    
-                // Crear el objeto dirección
-                let direccion = {
-                    id: 0,
-                    calle: calleDir,
-                    numero: numeroDir,
-                    dirBarrio: selectedHood
-                };
-    
-                await postData(direccion, "direccion");
-    
-                // Crear el objeto código postal
-                let postalCode = {
-                    id: 0,
-                    codigo: postalOffice,
-                    region: selectedRegion
-                };
-    
-                await postData(postalCode, "codigopostal");
-    
-                // Crear el objeto nuevaOficina
-                let nuevaOficina = {
-                    id: 0,
-                    telefono: {
-                        id: maxIDTel,
-                        nombre: telefono.nombre,
-                        tipoTelefono: selectedPhoneType
-                    },
-                    ciudad: selectedCity,
-                    pais: selectedPais,
-                    direccion: {
-                        id: maxIDDir,
-                        calle: direccion.calle,
-                        numero: direccion.numero,
-                        dirBarrio: selectedHood
-                    },
-                    codigoPostal: {
-                        id: maxIDPos,
-                        codigo: postalCode.codigo,
-                        region: selectedRegion
-                    }
-                };
-    
-                console.log("Oficina creada:", nuevaOficina);
-    
-                await postData(nuevaOficina, "oficinas");
-    
-                this.showOffices();
-
-                inputsFormText.forEach((inpt) => {
-                    inpt.value = ""
-                })
-                
-                this.closeAddOfficeModal()
-
-                overlay4Offices.classList.add("active")
-                popUpAllrigthOffices.classList.add("active")
-
+        
+                console.log("Pago creado:", formPayment);
+        
+                await postData(formPayment, "pagos");
+        
+                this.showPayments();
+        
+                // Limpiar inputs y cerrar modal
+                document.querySelectorAll(".input-txt").forEach(inpt => inpt.value = "");
+                this.closeAddPaymentModal();
+        
+                // Mostrar confirmación
+                overlay4.classList.add("active");
+                popUpAllrigth.classList.add("active");
+        
                 btnCloseModals.addEventListener("click", e => {
                     e.preventDefault();
-                    overlay4Offices.classList.remove("active")
-                    popUpAllrigthOffices.classList.remove("active")
+                    overlay4.classList.remove("active");
+                    popUpAllrigth.classList.remove("active");
                 });
-    
+        
             } catch (error) {
-                console.error("Error al crear la oficina:", error);
+                console.error("Error al crear el pago:", error);
             }
         });
     }
-
-        
-    async calculateMaxId(endpoint) {
-        try {
-            const { data } = await getData(endpoint);  // Destructura solo 'data' del resultado
-            if (!Array.isArray(data)) {
-                throw new Error('Los datos no son un array');
-            }
-    
-            let maxID = 0;
-            data.forEach((item) => {
-                if (item.id >= maxID) {
-                    maxID = item.id + 1;
-                }
-            });
-            return maxID;
-        } catch (error) {
-            console.error(`Error al calcular maxID para ${endpoint}:`, error);
-            throw error;
-        }
-    }
-    
 
     fillSelectsEdit() {
-        const selectCountryOficinas = document.getElementById("inCountryOfficeEdit");
-        const selectCityOficinas = document.getElementById("inCityOfficeEdit");
-        const selectHoodOficinas = document.getElementById("inHoodOfficeEdit");
-        const selectPhoneTypeOficinas = document.getElementById("inTypePhoneEditOffice");
-        const selectRegionOficinas = document.getElementById("inRegionOfficeEdit");
-    
-        // Llenar los selects con los datos obtenidos de las respectivas funciones
-        this.arrayPhoneTypes().then((tipostel) => {
-            if (tipostel) {
-                selectPhoneTypeOficinas.innerHTML = ''; 
-                tipostel.forEach(tipotel => {
+        const selectPaymentMethodPayment = document.getElementById("inPaymentMethodEditPayment");
+        const selectCustomerPayment = document.getElementById("inCustomerEditPayment");
+
+        this.arrayPaymentMethods().then((paymethods) => {
+            if (paymethods) {
+                selectPaymentMethodPayment.innerHTML = '';
+                paymethods.forEach(paymethod => {
                     const opc = document.createElement("option");
-                    opc.value = JSON.stringify(tipotel);
-                    opc.textContent = tipotel.nombre;
-                    selectPhoneTypeOficinas.appendChild(opc);
+                    opc.value = JSON.stringify(paymethod);
+                    opc.textContent = paymethod.formaPago;
+                    selectPaymentMethodPayment.appendChild(opc);
                 });
             } else {
-                console.log("No se pudieron obtener los tipos de teléfono.");
+                console.log("No se pudieron obtener las paymethods.");
             }
         }).catch((error) => {
-            console.error("Error al obtener los tipos de teléfono:", error);
+            console.error("Error al obtener las paymethods:", error);
         });
-    
-        this.arrayCountries().then((paises) => {
-            if (paises) {
-                selectCountryOficinas.innerHTML = ''; 
-                paises.forEach(pais => {
+
+        this.arrayCustomers().then((clientes) => {
+            if (clientes) {
+                selectCustomerPayment.innerHTML = '';
+                clientes.forEach(cliente => {
                     const opc = document.createElement("option");
-                    opc.value = JSON.stringify(pais);
-                    opc.textContent = pais.name;
-                    selectCountryOficinas.appendChild(opc);
+                    opc.value = JSON.stringify(cliente);
+                    opc.textContent = cliente.nombre;
+                    selectCustomerPayment.appendChild(opc);
                 });
             } else {
-                console.log("No se pudieron obtener los países.");
+                console.log("No se pudieron obtener los clientes.");
             }
         }).catch((error) => {
-            console.error("Error al obtener los países:", error);
-        });
-    
-        this.arrayCities().then((ciudades) => {
-            if (ciudades) {
-                selectCityOficinas.innerHTML = ''; 
-                ciudades.forEach(city => {
-                    const opc = document.createElement("option");
-                    opc.value = JSON.stringify(city);
-                    opc.textContent = city.nombreCiudad;
-                    selectCityOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener las ciudades.");
-            }
-        }).catch((error) => {
-            console.error("Error al obtener las ciudades:", error);
-        });
-    
-        this.arrayHood().then((barrios) => {
-            if (barrios) {
-                selectHoodOficinas.innerHTML = ''; 
-                barrios.forEach(barrio => {
-                    const opc = document.createElement("option");
-                    opc.value = JSON.stringify(barrio);
-                    opc.textContent = barrio.nombreBarrio;
-                    selectHoodOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener los barrios.");
-            }
-        }).catch((error) => {
-            console.error("Error al obtener los barrios:", error);
-        });
-    
-        this.arrayRegion().then((regions) => {
-            if (regions) {
-                selectRegionOficinas.innerHTML = ''; 
-                regions.forEach(region => {
-                    const opc = document.createElement("option");
-                    opc.value = JSON.stringify(region);
-                    opc.textContent = region.nombre;
-                    selectRegionOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener las regiones.");
-            }
-        }).catch((error) => {
-            console.error("Error al obtener las regiones:", error);
+            console.error("Error al obtener los clientes:", error);
         });
     }
-    
+
 
     fillSelects() {
-        const selectCountryOficinas = document.getElementById("inCountryOffice");
-        const selectCityOficinas = document.getElementById("inCityOffice");
-        const selectHoodOficinas = document.getElementById("inHoodOffice");
-        const selectPhoneTypeOficinas = document.getElementById("inTypePhoneOffice");
-        const selectRegionOficinas = document.getElementById("inRegionOffice");
-    
-        // Llenar los selects con los datos obtenidos de las respectivas funciones
-        this.arrayPhoneTypes().then((tipostel) => {
-            if (tipostel) {
-                selectPhoneTypeOficinas.innerHTML = ''; 
-                tipostel.forEach(tipotel => {
+        const selectPaymentMethodPayment = document.getElementById("inPaymentMethodPayment");
+        const selectCustomerPayment = document.getElementById("inCustomerPayment");
+
+        this.arrayPaymentMethods().then((paymethods) => {
+            if (paymethods) {
+                selectPaymentMethodPayment.innerHTML = '';
+                paymethods.forEach(paymethod => {
                     const opc = document.createElement("option");
-                    opc.value = JSON.stringify(tipotel);
-                    opc.textContent = tipotel.nombre;
-                    selectPhoneTypeOficinas.appendChild(opc);
+                    opc.value = JSON.stringify(paymethod);
+                    opc.textContent = paymethod.formaPago;
+                    selectPaymentMethodPayment.appendChild(opc);
                 });
             } else {
-                console.log("No se pudieron obtener los tipos de teléfono.");
+                console.log("No se pudieron obtener las paymethods.");
             }
         }).catch((error) => {
-            console.error("Error al obtener los tipos de teléfono:", error);
+            console.error("Error al obtener las paymethods:", error);
         });
-    
-        this.arrayCountries().then((paises) => {
-            if (paises) {
-                selectCountryOficinas.innerHTML = ''; 
-                paises.forEach(pais => {
+
+        this.arrayCustomers().then((clientes) => {
+            if (clientes) {
+                selectCustomerPayment.innerHTML = '';
+                clientes.forEach(cliente => {
                     const opc = document.createElement("option");
-                    opc.value = JSON.stringify(pais);
-                    opc.textContent = pais.name;
-                    selectCountryOficinas.appendChild(opc);
+                    opc.value = JSON.stringify(cliente);
+                    opc.textContent = cliente.nombre;
+                    selectCustomerPayment.appendChild(opc);
                 });
             } else {
-                console.log("No se pudieron obtener los países.");
+                console.log("No se pudieron obtener los clientes.");
             }
         }).catch((error) => {
-            console.error("Error al obtener los países:", error);
+            console.error("Error al obtener los clientes:", error);
         });
-    
-        this.arrayCities().then((ciudades) => {
-            if (ciudades) {
-                selectCityOficinas.innerHTML = ''; 
-                ciudades.forEach(city => {
-                    const opc = document.createElement("option");
-                    opc.value = JSON.stringify(city);
-                    opc.textContent = city.nombreCiudad;
-                    selectCityOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener las ciudades.");
-            }
-        }).catch((error) => {
-            console.error("Error al obtener las ciudades:", error);
-        });
-    
-        this.arrayHood().then((barrios) => {
-            if (barrios) {
-                selectHoodOficinas.innerHTML = ''; 
-                barrios.forEach(barrio => {
-                    const opc = document.createElement("option");
-                    opc.value = JSON.stringify(barrio);
-                    opc.textContent = barrio.nombreBarrio;
-                    selectHoodOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener los barrios.");
-            }
-        }).catch((error) => {
-            console.error("Error al obtener los barrios:", error);
-        });
-    
-        this.arrayRegion().then((regions) => {
-            if (regions) {
-                selectRegionOficinas.innerHTML = ''; 
-                regions.forEach(region => {
-                    const opc = document.createElement("option");
-                    opc.value = JSON.stringify(region);
-                    opc.textContent = region.nombre;
-                    selectRegionOficinas.appendChild(opc);
-                });
-            } else {
-                console.log("No se pudieron obtener las regiones.");
-            }
-        }).catch((error) => {
-            console.error("Error al obtener las regiones:", error);
-        });
-    }
-    
-    closeAddOfficeModal() {
-        const overlay = document.getElementById("overlay");
-        const popUpAdd = document.getElementById("popUpAdd");
-        overlay.classList.remove("active");
-        popUpAdd.classList.remove("active");
     }
 
-    editOffice(oficina) {
-        const overlay = document.getElementById("overlay5");
-        const popUpEdit = document.getElementById("popUpEditOffice")
-        const btnCerrar = document.getElementById("btnCancelEdit");
+    editPayment(pago) {
+        const overlay = document.getElementById("overlay5Payment");
+        const popUpEdit = document.getElementById("popUpEditPayment")
+        const btnCerrar = document.getElementById("btnCancelEditPayment");
     
         overlay.classList.add("active");
         popUpEdit.classList.add("active");
@@ -647,284 +341,230 @@ export class PagosMenu extends HTMLElement {
             overlay.classList.remove("active");
             popUpEdit.classList.remove("active");
         });
-    
-        const selectCountryOficinas = document.getElementById("inCountryOfficeEdit");
-        const selectCityOficinas = document.getElementById("inCityOfficeEdit");
-        const selectHoodOficinas = document.getElementById("inHoodOfficeEdit");
-        const selectPhoneTypeOficinas = document.getElementById("inTypePhoneEditOffice");
-        const selectRegionOficinas = document.getElementById("inRegionOfficeEdit");
-    
-        const btnSendOffice = document.getElementById("editOffice");
-    
-        // Llenar los selects con los datos obtenidos de las respectivas funciones
+
+        const overlay4 = document.querySelector("#overlay4Payments");
+        const popUpAllrigth = document.getElementById("popupAllrigthPayment")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigthPayment")
+
+        const selectPaymentMethodPayment = document.getElementById("inPaymentMethodPayment");
+        const selectCustomerPayment = document.getElementById("inCustomerEditPayment");
+
+        let formPaymentAdd = document.getElementById("addPedidoForm")
+        const btnSendPayment = document.getElementById("editNewPayment");
+
         this.fillSelectsEdit();
-    
-        btnSendOffice.addEventListener("click", async (e) => {
+
+        btnSendPayment.addEventListener("click", async (e) => {
             e.preventDefault();
-    
             try {
-                let inputsFormText = document.querySelectorAll(".input-txt");
-    
-                // Obtener los valores de los inputs
-                let nombreTelefono = document.getElementById("inPhoneEditOffice").value;
-                let calleDir = document.getElementById("inStreetOfficeEdit").value;
-                let numeroDir = Number.parseInt(document.getElementById("inNumberStreetEdit").value);
-                let postalOffice = document.getElementById("inPostalCodeOfficeEdit").value;
-    
-                // Obtener las opciones seleccionadas
-                const selectedOptionPhoneType = selectPhoneTypeOficinas.options[selectPhoneTypeOficinas.selectedIndex];
-                const selectedPhoneType = JSON.parse(selectedOptionPhoneType.value);
-    
-                const selectedPais = JSON.parse(selectCountryOficinas.value);
-                const selectedCity = JSON.parse(selectCityOficinas.value);
-    
-                const selectedOptionHood = selectHoodOficinas.options[selectHoodOficinas.selectedIndex];
-                const selectedHood = JSON.parse(selectedOptionHood.value);
-    
-                const selectedOptionRegion = selectRegionOficinas.options[selectRegionOficinas.selectedIndex];
-                const selectedRegion = JSON.parse(selectedOptionRegion.value);
-    
-                // Calcular el maxIDTel, maxIDDir y maxIDPos
-                let maxIDTel = await this.calculateMaxId("telefono");
-                let maxIDDir = await this.calculateMaxId("direccion");
-                let maxIDPos = await this.calculateMaxId("codigopostal");
-    
-                // Crear el objeto teléfono
-                let telefono = {
-                    id: 0,
-                    nombre: Number.parseInt(nombreTelefono),
-                    tipoTelefono: selectedPhoneType
+                // Obtener otras variables y opciones seleccionadas
+                let transaction = document.getElementById("inTransactionEditPayment").value;
+                let fechaPago = new Date(document.getElementById("inPaymentDateEditPayment").value).toISOString();
+
+                const selectedOptionPaymentMethod = selectPaymentMethodPayment.options[selectPaymentMethodPayment.selectedIndex];
+                const selectedPaymentMethod = JSON.parse(selectedOptionPaymentMethod.value);
+        
+                const selectedOptionCustomer = selectCustomerPayment.options[selectCustomerPayment.selectedIndex];
+                const selectedCustomer = JSON.parse(selectedOptionCustomer.value);
+        
+                // Crear el objeto nuevapayment
+                let formPayment = {
+                    id: pago.id,
+                    transaccion: transaction,
+                    formaPago: selectedPaymentMethod,
+                    fechaPago: fechaPago,
+                    cliente: selectedCustomer
                 };
-    
-                await postData(telefono, "telefono");
-    
-                // Crear el objeto dirección
-                let direccion = {
-                    id: 0,
-                    calle: calleDir,
-                    numero: numeroDir,
-                    dirBarrio: selectedHood
-                };
-    
-                await postData(direccion, "direccion");
-    
-                // Crear el objeto código postal
-                let postalCode = {
-                    id: 0,
-                    codigo: postalOffice,
-                    region: selectedRegion
-                };
-    
-                await postData(postalCode, "codigopostal");
-    
-                // Crear el objeto nuevaOficina
-                let nuevaOficina = {
-                    id: oficina.id,
-                    telefono: {
-                        id: maxIDTel,
-                        nombre: telefono.nombre,
-                        tipoTelefono: selectedPhoneType
-                    },
-                    ciudad: selectedCity,
-                    pais: selectedPais,
-                    direccion: {
-                        id: maxIDDir,
-                        calle: direccion.calle,
-                        numero: direccion.numero,
-                        dirBarrio: selectedHood
-                    },
-                    codigoPostal: {
-                        id: maxIDPos,
-                        codigo: postalCode.codigo,
-                        region: selectedRegion
-                    }
-                };
-    
-                console.log("Oficina creada:", nuevaOficina);
-    
-                await updateData(nuevaOficina, "oficinas", oficina.id);
-    
-                // Refrescar la lista de oficinas inmediatamente después de la actualización
-                contShowOffices.innerHTML = "";  // Limpiar lista actual
-                this.showOffices();  // Vuelve a cargar y renderizar la lista de oficinas
-                
-                // Limpiar los campos del formulario
-                inputsFormText.forEach((inpt) => {
-                    inpt.value = "";
+        
+                console.log("Pago creado:", formPayment);
+        
+                await updateData(formPayment, "pagos", pago.id);
+        
+                this.showPayments();
+        
+                // Limpiar inputs y cerrar modal
+                document.querySelectorAll(".input-txt").forEach(inpt => inpt.value = "");
+                this.closeAddPaymentModal();
+        
+                // Mostrar confirmación
+                overlay4.classList.add("active");
+                popUpAllrigth.classList.add("active");
+        
+                btnCloseModals.addEventListener("click", e => {
+                    e.preventDefault();
+                    overlay4.classList.remove("active");
+                    popUpAllrigth.classList.remove("active");
                 });
-    
+        
             } catch (error) {
-                console.error("Error al crear la oficina:", error);
+                console.error("Error al crear el pago:", error);
             }
         });
     }
-    
 
-    showOffices() {
+
+    showPayments() {
         const btnAddPayment = document.getElementById("btnAddPayment");
-        const overlay = document.getElementById("overlay");
-        const popUpAdd = document.getElementById("popUpAdd");
-        const btnCerrar = document.getElementById("btnCancelAdd");
-        const contShowOffices = document.querySelector("#containerShowPayments");
-    
+        const overlay = document.getElementById("overlayPayment");
+        const popUpAddPayment = document.getElementById("popUpAddPayment");
+        const btnCerrar = document.getElementById("btnCancelAddPayment");
+        const contShowPayments = document.querySelector("#containerShowPayments");
+
         btnAddPayment.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.add("active");
-            popUpAdd.classList.add("active");
+            popUpAddPayment.classList.add("active");
         });
-    
+
         btnCerrar.addEventListener("click", e => {
             e.preventDefault();
             overlay.classList.remove("active");
-            popUpAdd.classList.remove("active");
+            popUpAddPayment.classList.remove("active");
         });
-    
-        this.arrayOffices()
-        .then((oficinas) => {
-            if (oficinas.length === 0) {
-                contShowOffices.innerHTML = '<p class="txt-showbox">No hay oficinas registradas</p>'
-            } else {
-                if (oficinas) {
-                    contShowOffices.innerHTML = ''; // Limpiar la lista antes de añadir nuevas oficinas
-                    oficinas.forEach(oficina => {
-                        const card = document.createElement("div");
-                        card.classList.add("card-element");
-                        card.innerHTML = `
-                            <p class="card-text">${oficina.id}</p>
-                            <p class="card-text">${oficina.telefono.nombre}</p>
-                            <p class="card-text">${oficina.ciudad.nombreCiudad}</p>
+
+        this.arrayPayments()
+            .then((pagos) => {
+                if (pagos.length === 0) {
+                    contShowPayments.innerHTML = '<p class="txt-showbox">No hay pagos registradas</p>'
+                } else {
+                    if (pagos) {
+                        contShowPayments.innerHTML = ''; // Limpiar la lista antes de añadir nuevas pagos
+                        pagos.forEach(pago => {
+                            const card = document.createElement("div");
+                            card.classList.add("card-element");
+                            card.innerHTML = `
+                            <p class="card-text">${pago.id}</p>
+                            <p class="card-text">${pago.transaccion}</p>
+                            <p class="card-text">${pago.formaPago.formaPago}</p>
                             <div class="card-buttons_container">
-                                <a href="#" class="card-button btnInfoOffice" data-id="${oficina.id}">
+                                <a href="#" class="card-button btnInfoPayment" data-id="${pago.id}">
                                     <box-icon name='info-circle' color='#508C9B'></box-icon>
                                 </a>
-                                <a href="#" class="card-button btnDeleteOffice" data-id="${oficina.id}">
+                                <a href="#" class="card-button btnDeletePayment" data-id="${pago.id}">
                                     <box-icon name='trash' color='#508C9B'></box-icon>
                                 </a>
-                                <a href="#" data-id="${oficina.id}" class="card-button btnEditOffice">
+                                <a href="#" data-id="${pago.id}" class="card-button btnEditPayment">
                                     <box-icon name='pencil' color='#508C9B'></box-icon>
                                 </a>
                             </div>`;
-        
-                        contShowOffices.appendChild(card);
-                    });
-        
-                    // Añadir los event listeners después de haber añadido los botones al DOM
-                    document.querySelectorAll(".btnInfoOffice").forEach(button => {
-                        button.addEventListener("click", e => {
-                            e.preventDefault();
-                            const officeId = button.getAttribute("data-id");
-                            const oficina = oficinas.find(o => o.id.toString() === officeId);
-        
-                            if (oficina) {
-                                this.showInfoModal(oficina);
-    
-                            } else {
-                                console.error(`No se encontró la oficina con id: ${officeId}`);
-                            }
-                        });
-                    });
-        
-                    document.querySelectorAll(".btnDeleteOffice").forEach(button => {
-                        button.addEventListener("click", e => {
-                            e.preventDefault();
-                            const officeId = button.getAttribute("data-id");
-                            const oficina = oficinas.find(o => o.id.toString() === officeId);
-        
-                            if (oficina) {
-                                this.deleteOffice(oficina);
-    
-                            } else {
-                                console.error(`No se encontró la oficina con id: ${officeId}`);
-                            }
-                        });
-                    });
 
-                    document.querySelectorAll(".btnEditOffice").forEach(button => {
-                        button.addEventListener("click", e => {
-                            e.preventDefault();
-                            const officeId = button.getAttribute("data-id");
-                            const oficina = oficinas.find(o => o.id.toString() === officeId);
-        
-                            if (oficina) {
-                                this.editOffice(oficina);
-    
-                            } else {
-                                console.error(`No se encontró la oficina con id: ${officeId}`);
-                            }
+                            contShowPayments.appendChild(card);
                         });
-                    });
-                } else {
-                    console.log("No se pudieron obtener las oficinas.");
+
+                        // Añadir los event listeners después de haber añadido los botones al DOM
+                        document.querySelectorAll(".btnInfoPayment").forEach(button => {
+                            button.addEventListener("click", e => {
+                                e.preventDefault();
+                                const paymentId = button.getAttribute("data-id");
+                                const pay = pagos.find(o => o.id.toString() === paymentId);
+
+                                if (pay) {
+                                    this.showInfoModal(pay);
+
+                                } else {
+                                    console.error(`No se encontró la pay con id: ${paymentId}`);
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll(".btnDeletePayment").forEach(button => {
+                            button.addEventListener("click", e => {
+                                e.preventDefault();
+                                const paymentId = button.getAttribute("data-id");
+                                const pay = pagos.find(o => o.id.toString() === paymentId);
+
+                                if (pay) {
+                                    this.deleteOffice(pay);
+
+                                } else {
+                                    console.error(`No se encontró la pay con id: ${paymentId}`);
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll(".btnEditPayment").forEach(button => {
+                            button.addEventListener("click", e => {
+                                e.preventDefault();
+                                const paymentId = button.getAttribute("data-id");
+                                const pay = pagos.find(o => o.id.toString() === paymentId);
+
+                                if (pay) {
+                                    this.editPayment(pay);
+
+                                } else {
+                                    console.error(`No se encontró la pay con id: ${paymentId}`);
+                                }
+                            });
+                        });
+                    } else {
+                        console.log("No se pudieron obtener las pays.");
+                    }
                 }
-            }
-        })
-        .catch((error) => {
-            console.error("Error al obtener las oficinas:", error);
-        });
+            })
+            .catch((error) => {
+                console.error("Error al obtener las pays:", error);
+            });
     }
-    
-    
-    showInfoModal(oficina) {
-        const overlay2 = document.getElementById("overlay2");
-        const popUpInfo = document.getElementById("popupInfo");
-        const infoModal = document.getElementById("infoModalOffice");
 
-        infoModal.innerHTML =` 
-            <div class="cont-info_p">
-                <label for="pOfficeTel" class="label-form">Telefono</label>
-                <p name="pOfficeTel" class="card-text">${oficina.telefono.nombre}</p>
-            </div>
-            <div class="cont-info_p">
-                <label for="pOfficeCity" class="label-form">Ciudad</label>
-                <p name="pOfficeCity" class="card-text">${oficina.ciudad.nombreCiudad}</p>
-            </div>
-            <div class="cont-info_p">
-                <label for="pOfficeCountry" class="label-form">Pais</label>
-                <p name="pOfficeCountry" class="card-text">${oficina.pais.name}</p>
-            </div>
-            <div class="cont-info_p">
-                <label for="pOfficePCode" class="label-form">Codigo Postal</label>
-                <p name="pOfficePCode" class="card-text">${oficina.codigoPostal.codigo}</p>
-            </div>
-            <div class="cont-info_p">
-                <label for="pOfficeAddr" class="label-form">Direccion</label>
-                <p class="card-text">Calle ${oficina.direccion.calle} #${oficina.direccion.numero}</p>
-            </div>`;
 
-        overlay2.classList.add("active");
+    showInfoModal(pay) {
+        const overlay2Payment = document.getElementById("overlay2Payment");
+        const popUpInfo = document.getElementById("popupInfoPayment");
+        const infoModal = document.getElementById("infoModalPayment");
+
+        infoModal.innerHTML = ` 
+            <div class="cont-info_p">
+                <label for="pTransaccion" class="label-form">Transaction Amount</label>
+                <p name="pTransaccion" class="card-text">${pay.transaccion}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pPaymentPaymentMethod" class="label-form">Payment Method</label>
+                <p name="pPaymentPaymentMethod" class="card-text">${pay.formaPago.formaPago}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pPaymentPaymentDate" class="label-form">Payment Date</label>
+                <p name="pPaymentPaymentDate" class="card-text">${pay.fechaPago}</p>
+            </div>
+            <div class="cont-info_p">
+                <label for="pPaymentCustomer" class="label-form">Customer Name</label>
+                <p name="pPaymentCustomer" class="card-text">${pay.cliente.nombre}</p>
+            </div>
+            `;
+
+        overlay2Payment.classList.add("active");
         popUpInfo.classList.add("active");
 
-        document.getElementById("btnCancelOfficeInfo").addEventListener("click", e => {
+        document.getElementById("btnCancelPayementInfo").addEventListener("click", e => {
             e.preventDefault();
-            overlay2.classList.remove("active");
+            overlay2Payment.classList.remove("active");
             popUpInfo.classList.remove("active");
         });
     }
-    
+
     deleteOffice(office) {
-        const endpoint = "oficinas";
-        const overlay3 = document.querySelector("#overlay3");
-        const popUpDelete = document.getElementById("popupDelete");
-        const btnConfirmDelOffice = document.querySelector("#btnConfirmDelOffice");
-        const btnCancelDelOffice = document.querySelector("#btnCancelDelOffice");
-        const contShowOffices = document.querySelector("#containerShowO");
-        const overlay4Offices = document.querySelector("#overlay4Offices");
-        const popUpAllrigthOffices = document.getElementById("popupAllrigthOffices")
-        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigthOffices")
-    
+        const endpoint = "pagos";
+        const overlay3Payment = document.querySelector("#overlay3Payment");
+        const popUpDelete = document.getElementById("popupDeletePayment");
+        const btnConfirmDelPayment = document.querySelector("#btnConfirmDelPayment");
+        const btnCancelDelPayment = document.querySelector("#btnCancelDelPayment");
+        const contShowPayments = document.querySelector("#containerShowPayments");
+        const overlay4Payments = document.querySelector("#overlay4Payments");
+        const popUpAllrigthPayment = document.getElementById("popupAllrigthPayment")
+        const btnCloseModals = document.querySelector("#btnCloseModalsAllrigthPayment")
+
         const closeDeletePopup = () => {
-            overlay3.classList.remove("active");
+            overlay3Payment.classList.remove("active");
             popUpDelete.classList.remove("active");
         };
 
         const closeConfirmPopup = () => {
-            overlay4Offices.classList.remove("active");
-            popUpAllrigthOffices.classList.remove("active");
+            overlay4Payments.classList.remove("active");
+            popUpAllrigthPayment.classList.remove("active");
         };
-    
-        overlay3.classList.add("active");
+
+        overlay3Payment.classList.add("active");
         popUpDelete.classList.add("active");
-    
+
         const handleConfirmDelete = e => {
             e.preventDefault();
             deleteData(endpoint, office.id)
@@ -932,20 +572,19 @@ export class PagosMenu extends HTMLElement {
                     if (response.ok) {
                         closeDeletePopup();
 
-                        overlay4Offices.classList.add("active")
-                        popUpAllrigthOffices.classList.add("active")
+                        overlay4Payments.classList.add("active")
+                        popUpAllrigthPayment.classList.add("active")
 
                         // Espera un pequeño retraso antes de actualizar la lista
                         setTimeout(() => {
-                            contShowOffices.innerHTML = "";  // Limpiar lista actual
-                            this.showOffices();  // Vuelve a cargar y renderizar la lista de oficinas
+                            contShowPayments.innerHTML = "";  // Limpiar lista actual
+                            this.showPayments();  // Vuelve a cargar y renderizar la lista de pays
                         }, 200);  // Agrega un retraso corto
-    
+
                         // Escuchar el evento de cierre del popup
                         btnCloseModals.addEventListener("click", e => {
                             e.preventDefault();
-                            overlay4Offices.classList.remove("active")
-                            popUpAllrigthOffices.classList.remove("active")
+                            closeConfirmPopup();
                         });
                     } else {
                         throw new Error(`Error en la solicitud DELETE: ${response.status} - ${response.statusText}`);
@@ -954,24 +593,24 @@ export class PagosMenu extends HTMLElement {
                 .catch(error => {
                     console.error("Error en la eliminación de datos:", error);
                     popUpDelete.innerHTML = `
-                        <div>Error al eliminar la oficina. Por favor, inténtelo de nuevo.</div>
+                        <div>Error al eliminar la pay. Por favor, inténtelo de nuevo.</div>
                         <div id="btnCloseDelError" class="button-cancel_modal">&#10005;</div>`;
-                    
+
                     document.getElementById("btnCloseDelError").addEventListener("click", e => {
                         e.preventDefault();
                         closeDeletePopup();
                     });
                 });
         };
-    
+
         // Se asegura de que solo se escuche una vez el evento de confirmación
-        btnConfirmDelOffice.addEventListener("click", handleConfirmDelete, { once: true });
-    
-        btnCancelDelOffice.addEventListener("click", e => {
+        btnConfirmDelPayment.addEventListener("click", handleConfirmDelete, { once: true });
+
+        btnCancelDelPayment.addEventListener("click", e => {
             e.preventDefault();
             closeDeletePopup();
         });
     }
-}    
+}
 
 customElements.define("pagos-menu", PagosMenu);
