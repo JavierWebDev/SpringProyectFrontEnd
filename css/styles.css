@@ -642,7 +642,8 @@ register-component {
 }
 
 /* WEB COMPONENTS */
-oficinas-menu, pedidos-menu, productos-menu, pagos-menu {
+
+oficinas-menu, pedidos-menu, productos-menu, pagos-menu, clientes-menu {
     display: none;
 }
 

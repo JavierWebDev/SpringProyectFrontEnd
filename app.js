@@ -25,6 +25,10 @@ import '/App/Components/login/login.js'
 
 import '/App/Components/register/register.js'
 
+// Client
+
+import '/App/Components/Clientes/clientes.js'
+
 // Pagos Menu
 
 import '/App/Components/Pagos/pagos.js'
